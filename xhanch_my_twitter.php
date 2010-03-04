@@ -3,7 +3,7 @@
 		Plugin Name: Xhanch - My Twitter
 		Plugin URI: http://xhanch.com/wp-plugin-my-twitter/
 		Description: Twitter plugin for wordpress
-		Author: Susanto BSc (xhanch)
+		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
 		Version: 1.2.8
 	*/
