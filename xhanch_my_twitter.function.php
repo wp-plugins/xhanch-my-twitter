@@ -170,8 +170,8 @@
 
 		if(!$xml)
 			xhanch_my_twitter_log('Failed to parse feeds retrieved from twitter');			
-		if(!isset($xml->entry))
-			xhanch_my_twitter_log('Feeds retrieved from twitter is not well formed');		
+		//if(!isset($xml->entry))
+		//	xhanch_my_twitter_log('Feeds retrieved from twitter is not well formed');		
 		
 		$items_count= count($xml->entry);
 		if($items_count < $limit)
