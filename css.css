@@ -1,0 +1,49 @@
+#xhanch_my_twitter .header_48{
+	height:48px;
+	line-height:48px;
+	vertical-align:middle
+}
+
+#xhanch_my_twitter .text_18{	
+	font-size:18px
+}
+
+#xhanch_my_twitter .img_left{	
+	float:left;
+	margin-right:5px;
+	border:none
+}
+
+#xhanch_my_twitter ul li{
+	font:inherit;
+	list-style:none;
+	text-indent: 0px;
+	background: none;
+	padding-left: 0px;
+}
+
+#xhanch_my_twitter .avatar{
+	float:left;
+	padding:0px 3px 3px 0;
+	width:48px;
+	height:48px;
+	border:none
+}
+
+#xhanch_my_twitter .credit{
+	font-size:10px;
+	text-align:right;
+}
+
+#xhanch_my_twitter .credit a{
+	text-decoration:none;
+	font-size:10px
+}
+
+#xhanch_my_twitter .credit a:hover{
+	text-decoration:underline;
+}
+
+#xhanch_my_twitter .clear{
+	clear:both
+}
