@@ -1,6 +1,6 @@
 <?php
 	/*
-		Plugin Name: My Twitter
+		Plugin Name: Xhanch My Twitter
 		Plugin URI: http://xhanch.com/wp-plugin-my-twitter/
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (xhanch)
