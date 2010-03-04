@@ -265,8 +265,8 @@
 	}
 
 	function widget_xhanch_my_twitter_init(){
-		register_sidebar_widget('Xhanch My Twitter', 'widget_xhanch_my_twitter');
-		register_widget_control('Xhanch My Twitter', 'xhanch_my_twitter_control', 300, 200 );     
+		register_sidebar_widget('Xhanch - My Twitter', 'widget_xhanch_my_twitter');
+		register_widget_control('Xhanch - My Twitter', 'xhanch_my_twitter_control', 300, 200 );     
 	}
 	add_action("plugins_loaded", "widget_xhanch_my_twitter_init");
 
