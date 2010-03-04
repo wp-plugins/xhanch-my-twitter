@@ -160,7 +160,7 @@
 		$api_url = 'http://twitter.com/statuses/user_timeline/'.urlencode($uid).'.xml?count='.$limit;
 
 		$req = xhanch_my_twitter_get_file($api_url); 
-			xhanch_my_twitter_log($req);
+			//xhanch_my_twitter_log($req);
 		if($req == ''){
 			xhanch_my_twitter_log('Feed retrieved from twitter is empty');
 			return array();
