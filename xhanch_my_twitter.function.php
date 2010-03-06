@@ -195,7 +195,8 @@
 					$timestamp .= ' on '.date($date_format, xhanch_my_twitter_get_time($date_time));
 			}
 			
-			$pattern = '/\@([a-zA-Z]+)/';
+			//$pattern = '/\@([a-zA-Z]+)/';
+			$pattern = '/\@([a-zA-Z0-9]+)/';
 			$replace = '<a href="http://twitter.com/'.strtolower('\1').'">@\1</a>';
 			$output = convert_smilies(preg_replace($pattern,$replace,xhanch_my_twitter_make_clickable($res->text)));
 
