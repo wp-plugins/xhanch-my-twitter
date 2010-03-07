@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.2.9
+		Version: 1.3.0
 	*/
 
 	function xhanch_my_twitter_install () {
@@ -109,6 +109,8 @@
 			'bird_with_text-4' => 'Twitter bird 4 + display name',
 			'bird_with_text-5' => 'Twitter bird 5 + display name',
 			'bird_with_text-6' => 'Twitter bird 6 + display name',
+			'bird_with_text-7' => 'Twitter bird 7 + display name',
+			'bird_with_text-8' => 'Twitter bird 8 + display name',
 			'logo_with_text-1' => 'Twitter logo 1 + display name',
 		);
 
