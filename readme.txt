@@ -18,8 +18,8 @@ This plugin use NO JavaScript.
 
 [Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
 
-Special Thanks to:
-= Peter Boekelaar (peter@boekelaar.org) =
+= Special Thanks to: =
+- Peter Boekelaar (peter@boekelaar.org)
 For the show divider line, direct message and tweet replies(alternative method) functionalities
 
 == Installation ==
