@@ -6,7 +6,7 @@ Donate link: http://xhanch.com/wp-plugin-my-twitter/
 Tags: twitter, tweet, status, sidebar, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text
 Requires at least: 2.3
 Tested up to: 2.9.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 
 Xhanch - My Twitter shows your latest tweets, replies, avatars, post date, click-able links, smilies, and others.
 
@@ -17,6 +17,10 @@ Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your lat
 This plugin use NO JavaScript.
 
 [Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+
+Special Thanks to:
+= Peter Boekelaar (peter@boekelaar.org) =
+For the show divider line, direct message and tweet replies(alternative method) functionalities
 
 == Installation ==
 

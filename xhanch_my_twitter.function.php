@@ -107,13 +107,17 @@
 		else { return WP_CONTENT_URL.'/plugins/'.plugin_basename(dirname(__FILE__)); }
 	}
 
-	function xhanch_my_twitter_get_file($name){
+	function xhanch_my_twitter_get_file($name, $credentials=false){
 		$res = '';
-		$res = @file_get_contents($name);
+		if($credentials === false)
+			$res = @file_get_contents($name);
 		if($res === false || $res == ''){
 			$ch = curl_init();
 
 			curl_setopt($ch, CURLOPT_URL, $name);
+			if($credentials !== false)
+				curl_setopt($ch, CURLOPT_USERPWD, $credentials);
+
 			curl_setopt($ch, CURLOPT_AUTOREFERER, 0);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -149,62 +153,44 @@
 		return mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add;
 	}
 
-	function xhanch_my_twitter_get_tweets(){
-		$uid = get_option('xhanch_my_twitter_id');
-		$limit = intval(get_option('xhanch_my_twitter_count'));
-		$show_post_by = intval(get_option('xhanch_my_twitter_show_post_by'));
-
-		if($limit <= 0)
-			$limit = 5;
-
-		$api_url = 'http://twitter.com/statuses/user_timeline/'.urlencode($uid).'.xml?count='.$limit;
-
-		$req = xhanch_my_twitter_get_file($api_url); 
-			//xhanch_my_twitter_log($req);
-		if($req == ''){
-			xhanch_my_twitter_log('Feed retrieved from twitter is empty');
-			return array();
+	function xhanch_my_twitter_parse_time($dt){
+		$timestamp = '';
+		$date_format = get_option('xhanch_my_twitter_date_format');
+		if($date_format != ''){
+			$timestamp = ' - posted ';
+			if($date_format == 'span')
+				$timestamp .= xhanch_my_twitter_time_span(xhanch_my_twitter_get_time($dt));
+			else
+				$timestamp .= ' on '.date($date_format, xhanch_my_twitter_get_time($dt));
 		}
-		
+		return $timestamp;
+	}
+
+	function xhanch_my_twitter_split_xml($arr, $req, $kind = '') {
+		if($kind == 'direct') {
+			$req = str_replace('direct-messages', 'statuses', $req);
+			$req = str_replace('direct_message', 'status', $req);
+			$req = str_replace('sender', 'user', $req);
+		}
 		$xml = @new SimpleXMLElement($req);
-
 		if(!$xml)
-			xhanch_my_twitter_log('Failed to parse feeds retrieved from twitter');			
-		//if(!isset($xml->entry))
-		//	xhanch_my_twitter_log('Feeds retrieved from twitter is not well formed');		
-		
+			xhanch_my_twitter_log('Failed to parse feeds retrieved from twitter');	
 		$items_count= count($xml->entry);
-		if($items_count < $limit)
-			$limit = $items_count;
-
-		$arr = array();
+		$limit = $items_count;
 		foreach($xml->status as $res){
 			$sts_id = (string)$res->id;
 			$rpl = (string)$res->in_reply_to_status_id;
-			if($rpl != '')
-				$sts_id = $rpl;
 			$date_time = (string)$res->created_at;
 			
-			$timestamp = '';
-			$date_format = get_option('xhanch_my_twitter_date_format');
-			if($date_format != ''){
-				$timestamp = ' - posted ';
-				if($date_format == 'span')
-					$timestamp .= xhanch_my_twitter_time_span(xhanch_my_twitter_get_time($date_time));
-				else
-					$timestamp .= ' on '.date($date_format, xhanch_my_twitter_get_time($date_time));
-			}
+			$timestamp = xhanch_my_twitter_parse_time($date_time);
 			
-			//$pattern = '/\@([a-zA-Z]+)/';
 			$pattern = '/\@([a-zA-Z0-9]+)/';
 			$replace = '<a href="http://twitter.com/'.strtolower('\1').'">@\1</a>';
 			$output = convert_smilies(preg_replace($pattern,$replace,xhanch_my_twitter_make_clickable($res->text)));
-
 			$author_name = (string)$res->user->name;
 			$author_uid = (string)$res->user->screen_name;
 			$author_img = (string)$res->user->profile_image_url;
-			
-			$arr[$sts_id] = array(
+			$arr[date('YmdHis', xhanch_my_twitter_get_time($date_time))] = array(
 				'timestamp' => $timestamp,
 				'tweet' => $output,
 				'author' => $author_uid,
@@ -214,6 +200,52 @@
 			);
 		}
 		unset($xml);
+		return $arr;
+	}
+
+	function xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options){
+        $res = array();
+		if($extra_options['rep_msg'])
+			$res = xhanch_my_twitter_split_xml($res, $rep_req, 'reply');
+		if($extra_options['dir_msg'])
+			$res = xhanch_my_twitter_split_xml($res, $dir_req, 'direct');
+		$res = xhanch_my_twitter_split_xml($res, $std_req, 'standard');
+		krsort($res);
+		return $res;
+	}
+
+	function xhanch_my_twitter_get_tweets(){
+		$uid = get_option('xhanch_my_twitter_id');
+		$pwd = get_option('xhanch_my_twitter_pw');
+		$limit = intval(get_option('xhanch_my_twitter_count'));
+		$show_post_by = intval(get_option('xhanch_my_twitter_show_post_by'));
+		
+		if($limit <= 0)
+			$limit = 5;
+		
+		$arr = array();
+		if($pwd == ''){			
+			$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
+			$arr = xhanch_my_twitter_split_xml($arr, xhanch_my_twitter_get_file($api_url));
+		}else{			
+			$extra_options = Array();
+			$extra_options['rep_msg'] = intval(get_option("xhanch_my_twitter_rep_msg_enable"));
+			$extra_options['dir_msg'] = intval(get_option("xhanch_my_twitter_dir_msg_enable"));
+			$extra_options['credentials'] = sprintf("%s:%s", $uid, $pwd);
+
+			if($extra_options['rep_msg']) {
+				$api_url = sprintf('http://twitter.com/statuses/replies/%s.xml?count=%s',urlencode($uid),$limit);
+				$rep_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
+			}
+			if($extra_options['dir_msg']) {
+				$api_url = sprintf('http://twitter.com/direct_messages.xml?count=%s',$limit);
+				$dir_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
+			}
+			$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
+			$std_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
+
+			$arr = xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options);			
+		}
 
 		if($show_post_by != 'hidden_personal'){
 			$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($uid);

@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.3.0
+		Version: 1.3.1
 	*/
 
 	function xhanch_my_twitter_install () {
@@ -24,6 +24,11 @@
 		update_option("xhanch_my_twitter_count", intval($param['count']));
 		update_option("xhanch_my_twitter_show_post_by", htmlspecialchars($param['show_post_by']));
 		update_option("xhanch_my_twitter_date_format", htmlspecialchars($param['date_format']));
+		update_option("xhanch_my_twitter_show_hr", intval($param['show_hr']));
+		
+		update_option("xhanch_my_twitter_pw", htmlspecialchars($param['password']));
+		update_option("xhanch_my_twitter_rep_msg_enable", intval($param['rep_msg_enable']));
+		update_option("xhanch_my_twitter_dir_msg_enable", intval($param['dir_msg_enable']));
 
 		update_option("xhanch_my_twitter_scroll_enable", htmlspecialchars($param['scroll_enable']));
 		update_option("xhanch_my_twitter_scroll_area_height", htmlspecialchars($param['scroll_area_height']));
@@ -44,6 +49,7 @@
 		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
 		$scroll_mode = intval(get_option('xhanch_my_twitter_scroll_enable'));
 		$scroll_h = intval(get_option('xhanch_my_twitter_scroll_area_height'));
+        $show_hr = intval(get_option('xhanch_my_twitter_show_hr'));
 		$scroll_animate = intval(get_option('xhanch_my_twitter_scroll_animate'));
 		$scroll_animate_amount = intval(get_option('xhanch_my_twitter_scroll_amount'));
 		$scroll_animate_delay = intval(get_option('xhanch_my_twitter_scroll_delay'));
@@ -71,10 +77,13 @@
 			<ul>
 			<?php foreach($res as $row){ ?>
 				<li>
+					<?php if($show_hr) echo '<hr />'; ?>
 					<?php if($show_post_by != '' && $show_post_by != 'hidden_personal'){ ?>
 						<a href="<?php echo $row['author_url']; ?>">
 							<?php if($show_post_by == 'avatar'){ ?>
 								<img class="avatar" src="<?php echo $row['author_img']; ?>" alt="<?php echo $row['author_name']; ?>"/></a>						
+							<?php } else if($show_post_by == 'avatar_name'){ ?>
+								<img class="avatar" src="<?php echo $row['author_img']; ?>" alt="<?php echo $row['author_name']; ?>"/> <?php echo $row['author_name'].': '; ?></a>			
 							<?php }else{ echo $row['author_name'].'</a>: '; } ?>
 					<?php } ?>
 					<?php echo $row['tweet']; ?> <?php echo $row['timestamp']; ?>
@@ -135,17 +144,23 @@
 			'' => 'Hidden',
 			'hidden_personal' => 'Hidden (Show my tweets only)',
 			'avatar' => 'Avatar',
+			'avatar_name' => 'Avatar + Name',
 			'name' => 'Name',
 		);
 
 		$title = get_option('xhanch_my_twitter_title');
 		$header_style = get_option('xhanch_my_twitter_header_style');
 		$name = htmlspecialchars(get_option('xhanch_my_twitter_name'));
-		$uid = get_option('xhanch_my_twitter_id');
+		$uid = get_option('xhanch_my_twitter_id');	
 		$limit = intval(get_option('xhanch_my_twitter_count'));
 		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
 		$date_format = get_option('xhanch_my_twitter_date_format');
+		$show_hr = intval(get_option('xhanch_my_twitter_show_hr'));
 		$credit = intval(get_option('xhanch_my_twitter_credit'));
+		
+		$pwd = get_option('xhanch_my_twitter_pw');
+		$rep_msg_enable = intval(get_option('xhanch_my_twitter_rep_msg_enable'));	
+		$dir_msg_enable = intval(get_option('xhanch_my_twitter_dir_msg_enable'));
 		
 		$scroll_enable = intval(get_option('xhanch_my_twitter_scroll_enable'));	
 		$scroll_animate = intval(get_option('xhanch_my_twitter_scroll_animate'));
@@ -164,8 +179,13 @@
 			update_option("xhanch_my_twitter_count", intval($_POST['xhanch_my_twitter_count']));
 			update_option("xhanch_my_twitter_show_post_by", htmlspecialchars($_POST['xhanch_my_twitter_show_post_by']));
 			update_option("xhanch_my_twitter_date_format", htmlspecialchars($_POST['xhanch_my_twitter_date_format']));
+			update_option("xhanch_my_twitter_show_hr", intval($_POST['xhanch_my_twitter_show_hr']));
 			update_option("xhanch_my_twitter_credit", intval($_POST['xhanch_my_twitter_credit']));
 
+			update_option("xhanch_my_twitter_pw", htmlspecialchars($_POST['xhanch_my_twitter_pw']));
+			update_option("xhanch_my_twitter_rep_msg_enable", intval($_POST['xhanch_my_twitter_rep_msg_enable']));
+			update_option("xhanch_my_twitter_dir_msg_enable", intval($_POST['xhanch_my_twitter_dir_msg_enable']));
+			
 			update_option("xhanch_my_twitter_scroll_enable", intval($_POST['xhanch_my_twitter_scroll_enable']));
 			update_option("xhanch_my_twitter_scroll_animate", intval($_POST['xhanch_my_twitter_scroll_animate']));
 			update_option("xhanch_my_twitter_scroll_amount", intval($_POST['xhanch_my_twitter_scroll_amount']));
@@ -225,9 +245,30 @@
 				</td>
 			</tr>
 			<tr>
+				<td><label for="xhanch_my_twitter_show_hr">Show Divider Line</label></td>
+				<td><input type="checkbox" id="xhanch_my_twitter_show_hr" name="xhanch_my_twitter_show_hr" value="1" <?php echo ($show_hr?'checked="checked"':''); ?>/></td>
+			</tr>
+			<tr>
 				<td><label for="xhanch_my_twitter_credit">Display Credit</label></td>
 				<td><input type="checkbox" id="xhanch_my_twitter_credit" name="xhanch_my_twitter_credit" value="1" <?php echo ($credit?'checked="checked"':''); ?>/></td>
 			</tr>
+		</table>
+		<br/>
+		
+        <b>Advanced Options</b>
+		<table>
+            <tr>
+				<td width="150"><label for="xhanch_my_twitter_pw">Password</label></td>
+				<td><input type="password" id="xhanch_my_twitter_pw" name="xhanch_my_twitter_pw" value="<?php echo $pwd; ?>" /></td>
+			</tr>
+			<tr>
+				<td><label for="xhanch_my_twitter_rep_msg_enable">Tweet Replies</label></td>
+				<td><input type="checkbox" id="xhanch_my_twitter_rep_msg_enable" name="xhanch_my_twitter_rep_msg_enable" value="1" <?php echo ($rep_msg_enable?'checked="checked"':''); ?>/></td>
+		    </tr>
+            <tr>
+				<td><label for="xhanch_my_twitter_dir_msg_enable">Direct Message</label></td>
+				<td><input type="checkbox" id="xhanch_my_twitter_dir_msg_enable" name="xhanch_my_twitter_dir_msg_enable" value="1" <?php echo ($dir_msg_enable?'checked="checked"':''); ?>/></td>
+		    </tr>
 		</table>
 		<br/>
 

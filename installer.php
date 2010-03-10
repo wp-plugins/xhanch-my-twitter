@@ -119,6 +119,16 @@
 
 		$cur_ver = '1.1.8';
 		update_option("xhanch_my_twitter_version", $cur_ver);
+	}	
+
+	if($cur_ver == '1.1.8'){
+		add_option("xhanch_my_twitter_pw", '');
+		add_option("xhanch_my_twitter_rep_msg_enable", '0');
+		add_option("xhanch_my_twitter_dir_msg_enable", '0');
+		add_option("xhanch_my_twitter_show_hr", '0');
+
+		$cur_ver = '1.1.9';
+		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
 
 	update_option("xhanch_my_twitter_credit", 1);
