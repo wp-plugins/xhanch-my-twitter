@@ -172,6 +172,8 @@
 			$req = str_replace('direct_message', 'status', $req);
 			$req = str_replace('sender', 'user', $req);
 		}
+		if($req == '')
+			return $arr;
 		$xml = @new SimpleXMLElement($req);
 		if(!$xml)
 			xhanch_my_twitter_log('Failed to parse feeds retrieved from twitter');	
