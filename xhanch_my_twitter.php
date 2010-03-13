@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.3.2
+		Version: 1.3.3
 	*/
 
 	function xhanch_my_twitter_install () {
@@ -88,6 +88,7 @@
 							<?php }else{ echo $row['author_name'].'</a>: '; } ?>
 					<?php } ?>
 					<?php echo $row['tweet']; ?> <?php echo $row['timestamp']; ?>
+					<div class="clear"></div>
 					</div>
 				</li>
 			<?php } ?>
