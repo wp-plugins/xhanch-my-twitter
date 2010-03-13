@@ -1,3 +1,10 @@
+#xhanch_my_twitter hr{
+	height:1px;
+	width:100%;
+	color:#000000
+}
+
+
 #xhanch_my_twitter .header_48{
 	height:48px;
 	line-height:48px;
@@ -14,12 +21,22 @@
 	border:none
 }
 
-#xhanch_my_twitter ul li{
+#xhanch_my_twitter_list{
+	padding-left:0px;	
+	margin-left:0px
+}
+
+#xhanch_my_twitter ul li.tweet_list{
 	font:inherit;
 	list-style:none;
 	text-indent: 0px;
 	background: none;
-	padding-left: 0px;
+	padding-left: 0px;	
+	margin-left:0
+}
+
+#xhanch_my_twitter ul li.tweet_list:before{
+	content:""
 }
 
 #xhanch_my_twitter .avatar{
