@@ -13,8 +13,21 @@ Xhanch - My Twitter shows your latest tweets, replies, avatars, post date, click
 
 == Description ==
 
-Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your latest tweets, replies, user's profile picture(or you may just show the name instead of picture), post date(changeable format), click-able links within the tweets, convert smilies syntax to smilies and some custom texts(can be HTML code). Xhanch - My Twitter generates very clean, table-less and valid XHTML codes.
-This plugin use NO JavaScript.
+My Twitter is a WordPress plugin made by Xhanch Studio to show your latest tweets and you can customize it with our predefined customizations settings/options.
+
+Features:
+- Display a number of latest tweets
+- Display/hide tweet replies (there are two methods provided to achieve this, by using or without your Twitter password)
+- Display/hide user's profile picture or you may just show the name instead of picture
+- Display/hide post date(changeable format)
+- Display date time based on timezone setting on your WordPress
+- Convert all url and @username to click-able links
+- Show your direct messages
+- Convert smilies/emoticon syntax to smilies/emoticon images
+- Display custom texts(can be HTML code) before and after the tweets list.
+- Choose one of available header styles that suits your taste
+- Generates very clean, table-less and valid W3C XHTML codes.
+- You can activate scrolling mode to save space on your webpage and to display more tweets
 
 [Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
 
