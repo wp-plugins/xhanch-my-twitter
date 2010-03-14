@@ -15,7 +15,7 @@ Xhanch - My Twitter shows your latest tweets, replies, avatars, post date, click
 
 My Twitter is a WordPress plugin made by Xhanch Studio to show your latest tweets and you can customize it with our predefined customizations settings/options.
 
-Features:
+= Features: =
 - Display a number of latest tweets
 - Display/hide tweet replies (there are two methods provided to achieve this, by using or without your Twitter password)
 - Display/hide user's profile picture or you may just show the name instead of picture
