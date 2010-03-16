@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.3.4
+		Version: 1.3.5
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -42,57 +42,56 @@
 		if(count($res) == 0) 
 			return;		
 		echo $before_widget;
-?>
-		<?php 
-			if (get_option("xhanch_my_twitter_title")!='')
-				echo $before_title.get_option("xhanch_my_twitter_title").$after_title;				
-		?>
-		<div id="xhanch_my_twitter">
-			<?php xhanch_my_twitter_header_style(); ?>
+		if (get_option("xhanch_my_twitter_title")!='')
+			echo $before_title.get_option("xhanch_my_twitter_title").$after_title;				
+		
+		echo '<div id="xhanch_my_twitter">';
+		xhanch_my_twitter_header_style();
 
-			<?php echo convert_smilies(html_entity_decode(get_option("xhanch_my_twitter_text_header"))); ?>
+		echo convert_smilies(html_entity_decode(get_option("xhanch_my_twitter_text_header")));
 
-			<?php if($scroll_mode){ ?>
-				<?php if($scroll_animate){ ?>
-					<marquee direction="up" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="<?php echo $scroll_animate_delay; ?>" scrollamount="<?php echo $scroll_animate_amount; ?>" height="<?php echo $scroll_h; ?>px" style="height:<?php echo $scroll_h; ?>px;overflow:hidden">
-				<?php }else{ ?>
-					<div style="max-height:<?php echo $scroll_h; ?>px;overflow:auto">
-				<?php } ?>
-			<?php } ?>
-			<ul id="xhanch_my_twitter_list">
-			<?php foreach($res as $row){ ?>
-				<li class="tweet_list">
-					<?php if($show_hr) echo '<hr />'; ?>
-					<div>
-					<?php if($show_post_by != '' && $show_post_by != 'hidden_personal'){ ?>
-						<a href="<?php echo $row['author_url']; ?>">
-							<?php if($show_post_by == 'avatar'){ ?>
-								<img class="avatar" src="<?php echo $row['author_img']; ?>" alt="<?php echo $row['author_name']; ?>"/></a>						
-							<?php } else if($show_post_by == 'avatar_name'){ ?>
-								<img class="avatar" src="<?php echo $row['author_img']; ?>" alt="<?php echo $row['author_name']; ?>"/> <?php echo $row['author_name'].': '; ?></a>			
-							<?php }else{ echo $row['author_name'].'</a>: '; } ?>
-					<?php } ?>
-					<?php echo $row['tweet']; ?> <?php echo $row['timestamp']; ?>
-					<div class="clear"></div>
-					</div>
-				</li>
-			<?php } ?>
-			</ul>
-			<?php if($scroll_mode){ ?>
-				<?php if($scroll_animate){ ?>
-					</marquee>
-				<?php }else{ ?>
-					</div>
-				<?php } ?>
-			<?php } ?>
-						
-			<?php echo convert_smilies(html_entity_decode(get_option("xhanch_my_twitter_text_footer"))); ?>
+		if($scroll_mode){
+			if($scroll_animate){
+				echo '<marquee direction="up" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="'.$scroll_animate_delay.'" scrollamount="'.$scroll_animate_amount.'" height="'.$scroll_h.'px" style="height:'.$scroll_h.'px;overflow:hidden">';
+			}else
+				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';			
+		} 
+		echo '<ul id="xhanch_my_twitter_list">';
+		foreach($res as $row){
+			echo '<li class="tweet_list">';
+				if($show_hr) 
+					echo '<hr />';
+				echo '<div>';
+				if($show_post_by != '' && $show_post_by != 'hidden_personal'){
+					echo '<a href="'.$row['author_url'].'">';
+					if($show_post_by == 'avatar'){
+						echo '<img class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';					
+					}else if($show_post_by == 'avatar_name'){
+						echo '<img class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/> '.$row['author_name'].': </a>';			
+					}else{ 
+						echo $row['author_name'].'</a>: '; 
+					}
+				}
+				echo $row['tweet'];
+				echo $row['timestamp']; 
+				echo '<div class="clear"></div>';
+				echo '</div>';
+			echo '</li>';
+		}
+		echo '</ul>';
+		if($scroll_mode){
+			if($scroll_animate)
+				echo '</marquee>';
+			else
+				echo '</div>';			
+		} 
+					
+		echo convert_smilies(html_entity_decode(get_option("xhanch_my_twitter_text_footer"))); 
 
-			<?php if (get_option("xhanch_my_twitter_credit")){ ?>
-				<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="Xhanch My Twitter - A free WordPress plugin to display your latest tweets from Twitter">My Twitter</a>, <a href="http://xhanch.com/" rel="section" title="Developed by Xhanch Studio">by Xhanch</a></div>
-			<?php }?>
-		</div>
-<?php		
+		if (get_option("xhanch_my_twitter_credit")){
+			echo '<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="Xhanch My Twitter - A free WordPress plugin to display your latest tweets from Twitter">My Twitter</a>, <a href="http://xhanch.com/" rel="section" title="Developed by Xhanch Studio">by Xhanch</a></div>';
+		}
+		echo '</div>';
 		echo $after_widget;
 	}
 

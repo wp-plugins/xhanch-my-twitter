@@ -17,7 +17,7 @@
 
 #xhanch_my_twitter .img_left{	
 	float:left;
-	margin-right:5px;
+	margin:0 5px 0 0;
 	border:none
 }
 
@@ -26,13 +26,19 @@
 	margin-left:0px
 }
 
+#xhanch_my_twitter ul{
+	line-height:150%;
+	list-style:none;
+}
+
 #xhanch_my_twitter ul li.tweet_list{
 	font:inherit;
-	list-style:none;
-	text-indent: 0px;
+	text-indent:0;
 	background: none;
-	padding-left: 0px;	
-	margin-left:0
+	padding:0;	
+	margin:0;
+	display:block;
+	white-space: normal; 
 }
 
 #xhanch_my_twitter ul li.tweet_list:before{
@@ -44,7 +50,9 @@
 	padding:0px 3px 3px 0;
 	width:48px;
 	height:48px;
-	border:none
+	border:none;
+	position:relative;
+	display:block
 }
 
 #xhanch_my_twitter .credit{
@@ -62,5 +70,5 @@
 }
 
 #xhanch_my_twitter .clear{
-	clear:both
+	clear:both; 
 }
