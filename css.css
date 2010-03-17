@@ -39,6 +39,7 @@
 	margin:0;
 	display:block;
 	white-space: normal; 
+	word-wrap: break-word;
 }
 
 #xhanch_my_twitter ul li.tweet_list:before{
