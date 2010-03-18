@@ -5,6 +5,7 @@
 	function xhanch_my_twitter_setting(){
 		$arr_header_style = array(
 			'' => 'No Header',
+			'avatar' => 'Your avatar + display name',
 			'default' => 'Twitter bird 1 + display name',
 			'bird_with_text-2' => 'Twitter bird 2 + display name',
 			'bird_with_text-3' => 'Twitter bird 3 + display name',
