@@ -24,8 +24,9 @@ Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your lat
 - Display date time based on timezone setting on your WordPress
 - Convert all url and @username to click-able links
 - Show your direct messages
+- Cache System
 - Convert smilies/emoticon syntax to smilies/emoticon images
-- Wrap long word in tweets into multiple lines so that it won;t be displayed outside the box/area anymore
+- Wrap long word in tweets into multiple lines so that it won't be displayed outside the box/area anymore
 - Display custom texts(can be HTML code) before and after the tweets list.
 - Choose one of available header styles that suits your taste
 - Generates very clean, optimized, table-less and valid W3C XHTML codes.
