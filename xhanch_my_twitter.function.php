@@ -23,7 +23,6 @@
 		$dest = esc_url($dest);
 		if ( empty($dest) )
 			return $matches[0];
-		// removed trailing [,;:] from URL
 		if ( in_array(substr($dest, -1), array('.', ',', ';', ':')) === true ) {
 			$ret = substr($dest, -1);
 			$dest = substr($dest, 0, strlen($dest)-1);
@@ -38,7 +37,6 @@
 
 	function xhanch_my_twitter_make_clickable($ret) {
 		$ret = ' ' . $ret;
-		// in testing, using arrays here was found to be faster
 		$ret = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', 'xhanch_my_twitter_make_url_clickable_cb', $ret);
 		$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', 'xhanch_my_twitter_make_web_ftp_clickable_cb', $ret);
 		//$ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', 'xhanch_my_twitter_make_email_clickable_cb', $ret);
@@ -217,93 +215,111 @@
 	}
 
 	function xhanch_my_twitter_get_tweets(){
-		$uid = get_option('xhanch_my_twitter_id');
-		$pwd = get_option('xhanch_my_twitter_pw');
-		$limit = intval(get_option('xhanch_my_twitter_count'));
-		$show_post_by = intval(get_option('xhanch_my_twitter_show_post_by'));
-		
-		if($limit <= 0)
-			$limit = 5;
-		
-		$arr = array();
-		if($pwd == ''){			
-			$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
-			$arr = xhanch_my_twitter_split_xml($arr, xhanch_my_twitter_get_file($api_url));
-		}else{			
-			$extra_options = Array();
-			$extra_options['rep_msg'] = intval(get_option("xhanch_my_twitter_rep_msg_enable"));
-			$extra_options['dir_msg'] = intval(get_option("xhanch_my_twitter_dir_msg_enable"));
-			$extra_options['credentials'] = sprintf("%s:%s", $uid, $pwd);
+		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
+		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry')) * 60;	
+		$cache_date = intval(get_option('xhanch_my_twitter_cache_date'));
 
-			if($extra_options['rep_msg']) {
-				$api_url = sprintf('http://twitter.com/statuses/replies/%s.xml?count=%s',urlencode($uid),$limit);
-				$rep_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
-			}
-			if($extra_options['dir_msg']) {
-				$api_url = sprintf('http://twitter.com/direct_messages.xml?count=%s',$limit);
-				$dir_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
-			}
-			$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
-			$std_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
-
-			$arr = xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options);			
+		$use_cache = false;
+		if($cache_enable){
+			$cache_age = time() - $cache_date;
+			if($cache_age <= $cache_expiry)
+				$use_cache = true;			
 		}
-
-		if($show_post_by != 'hidden_personal'){
-			$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($uid);
-			$req = xhanch_my_twitter_get_file($api_url_reply); 
-			if($req == '')
-				return array();
-
-			$xml = @new SimpleXMLElement($req);		
-			$items_count = count($xml->entry);
+		var_dump($use_cache);
+		if(!$use_cache){
+			$uid = get_option('xhanch_my_twitter_id');
+			$pwd = get_option('xhanch_my_twitter_pw');
+			$limit = intval(get_option('xhanch_my_twitter_count'));
+			$show_post_by = intval(get_option('xhanch_my_twitter_show_post_by'));
 			
-			$limit = intval(get_option('xhanch_my_twitter_count'));
-			if($items_count < $limit)
-				$limit = $items_count;
+			if($limit <= 0)
+				$limit = 5;
+			
+			$arr = array();
+			if($pwd == ''){			
+				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
+				$arr = xhanch_my_twitter_split_xml($arr, xhanch_my_twitter_get_file($api_url));
+			}else{			
+				$extra_options = Array();
+				$extra_options['rep_msg'] = intval(get_option("xhanch_my_twitter_rep_msg_enable"));
+				$extra_options['dir_msg'] = intval(get_option("xhanch_my_twitter_dir_msg_enable"));
+				$extra_options['credentials'] = sprintf("%s:%s", $uid, $pwd);
 
-			$i = 0;			
-			while($i < $limit){
-				$id_tag = (string)$xml->entry[$i]->id;			
-				$id_tag_part = explode(':', $id_tag);
-				$sts_id = $id_tag_part[2];
+				if($extra_options['rep_msg']) {
+					$api_url = sprintf('http://twitter.com/statuses/replies/%s.xml?count=%s',urlencode($uid),$limit);
+					$rep_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
+				}
+				if($extra_options['dir_msg']) {
+					$api_url = sprintf('http://twitter.com/direct_messages.xml?count=%s',$limit);
+					$dir_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
+				}
+				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
+				$std_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
 
-				$date_time = (string)$xml->entry[$i]->published;
-				$pos_t = strpos($date_time, 'T');
-				$pos_z = strpos($date_time, 'Z');
-
-				$date_raw = substr($date_time, 0, $pos_t);
-				$date_part = explode('-', $date_raw);
-				$date = $date_part[2].'/'.$date_part[1].'/'.$date_part[0];
-				$time = substr($date_time, $pos_t+1, $pos_z-$pos_t-1);
-
-				$author = (string)$xml->entry[$i]->author->name;
-				$author_name = substr($author, strpos($author, ' ') + 2, strlen($author) - (strpos($author, ' ') + 3));
-				$author_uid = substr($author, 0, strpos($author, ' '));
-
-				$author_img = $xml->entry[$i]->link[1]->attributes();	
-				$author_img = (string)$author_img['href'];
-
-				$arr[$sts_id] = array(
-					'date' => $date,
-					'time' => $time,
-					'tweet' => (string)$xml->entry[$i]->content,
-					'author' => $author_uid,
-					'author_name' => $author_name,
-					'author_url' => (string)$xml->entry[$i]->author->uri,
-					'author_img' => $author_img,
-				);
-				$i++;
+				$arr = xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options);			
 			}
-			krsort($arr);
 
-			$limit = intval(get_option('xhanch_my_twitter_count'));
-			if(count($arr) > $limit){
-				do{
-					array_pop($arr);
-				}while(count($arr) > $limit);
+			if($show_post_by != 'hidden_personal'){
+				$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($uid);
+				$req = xhanch_my_twitter_get_file($api_url_reply); 
+				if($req == '')
+					return array();
+
+				$xml = @new SimpleXMLElement($req);		
+				$items_count = count($xml->entry);
+				
+				$limit = intval(get_option('xhanch_my_twitter_count'));
+				if($items_count < $limit)
+					$limit = $items_count;
+
+				$i = 0;			
+				while($i < $limit){
+					$id_tag = (string)$xml->entry[$i]->id;			
+					$id_tag_part = explode(':', $id_tag);
+					$sts_id = $id_tag_part[2];
+
+					$date_time = (string)$xml->entry[$i]->published;
+					$pos_t = strpos($date_time, 'T');
+					$pos_z = strpos($date_time, 'Z');
+
+					$date_raw = substr($date_time, 0, $pos_t);
+					$date_part = explode('-', $date_raw);
+					$date = $date_part[2].'/'.$date_part[1].'/'.$date_part[0];
+					$time = substr($date_time, $pos_t+1, $pos_z-$pos_t-1);
+
+					$author = (string)$xml->entry[$i]->author->name;
+					$author_name = substr($author, strpos($author, ' ') + 2, strlen($author) - (strpos($author, ' ') + 3));
+					$author_uid = substr($author, 0, strpos($author, ' '));
+
+					$author_img = $xml->entry[$i]->link[1]->attributes();	
+					$author_img = (string)$author_img['href'];
+
+					$arr[$sts_id] = array(
+						'date' => $date,
+						'time' => $time,
+						'tweet' => (string)$xml->entry[$i]->content,
+						'author' => $author_uid,
+						'author_name' => $author_name,
+						'author_url' => (string)$xml->entry[$i]->author->uri,
+						'author_img' => $author_img,
+					);
+					$i++;
+				}
+				krsort($arr);
+
+				$limit = intval(get_option('xhanch_my_twitter_count'));
+				if(count($arr) > $limit){
+					do{
+						array_pop($arr);
+					}while(count($arr) > $limit);
+				}
 			}
+			update_option('xhanch_my_twitter_cache_date', time());
+			update_option('xhanch_my_twitter_cache_data', serialize($arr));
 		}
+
+		if($use_cache)
+			$arr = unserialize(get_option('xhanch_my_twitter_cache_data'));
 		return $arr;
 	}
 ?>

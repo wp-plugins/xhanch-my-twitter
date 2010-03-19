@@ -56,6 +56,9 @@
 			update_option("xhanch_my_twitter_pw", htmlspecialchars($_POST['xhanch_my_twitter_pw']));
 			update_option("xhanch_my_twitter_rep_msg_enable", intval($_POST['xhanch_my_twitter_rep_msg_enable']));
 			update_option("xhanch_my_twitter_dir_msg_enable", intval($_POST['xhanch_my_twitter_dir_msg_enable']));
+
+			update_option("xhanch_my_twitter_cache_enable", intval($_POST['xhanch_my_twitter_cache_enable']));
+			update_option("xhanch_my_twitter_cache_expiry", intval($_POST['xhanch_my_twitter_cache_expiry']));
 			
 			update_option("xhanch_my_twitter_scroll_enable", intval($_POST['xhanch_my_twitter_scroll_enable']));
 			update_option("xhanch_my_twitter_scroll_animate", intval($_POST['xhanch_my_twitter_scroll_animate']));
@@ -83,6 +86,9 @@
 		$rep_msg_enable = intval(get_option('xhanch_my_twitter_rep_msg_enable'));	
 		$dir_msg_enable = intval(get_option('xhanch_my_twitter_dir_msg_enable'));
 		
+		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
+		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry'));	
+
 		$scroll_enable = intval(get_option('xhanch_my_twitter_scroll_enable'));	
 		$scroll_animate = intval(get_option('xhanch_my_twitter_scroll_animate'));
 		$scroll_animate_amount = intval(get_option('xhanch_my_twitter_scroll_amount'));
@@ -172,6 +178,19 @@
 					</tr>
 				</table>
 				<br/>
+				
+				<b>Cache Options</b>
+				<table class="form-table">
+					<tr>
+						<th scope="row" valign="top">Enable Cache</th>
+						<td><input type="checkbox" id="xhanch_my_twitter_cache_enable" name="xhanch_my_twitter_cache_enable" value="1" <?php echo ($cache_enable?'checked="checked"':''); ?>/></td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Cache Expiry (in minutes)</th>
+						<td><input type="text" id="xhanch_my_twitter_cache_expiry" name="xhanch_my_twitter_cache_expiry" value="<?php echo $cache_expiry; ?>" size="5"  maxlength="3"/></td>
+					</tr>
+				</table>
+				<br/>
 
 				<b>Scrolling Mode</b>
 				<table class="form-table">
@@ -209,6 +228,11 @@
 					<input type="submit" name="cmd_submit" value="Save"/>
 				</p>
 			</form>
+			<br/><br/>
+			<b>Updates and Discussions</b><br/>
+			<br/>
+			<iframe src="http://xhanch.com/wp-plugin-my-twitter/feed/" style="width:100%;height:300px;border:1px solid blue"></iframe>
+			<br/><br/>
 		</div>
 <?php
 	}
