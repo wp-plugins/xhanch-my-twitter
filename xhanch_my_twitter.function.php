@@ -225,7 +225,6 @@
 			if($cache_age <= $cache_expiry)
 				$use_cache = true;			
 		}
-		var_dump($use_cache);
 		if(!$use_cache){
 			$uid = get_option('xhanch_my_twitter_id');
 			$pwd = get_option('xhanch_my_twitter_pw');
