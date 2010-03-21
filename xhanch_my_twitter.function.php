@@ -220,7 +220,7 @@
 		$cache_date = intval(get_option('xhanch_my_twitter_cache_date'));
 
 		$use_cache = false;
-		if($cache_enable && $cache_date > 0){
+		if($cache_enable && $cache_date){
 			$cache_age = time() - $cache_date;
 			if($cache_age <= $cache_expiry)
 				$use_cache = true;			
