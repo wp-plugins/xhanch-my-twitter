@@ -32,7 +32,7 @@ Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your lat
 - Generates very clean, optimized, table-less and valid W3C XHTML codes.
 - You can activate scrolling mode to save space on your webpage and to display more tweets
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 = Special Thanks to: =
 - Peter Boekelaar (peter@boekelaar.org)
@@ -40,26 +40,26 @@ For the show divider line, direct message and tweet replies(alternative method) 
 
 == Installation ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 == Screenshots ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 == Frequently Asked Questions ==
 
 = What is Xhanch - My Twitter? =
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 == Upgrade Notice ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 == Support ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 == Changelog ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - Xhanch - My Twitter")
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
