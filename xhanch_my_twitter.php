@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.4.0
+		Version: 1.4.1
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -52,9 +52,10 @@
 
 		if($scroll_mode){
 			if($scroll_animate){
-				echo '<marquee direction="up" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="'.$scroll_animate_delay.'" scrollamount="'.$scroll_animate_amount.'" height="'.$scroll_h.'px" style="height:'.$scroll_h.'px;overflow:hidden">';
-			}else
-				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';			
+				echo '<div onmouseover="xmt_scroll_stop()" onmouseout="xmt_scroll()"  style="max-height:'.$scroll_h.'px;overflow:hidden"><div id="xhanch_my_twitter_tweet_area" style="margin-bottom:'.$scroll_h.'px">';
+			}else{				
+				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
+			}
 		} 
 		echo '<ul id="xhanch_my_twitter_list">';
 		foreach($res as $row){
@@ -80,9 +81,32 @@
 		}
 		echo '</ul>';
 		if($scroll_mode){
-			if($scroll_animate)
-				echo '</marquee>';
-			else
+			if($scroll_animate){
+				echo '</div></div>';							
+				echo '
+					<script type="text/javascript">
+						var xmt_pos = '.$scroll_h.';
+						var xmt_ti;
+						var xmt_tweet_area = document.getElementById("xhanch_my_twitter_tweet_area");
+						var xmt_ta_limit = xmt_tweet_area.offsetHeight * -1;
+
+						function xmt_scroll(){
+							xmt_scroll_stop();
+							xmt_pos = xmt_pos - '.$scroll_animate_amount.';
+							if(xmt_pos < xmt_ta_limit)
+								xmt_pos = '.$scroll_h.';
+							xmt_tweet_area.style.marginTop = xmt_pos.toString() + "px";
+							xmt_ti = setTimeout("xmt_scroll()",50);
+						}
+						function xmt_scroll_stop(){
+							if(xmt_ti)
+								clearTimeout(xmt_ti);
+						}
+						xmt_tweet_area.style.marginTop = xmt_pos.toString() + "px";
+						xmt_scroll();
+					</script>
+				';
+			}else
 				echo '</div>';			
 		} 
 					
