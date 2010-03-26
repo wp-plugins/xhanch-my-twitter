@@ -121,11 +121,11 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 			$res = curl_exec($ch);
-
+			
 			if(!$res)
 				xhanch_my_twitter_log('Failed to read feeds from twitter');
 			curl_close($ch);
-		}
+		}		
 		return $res;
 	}	
 
@@ -170,9 +170,11 @@
 			$req = str_replace('direct_message', 'status', $req);
 			$req = str_replace('sender', 'user', $req);
 		}
+
 		if($req == '')
 			return $arr;
-		$xml = @new SimpleXMLElement($req);
+		$xml = @new SimpleXMLElement($req);	
+			
 		if(!$xml)
 			xhanch_my_twitter_log('Failed to parse feeds retrieved from twitter');	
 		$items_count= count($xml->entry);
@@ -238,6 +240,8 @@
 			if($pwd == ''){			
 				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
 				$arr = xhanch_my_twitter_split_xml($arr, xhanch_my_twitter_get_file($api_url));
+				if(count($arr) == 0)
+					$use_cache = true;
 			}else{			
 				$extra_options = Array();
 				$extra_options['rep_msg'] = intval(get_option("xhanch_my_twitter_rep_msg_enable"));
@@ -313,8 +317,12 @@
 					}while(count($arr) > $limit);
 				}
 			}
-			update_option('xhanch_my_twitter_cache_date', time());
-			update_option('xhanch_my_twitter_cache_data', serialize($arr));
+
+			if(count($arr)){
+				update_option('xhanch_my_twitter_cache_date', time());
+				update_option('xhanch_my_twitter_cache_data', serialize($arr));
+			}else
+				$use_cache = true;			
 		}
 
 		if($use_cache)
