@@ -33,6 +33,10 @@
 			'M d, Y H:i' => 'mmm dd, yyyy hh:mm',
 			'M d, Y h:i a' => 'mmm dd, yyyy hh:mm am/pm',
 			'M d, Y' => 'mmm dd, yyyy',
+			'd-F-Y H:i:s' => 'dd-month-yyyy hh:mm:ss',
+			'd-F-Y H:i' => 'dd-month-yyyy hh:mm',
+			'd-F-Y h:i a' => 'dd-month-yyyy hh:mm am/pm',
+			'd-F-Y' => 'dd-month-yyyy',
 			'span' => '? period ago',
 		);		
 
