@@ -75,6 +75,9 @@
 			update_option("xhanch_my_twitter_text_header", xhanch_my_twitter_form_post('xhanch_my_twitter_text_header'));
 			update_option("xhanch_my_twitter_text_footer", xhanch_my_twitter_form_post('xhanch_my_twitter_text_footer'));
 
+			update_option('xhanch_my_twitter_cache_date', 0);
+			update_option('xhanch_my_twitter_cache_data', serialize(array()));
+
 			echo '<div id="message" class="updated fade"><p>Configuration Updated</p></div>';
 		}
 		
