@@ -22,7 +22,7 @@ Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your lat
 - Display/hide user's profile picture or you may just show the name instead of picture
 - Display/hide post date(changeable format)
 - Display date time based on timezone setting on your WordPress
-- Convert all url and @username to click-able links
+- Convert all url, @username, and #tag (hash tags) to click-able links
 - Show your direct messages
 - Cache System
 - Convert smilies/emoticon syntax to smilies/emoticon images
