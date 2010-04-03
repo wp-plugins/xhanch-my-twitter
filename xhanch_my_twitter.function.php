@@ -186,9 +186,17 @@
 			
 			$timestamp = xhanch_my_twitter_parse_time($date_time);
 			
+			$output = xhanch_my_twitter_make_clickable($res->text);
+
+			$pattern = '/\#([a-zA-Z0-9]+)/';
+			$replace = '<a href="http://search.twitter.com/search?q=%23'.strtolower('\1').'" target="_blank">#\1</a>';
+			$output = preg_replace($pattern,$replace,$output);
+
 			$pattern = '/\@([a-zA-Z0-9]+)/';
-			$replace = '<a href="http://twitter.com/'.strtolower('\1').'">@\1</a>';
-			$output = convert_smilies(preg_replace($pattern,$replace,xhanch_my_twitter_make_clickable($res->text)));
+			$replace = '<a href="http://twitter.com/'.strtolower('\1').'" target="_blank">@\1</a>';
+			$output = preg_replace($pattern,$replace,$output);
+
+			$output = convert_smilies($output);
 			$author_name = (string)$res->user->name;
 			$author_uid = (string)$res->user->screen_name;
 			$author_img = (string)$res->user->profile_image_url;
