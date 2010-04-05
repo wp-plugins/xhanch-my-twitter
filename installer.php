@@ -141,5 +141,13 @@
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
 
+	if($cur_ver == '1.2.0'){
+		add_option("xhanch_my_twitter_avatar_width", '');
+		add_option("xhanch_my_twitter_avatar_height", '');
+
+		$cur_ver = '1.2.1'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
+
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

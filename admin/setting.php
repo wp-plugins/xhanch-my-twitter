@@ -54,7 +54,11 @@
 			update_option("xhanch_my_twitter_name", xhanch_my_twitter_form_post('xhanch_my_twitter_name'));
 			update_option("xhanch_my_twitter_id", htmlspecialchars($_POST['xhanch_my_twitter_id']));
 			update_option("xhanch_my_twitter_count", intval($_POST['xhanch_my_twitter_count']));
+			
 			update_option("xhanch_my_twitter_show_post_by", htmlspecialchars($_POST['xhanch_my_twitter_show_post_by']));
+			update_option("xhanch_my_twitter_avatar_width", intval(htmlspecialchars($_POST['xhanch_my_twitter_avatar_width'])));
+			update_option("xhanch_my_twitter_avatar_height", intval(htmlspecialchars($_POST['xhanch_my_twitter_avatar_height'])));
+
 			update_option("xhanch_my_twitter_date_format", htmlspecialchars($_POST['xhanch_my_twitter_date_format']));
 			update_option("xhanch_my_twitter_show_hr", intval($_POST['xhanch_my_twitter_show_hr']));
 			update_option("xhanch_my_twitter_credit", intval($_POST['xhanch_my_twitter_credit']));
@@ -86,7 +90,11 @@
 		$name = htmlspecialchars(get_option('xhanch_my_twitter_name'));
 		$uid = get_option('xhanch_my_twitter_id');	
 		$limit = intval(get_option('xhanch_my_twitter_count'));
+
 		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
+		$avatar_width = get_option('xhanch_my_twitter_avatar_width');
+		$avatar_height = get_option('xhanch_my_twitter_avatar_height');		
+
 		$date_format = get_option('xhanch_my_twitter_date_format');
 		$show_hr = intval(get_option('xhanch_my_twitter_show_hr'));
 		$credit = intval(get_option('xhanch_my_twitter_credit'));
@@ -138,6 +146,13 @@
 									<option value="<?php echo $key; ?>" <?php echo ($key==$header_style)?'selected="selected"':''; ?>><?php echo $row; ?></option>
 								<?php } ?>
 							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Avatar Size</td>
+						<td>
+							Width: <input type="text" id="xhanch_my_twitter_avatar_width" name="xhanch_my_twitter_avatar_width" value="<?php echo $avatar_width; ?>" size="5"  maxlength="3"/> px; 
+							Height:	<input type="text" id="xhanch_my_twitter_avatar_height" name="xhanch_my_twitter_avatar_height" value="<?php echo $avatar_height; ?>" size="5"  maxlength="3"/> px
 						</td>
 					</tr>
 					<tr>
