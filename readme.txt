@@ -18,6 +18,7 @@ Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your lat
 = Features: =
 - Display a number of latest tweets
 - Show your twitter's avatar
+- Changeable avatar size
 - Display/hide tweet replies (there are two methods provided to achieve this, by using or without your Twitter password)
 - Display/hide user's profile picture or you may just show the name instead of picture
 - Display/hide post date(changeable format)
