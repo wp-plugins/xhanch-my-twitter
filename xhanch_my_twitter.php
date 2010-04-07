@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.4.8
+		Version: 1.4.9
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -18,8 +18,14 @@
 	require_once(dirname(__FILE__).'/xhanch_my_twitter.function.php');	
 	require_once(dirname(__FILE__).'/xhanch_my_twitter_header_style.php');	
 	
-	function xhanch_my_twitter_css() {
+	function xhanch_my_twitter_css() {		
+		$avatar_width = get_option('xhanch_my_twitter_avatar_width');
+		$avatar_height = get_option('xhanch_my_twitter_avatar_height');
+
 		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.css" type="text/css" media="screen" />';
+
+		if($avatar_width && $avatar_height)
+			echo '<style type="text/css">/*<![CDATA[*/ #xhanch_my_twitter .avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} /*]]>*/</style>';
 	}
 	add_action('wp_print_styles', 'xhanch_my_twitter_css');
 
@@ -39,9 +45,6 @@
 		$scroll_animate_amount = intval(get_option('xhanch_my_twitter_scroll_amount'));
 		$scroll_animate_delay = intval(get_option('xhanch_my_twitter_scroll_delay'));
 		
-		$avatar_width = get_option('xhanch_my_twitter_avatar_width');
-		$avatar_height = get_option('xhanch_my_twitter_avatar_height');
-
 		if(count($res) == 0) 
 			return;		
 		echo $before_widget;
@@ -66,15 +69,12 @@
 				if($show_hr) 
 					echo '<hr />';
 				echo '<div>';
-				if($show_post_by != '' && $show_post_by != 'hidden_personal'){
-					$avatar_style = '';
-					if($avatar_width && $avatar_height)
-						$avatar_style = 'style="width:'.$avatar_width.'px;height:'.$avatar_height.'px"';
+				if($show_post_by != '' && $show_post_by != 'hidden_personal'){					
 					echo '<a href="'.$row['author_url'].'">';
 					if($show_post_by == 'avatar'){
 						echo '<img '.$avatar_style.' class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';					
 					}else if($show_post_by == 'avatar_name'){
-						echo '<img '.$avatar_style.' class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/> '.$row['author_name'].': </a>';			
+						echo '<img class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/> '.$row['author_name'].': </a>';			
 					}else{ 
 						echo $row['author_name'].'</a>: '; 
 					}
