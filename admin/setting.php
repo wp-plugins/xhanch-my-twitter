@@ -71,6 +71,9 @@
 			update_option("xhanch_my_twitter_rep_msg_enable", intval($_POST['xhanch_my_twitter_rep_msg_enable']));
 			update_option("xhanch_my_twitter_dir_msg_enable", intval($_POST['xhanch_my_twitter_dir_msg_enable']));
 
+			update_option("xhanch_my_twitter_clickable_user_tag", intval($_POST['xhanch_my_twitter_clickable_user_tag']));		
+			update_option("xhanch_my_twitter_clickable_hash_tag", intval($_POST['xhanch_my_twitter_clickable_hash_tag']));
+
 			update_option("xhanch_my_twitter_cache_enable", intval($_POST['xhanch_my_twitter_cache_enable']));
 			update_option("xhanch_my_twitter_cache_expiry", intval($_POST['xhanch_my_twitter_cache_expiry']));
 			
@@ -107,6 +110,9 @@
 		$rep_msg_enable = intval(get_option('xhanch_my_twitter_rep_msg_enable'));	
 		$dir_msg_enable = intval(get_option('xhanch_my_twitter_dir_msg_enable'));
 		
+		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
+		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));	
+
 		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
 		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry'));	
 
@@ -182,6 +188,14 @@
 					<tr>
 						<th scope="row" valign="top">Show Divider Line</th>
 						<td><input type="checkbox" id="xhanch_my_twitter_show_hr" name="xhanch_my_twitter_show_hr" value="1" <?php echo ($show_hr?'checked="checked"':''); ?>/></td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Clickable User Tag (@user)</th>
+						<td><input type="checkbox" id="xhanch_my_twitter_clickable_user_tag" name="xhanch_my_twitter_clickable_user_tag" value="1" <?php echo ($clickable_user_tag?'checked="checked"':''); ?>/></td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Clickable Hash Tag (#tag)</th>
+						<td><input type="checkbox" id="xhanch_my_twitter_clickable_hash_tag" name="xhanch_my_twitter_clickable_hash_tag" value="1" <?php echo ($clickable_hash_tag?'checked="checked"':''); ?>/></td>
 					</tr>
 					<tr>
 						<th scope="row" valign="top">Display Credit</th>

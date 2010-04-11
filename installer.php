@@ -149,5 +149,13 @@
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
 
+	if($cur_ver == '1.2.1'){
+		add_option("xhanch_my_twitter_clickable_user_tag", '1');
+		add_option("xhanch_my_twitter_clickable_hash_tag", '1');
+
+		$cur_ver = '1.2.2'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
+
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

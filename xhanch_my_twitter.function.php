@@ -165,6 +165,9 @@
 	}
 
 	function xhanch_my_twitter_split_xml($arr, $req, $kind = '') {
+		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
+		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));	
+
 		if($kind == 'direct') {
 			$req = str_replace('direct-messages', 'statuses', $req);
 			$req = str_replace('direct_message', 'status', $req);
@@ -188,13 +191,17 @@
 			
 			$output = xhanch_my_twitter_make_clickable($res->text);
 
-			$pattern = '/\#([a-zA-Z0-9]+)/';
-			$replace = '<a href="http://search.twitter.com/search?q=%23'.strtolower('\1').'" target="_blank">#\1</a>';
-			$output = preg_replace($pattern,$replace,$output);
+			if($clickable_hash_tag){
+				$pattern = '/\#([a-zA-Z0-9]+)/';
+				$replace = '<a href="http://search.twitter.com/search?q=%23'.strtolower('\1').'" target="_blank">#\1</a>';
+				$output = preg_replace($pattern,$replace,$output);
+			}
 
-			$pattern = '/\@([a-zA-Z0-9]+)/';
-			$replace = '<a href="http://twitter.com/'.strtolower('\1').'" target="_blank">@\1</a>';
-			$output = preg_replace($pattern,$replace,$output);
+			if($clickable_user_tag){
+				$pattern = '/\@([a-zA-Z0-9]+)/';
+				$replace = '<a href="http://twitter.com/'.strtolower('\1').'" target="_blank">@\1</a>';
+				$output = preg_replace($pattern,$replace,$output);
+			}
 
 			$output = convert_smilies($output);
 			$author_name = (string)$res->user->name;
