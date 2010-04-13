@@ -26,12 +26,14 @@ Xhanch - My Twitter is a WordPress plugin made by Xhanch Studio to show your lat
 - Convert all url, @username, and #tag (hash tags) to click-able links
 - Show your direct messages
 - Cache System
+- Tweet ordering: you may display your tweets from oldest to latest or from latest to oldest
 - Convert smilies/emoticon syntax to smilies/emoticon images
 - Wrap long word in tweets into multiple lines so that it won't be displayed outside the box/area anymore
 - Display custom texts(can be HTML code) before and after the tweets list.
 - Choose one of available header styles that suits your taste
 - Generates very clean, optimized, table-less and valid W3C XHTML codes.
 - You can activate scrolling mode to save space on your webpage and to display more tweets
+- Theme friendly
 
 [Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
