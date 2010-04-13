@@ -157,5 +157,12 @@
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
 
+	if($cur_ver == '1.2.2'){
+		add_option("xhanch_my_twitter_tweet_order", 'lto');
+
+		$cur_ver = '1.2.3'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
+
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

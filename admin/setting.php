@@ -52,12 +52,18 @@
 			'name' => 'Name',
 		);
 
+		$arr_tweet_order = array(
+			'lto' => 'Latest to oldest',
+			'otl' => 'Oldest to latest',
+		);
+
 		if ($_POST['xhanch_my_twitter_submit']){
 			update_option("xhanch_my_twitter_title", htmlspecialchars($_POST['xhanch_my_twitter_title']));
 			update_option("xhanch_my_twitter_header_style", htmlspecialchars($_POST['xhanch_my_twitter_header_style']));
 			update_option("xhanch_my_twitter_name", xhanch_my_twitter_form_post('xhanch_my_twitter_name'));
 			update_option("xhanch_my_twitter_id", htmlspecialchars($_POST['xhanch_my_twitter_id']));
 			update_option("xhanch_my_twitter_count", intval($_POST['xhanch_my_twitter_count']));
+			update_option("xhanch_my_twitter_tweet_order", htmlspecialchars($_POST['xhanch_my_twitter_tweet_order']));
 			
 			update_option("xhanch_my_twitter_show_post_by", htmlspecialchars($_POST['xhanch_my_twitter_show_post_by']));
 			update_option("xhanch_my_twitter_avatar_width", intval(htmlspecialchars($_POST['xhanch_my_twitter_avatar_width'])));
@@ -97,6 +103,7 @@
 		$name = htmlspecialchars(get_option('xhanch_my_twitter_name'));
 		$uid = get_option('xhanch_my_twitter_id');	
 		$limit = intval(get_option('xhanch_my_twitter_count'));
+		$tweet_order = get_option('xhanch_my_twitter_tweet_order');
 
 		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
 		$avatar_width = get_option('xhanch_my_twitter_avatar_width');
@@ -147,6 +154,16 @@
 					<tr>
 						<th scope="row" valign="top"># Latest Tweets</th>
 						<td><input type="text" id="xhanch_my_twitter_count" name="xhanch_my_twitter_count" value="<?php echo $limit; ?>" size="5"  maxlength="2"/></td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Tweet Order</th>
+						<td>
+							<select id="xhanch_my_twitter_tweet_order" name="xhanch_my_twitter_tweet_order" style="width:100%">
+								<?php foreach($arr_tweet_order as $key=>$row){ ?>
+									<option value="<?php echo $key; ?>" <?php echo ($key==$tweet_order)?'selected="selected"':''; ?>><?php echo $row; ?></option>
+								<?php } ?>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" valign="top">Header Style</td>

@@ -235,6 +235,7 @@
 		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
 		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry')) * 60;	
 		$cache_date = intval(get_option('xhanch_my_twitter_cache_date'));
+		$tweet_order = get_option('xhanch_my_twitter_tweet_order');
 
 		$use_cache = false;
 		if($cache_enable && $cache_date > 0){
@@ -342,6 +343,9 @@
 
 		if($use_cache)
 			$arr = unserialize(get_option('xhanch_my_twitter_cache_data'));
+		
+		if($tweet_order == 'otl')
+			$arr = array_reverse($arr);
 		return $arr;
 	}
 ?>
