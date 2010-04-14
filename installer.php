@@ -164,5 +164,11 @@
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
 
+	if($cur_ver == '1.2.3'){
+		add_option("xhanch_my_twitter_clickable_url", '1');
+
+		$cur_ver = '1.2.4'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

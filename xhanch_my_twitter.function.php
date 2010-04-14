@@ -167,6 +167,7 @@
 	function xhanch_my_twitter_split_xml($arr, $req, $kind = '') {
 		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
 		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));	
+		$clickable_url = intval(get_option('xhanch_my_twitter_clickable_url'));	
 
 		if($kind == 'direct') {
 			$req = str_replace('direct-messages', 'statuses', $req);
@@ -189,7 +190,10 @@
 			
 			$timestamp = xhanch_my_twitter_parse_time($date_time);
 			
-			$output = xhanch_my_twitter_make_clickable($res->text);
+			if($clickable_url)
+				$output = xhanch_my_twitter_make_clickable($res->text);
+			else
+				$output = (string)$res->text;
 
 			if($clickable_hash_tag){
 				$pattern = '/\#([a-zA-Z0-9]+)/';
