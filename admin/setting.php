@@ -80,6 +80,7 @@
 			update_option("xhanch_my_twitter_clickable_user_tag", intval($_POST['xhanch_my_twitter_clickable_user_tag']));		
 			update_option("xhanch_my_twitter_clickable_hash_tag", intval($_POST['xhanch_my_twitter_clickable_hash_tag']));		
 			update_option("xhanch_my_twitter_clickable_url", intval($_POST['xhanch_my_twitter_clickable_url']));
+			update_option("xhanch_my_twitter_open_link_in_new_window", intval($_POST['xhanch_my_twitter_open_link_in_new_window']));
 
 			update_option("xhanch_my_twitter_cache_enable", intval($_POST['xhanch_my_twitter_cache_enable']));
 			update_option("xhanch_my_twitter_cache_expiry", intval($_POST['xhanch_my_twitter_cache_expiry']));
@@ -120,7 +121,9 @@
 		
 		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
 		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));		
-		$clickable_url = intval(get_option('xhanch_my_twitter_clickable_url'));
+		$clickable_url = intval(get_option('xhanch_my_twitter_clickable_url'));	
+
+		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
 
 		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
 		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry'));	
@@ -219,6 +222,10 @@
 					<tr>
 						<th scope="row" valign="top">Clickable URL</th>
 						<td><input type="checkbox" id="xhanch_my_twitter_clickable_url" name="xhanch_my_twitter_clickable_url" value="1" <?php echo ($clickable_url?'checked="checked"':''); ?>/></td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Open Link In New Window</th>
+						<td><input type="checkbox" id="xhanch_my_twitter_open_link_in_new_window" name="xhanch_my_twitter_open_link_in_new_window" value="1" <?php echo ($open_link_in_new_window?'checked="checked"':''); ?>/></td>
 					</tr>
 					<tr>
 						<th scope="row" valign="top">Display Credit</th>

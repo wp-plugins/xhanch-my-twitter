@@ -9,14 +9,16 @@
 	}
 
 	function xhanch_my_twitter_make_url_clickable_cb($matches) {
+		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
 		$url = $matches[2];
 		$url = esc_url($url);
 		if ( empty($url) )
 			return $matches[0];
-		return $matches[1] . "<a href=\"$url\" rel=\"nofollow\" target=\"_blank\">$url</a>";
+		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($open_link_in_new_window?'target="_blank"':'').'>'.$url.'</a>';
 	}
 
 	function xhanch_my_twitter_make_web_ftp_clickable_cb($matches) {
+		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
 		$ret = '';
 		$dest = $matches[2];
 		$dest = 'http://' . $dest;
@@ -27,7 +29,7 @@
 			$ret = substr($dest, -1);
 			$dest = substr($dest, 0, strlen($dest)-1);
 		}
-		return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\" target=\"_blank\">$dest</a>" . $ret;
+		return $matches[1].'<a href="'.$dest.'" rel="nofollow" '.($open_link_in_new_window?'target="_blank"':'').'>'.$dest.'</a>'.$ret;
 	}
 
 	function xhanch_my_twitter_make_email_clickable_cb($matches) {
@@ -168,6 +170,7 @@
 		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
 		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));	
 		$clickable_url = intval(get_option('xhanch_my_twitter_clickable_url'));	
+		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
 
 		if($kind == 'direct') {
 			$req = str_replace('direct-messages', 'statuses', $req);
@@ -197,13 +200,13 @@
 
 			if($clickable_hash_tag){
 				$pattern = '/\#([a-zA-Z0-9]+)/';
-				$replace = '<a href="http://search.twitter.com/search?q=%23'.strtolower('\1').'" target="_blank">#\1</a>';
+				$replace = '<a href="http://search.twitter.com/search?q=%23'.strtolower('\1').'" '.($open_link_in_new_window?'target="_blank"':'').'>#\1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
 			if($clickable_user_tag){
 				$pattern = '/\@([a-zA-Z0-9]+)/';
-				$replace = '<a href="http://twitter.com/'.strtolower('\1').'" target="_blank">@\1</a>';
+				$replace = '<a href="http://twitter.com/'.strtolower('\1').'" '.($open_link_in_new_window?'target="_blank"':'').'>@\1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
