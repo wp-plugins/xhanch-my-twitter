@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.5.5
+		Version: 1.5.6
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -25,7 +25,7 @@
 		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.css" type="text/css" media="screen" />';
 
 		if($avatar_width && $avatar_height)
-			echo '<style type="text/css">/*<![CDATA[*/ #xhanch_my_twitter .avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} /*]]>*/</style>';
+			echo '<style type="text/css">/*<![CDATA[*/ #xhanch_my_twitter .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} /*]]>*/</style>';
 	}
 	add_action('wp_print_styles', 'xhanch_my_twitter_css');
 
@@ -72,9 +72,9 @@
 				if($show_post_by != '' && $show_post_by != 'hidden_personal'){					
 					echo '<a href="'.$row['author_url'].'">';
 					if($show_post_by == 'avatar'){
-						echo '<img '.$avatar_style.' class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';					
+						echo '<img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';					
 					}else if($show_post_by == 'avatar_name'){
-						echo '<img class="avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/> '.$row['author_name'].': </a>';			
+						echo '<img class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/> '.$row['author_name'].': </a>';			
 					}else{ 
 						echo $row['author_name'].'</a>: '; 
 					}
