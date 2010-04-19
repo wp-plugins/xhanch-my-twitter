@@ -8,7 +8,7 @@ Requires at least: 2.3
 Tested up to: 2.9.2
 Stable tag: 1.5.6
 
-The best plugin your latest tweets, tweet replies, direct messages, avatars, post date, click-able links, smilies, and others. Simple to use, very customizable and very powerful.
+The best plugin your latest tweets, tweet replies, direct messages, avatars, post date, click-able links, smilies, and others. Simple but powerful!
 
 == Description ==
 
