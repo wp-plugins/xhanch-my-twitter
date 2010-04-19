@@ -8,8 +8,7 @@ Requires at least: 2.3
 Tested up to: 2.9.2
 Stable tag: 1.5.6
 
-Xhanch - My Twitter shows your latest tweets, replies, avatars, post date, click-able links, smilies, and others.
-
+The best plugin your latest tweets, tweet replies, direct messages, avatars, post date, click-able links, smilies, and others. Simple to use, very customizable and very powerful.
 
 == Description ==
 
