@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.5.7
+		Version: 1.5.8
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -44,13 +44,25 @@
 		$scroll_animate = intval(get_option('xhanch_my_twitter_scroll_animate'));
 		$scroll_animate_amount = intval(get_option('xhanch_my_twitter_scroll_amount'));
 		$scroll_animate_delay = intval(get_option('xhanch_my_twitter_scroll_delay'));
-		
+		$link_on_title = intval(get_option('xhanch_my_twitter_link_on_title'));	
+		$username = get_option('xhanch_my_twitter_id');
+
 		if(count($res) == 0) 
 			return;		
 		echo $before_widget;
-		if (get_option("xhanch_my_twitter_title")!='')
-			echo $before_title.get_option("xhanch_my_twitter_title").$after_title;				
-		
+		if (get_option("xhanch_my_twitter_title")!=''){
+			echo $before_title;
+			
+			if($link_on_title)
+				echo '<a href="http://twitter.com/'.$username.'" target="_blank">';
+			echo get_option("xhanch_my_twitter_title");
+
+			if($link_on_title)
+				echo '</a>';
+			
+			echo $after_title;				
+		}
+
 		echo '<div id="xhanch_my_twitter">';
 		xhanch_my_twitter_header_style();
 

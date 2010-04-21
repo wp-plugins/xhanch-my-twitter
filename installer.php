@@ -177,5 +177,12 @@
 		$cur_ver = '1.2.5'; 
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
+
+	if($cur_ver == '1.2.5'){
+		add_option("xhanch_my_twitter_link_on_title", '0');
+
+		$cur_ver = '1.2.6'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

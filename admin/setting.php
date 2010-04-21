@@ -77,6 +77,7 @@
 			update_option("xhanch_my_twitter_rep_msg_enable", intval($_POST['xhanch_my_twitter_rep_msg_enable']));
 			update_option("xhanch_my_twitter_dir_msg_enable", intval($_POST['xhanch_my_twitter_dir_msg_enable']));
 
+			update_option("xhanch_my_twitter_link_on_title", intval($_POST['xhanch_my_twitter_link_on_title']));
 			update_option("xhanch_my_twitter_clickable_user_tag", intval($_POST['xhanch_my_twitter_clickable_user_tag']));		
 			update_option("xhanch_my_twitter_clickable_hash_tag", intval($_POST['xhanch_my_twitter_clickable_hash_tag']));		
 			update_option("xhanch_my_twitter_clickable_url", intval($_POST['xhanch_my_twitter_clickable_url']));
@@ -119,6 +120,7 @@
 		$rep_msg_enable = intval(get_option('xhanch_my_twitter_rep_msg_enable'));	
 		$dir_msg_enable = intval(get_option('xhanch_my_twitter_dir_msg_enable'));
 		
+		$link_on_title = intval(get_option('xhanch_my_twitter_link_on_title'));	
 		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
 		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));		
 		$clickable_url = intval(get_option('xhanch_my_twitter_clickable_url'));	
@@ -210,6 +212,10 @@
 					<tr>
 						<th scope="row" valign="top">Show Divider Line</th>
 						<td><input type="checkbox" id="xhanch_my_twitter_show_hr" name="xhanch_my_twitter_show_hr" value="1" <?php echo ($show_hr?'checked="checked"':''); ?>/></td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">Widget Title Link</th>
+						<td><input type="checkbox" id="xhanch_my_twitter_link_on_title" name="xhanch_my_twitter_link_on_title" value="1" <?php echo ($link_on_title?'checked="checked"':''); ?>/></td>
 					</tr>
 					<tr>
 						<th scope="row" valign="top">Clickable User Tag (@user)</th>
