@@ -306,11 +306,6 @@
 					<input type="submit" name="cmd_submit" value="Save"/>
 				</p>
 			</form>
-			<br/><br/>
-			<b>Updates and Discussions</b><br/>
-			<br/>
-			<iframe src="http://xhanch.com/wp-plugin-my-twitter/feed/" style="width:100%;height:300px;border:1px solid blue"></iframe>
-			<br/><br/>
 		</div>
 <?php
 	}

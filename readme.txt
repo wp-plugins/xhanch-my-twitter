@@ -6,7 +6,7 @@ Donate link: http://xhanch.com/wp-plugin-my-twitter/
 Tags: twitter, tweet, status, sidebar, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text
 Requires at least: 2.3
 Tested up to: 2.9.2
-Stable tag: 1.5.8
+Stable tag: 1.5.9
 
 The best plugin your latest tweets, tweet replies, direct messages, avatars, post date, click-able links, smilies, and others. Simple but powerful!
 
