@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.5.9
+		Version: 1.6.0
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -37,6 +37,7 @@
 		extract($args);
 
 		$res = xhanch_my_twitter_get_tweets();
+		$date_string = get_option('xhanch_my_twitter_date_string');
 		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
 		$scroll_mode = intval(get_option('xhanch_my_twitter_scroll_enable'));
 		$scroll_h = intval(get_option('xhanch_my_twitter_scroll_area_height'));
@@ -92,7 +93,8 @@
 					}
 				}
 				echo $row['tweet'];
-				echo $row['timestamp']; 
+				if($row['timestamp'])
+					echo ' '.str_replace('@date', $row['timestamp'], convert_smilies(html_entity_decode($date_string))); 
 				echo '<div class="clear"></div>';
 				echo '</div>';
 			echo '</li>';

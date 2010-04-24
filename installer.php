@@ -184,5 +184,12 @@
 		$cur_ver = '1.2.6'; 
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
+
+	if($cur_ver == '1.2.6'){
+		add_option("xhanch_my_twitter_date_string", '- posted on @date');
+
+		$cur_ver = '1.2.7'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

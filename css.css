@@ -42,6 +42,10 @@
 	clear:both; 
 }
 
+#xhanch_my_twitter ul li.tweet_date{
+	font:inherit;
+}
+
 #xhanch_my_twitter ul li.tweet_list:before{
 	content:""
 }

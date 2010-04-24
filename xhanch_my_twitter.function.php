@@ -157,11 +157,10 @@
 		$timestamp = '';
 		$date_format = get_option('xhanch_my_twitter_date_format');
 		if($date_format != ''){
-			$timestamp = ' - posted ';
 			if($date_format == 'span')
 				$timestamp .= xhanch_my_twitter_time_span(xhanch_my_twitter_get_time($dt));
 			else
-				$timestamp .= ' on '.date($date_format, xhanch_my_twitter_get_time($dt));
+				$timestamp .= date($date_format, xhanch_my_twitter_get_time($dt));
 		}
 		return $timestamp;
 	}
