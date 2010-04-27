@@ -42,9 +42,27 @@
 	clear:both; 
 }
 
-#xhanch_my_twitter .tweet_date{
+#xhanch_my_twitter .tweet_date_gray{
 	font:inherit;
 	color:gray;
+	font-style:italic
+}
+
+#xhanch_my_twitter .tweet_date_black{
+	font:inherit;
+	color:#000000;
+	font-style:italic
+}
+
+#xhanch_my_twitter .tweet_date_white{
+	font:inherit;
+	color:#ffffff;
+	font-style:italic
+}
+
+#xhanch_my_twitter .tweet_date_red{
+	font:inherit;
+	color:#ff0000;
 	font-style:italic
 }
 
