@@ -42,8 +42,10 @@
 	clear:both; 
 }
 
-#xhanch_my_twitter ul li.tweet_date{
+#xhanch_my_twitter .tweet_date{
 	font:inherit;
+	color:gray;
+	font-style:italic
 }
 
 #xhanch_my_twitter ul li.tweet_list:before{
