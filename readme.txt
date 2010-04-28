@@ -26,7 +26,7 @@ Your latest tweets can be displayed via sidebar, post or page
 - Convert all url, @username, and #tag (hash tags) to click-able links
 - Show your direct messages
 - Cache System
-- [NEW] Shortcode is available to display your tweet list within a post or page
+- [NEW] Shortcode is available to display your tweet list within a post or page [Click here to read how to use the shortcode](http://xhanch.com/wp-plugin-my-twitter/#use_shortcode "Xhanch - My Twitter - Shortcode Manual")
 - Tweet ordering: you may display your tweets from oldest to latest or from latest to oldest
 - Convert smilies/emoticon syntax to smilies/emoticon images
 - Wrap long word in tweets into multiple lines so that it won't be displayed outside the box/area anymore
