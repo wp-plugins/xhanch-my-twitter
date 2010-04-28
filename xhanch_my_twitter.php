@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.6.2
+		Version: 1.6.3
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -32,6 +32,25 @@
 	function xhanch_my_twitter($args = array()){	
 		widget_xhanch_my_twitter($args);
 	}
+
+	function xhanch_my_twitter_short_code($atts) {
+		extract(shortcode_atts(array(
+			'before_widget' => '',
+			'after_widget' => '',
+			'before_title' => '',
+			'after_title' => '',
+		), $atts));
+
+		$args = array(
+			'before_widget' => $before_widget,
+			'after_widget' => $after_widget,
+			'before_title' => $before_title,
+			'after_title' => $after_title,
+		);
+
+		xhanch_my_twitter($args);
+	}
+	add_shortcode('xhanch_my_twitter', 'xhanch_my_twitter_short_code');
 	
 	function widget_xhanch_my_twitter($args) {		
 		extract($args);
