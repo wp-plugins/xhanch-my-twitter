@@ -354,4 +354,38 @@
 			$arr = array_reverse($arr);
 		return $arr;
 	}
+
+	function xhanch_my_twitter_get_detail(){		
+		$username = get_option('xhanch_my_twitter_id');
+		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
+		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry')) * 60;	
+		$cache_date = intval(get_option('xhanch_my_twitter_profile_cache_date'));
+
+		$use_cache = false;
+		if($cache_enable && $cache_date > 0){
+			$cache_age = time() - $cache_date;
+			if($cache_age <= $cache_expiry)
+				$use_cache = true;			
+		}
+
+		if(!$use_cache){
+			$api_url_reply = 'http://twitter.com/users/'.urlencode($username).'.xml';
+			$req = xhanch_my_twitter_get_file($api_url_reply);
+			$xml = @new SimpleXMLElement($req);
+
+			$arr = array(
+				'avatar' => (string)$xml->profile_image_url,
+				'followers_count' => intval($xml->followers_count)
+			);
+			if($req){
+				update_option('xhanch_my_twitter_profile_cache_date', time());
+				update_option('xhanch_my_twitter_profile_cache_data', serialize($arr));
+			}else
+				$use_cache = true;		
+		}
+
+		if($use_cache)
+			$arr = unserialize(get_option('xhanch_my_twitter_profile_cache_data'));
+		return $arr;
+	}
 ?>

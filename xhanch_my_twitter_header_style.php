@@ -21,15 +21,11 @@
 				echo '<div class="header_48"><a href="'.$twitter_url.'" '.($open_link_in_new_window?'target="_blank"':'').'><img src="'.$img_url.'twitter-logo-'.$sty_var.'.png" class="img_left" alt="'.$username.'"/></a><a '.($open_link_in_new_window?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.get_option("xhanch_my_twitter_name").'</a><div class="clear"></div></div>';
 				break;
 			case 'avatar':
-				$api_url_reply = 'http://twitter.com/users/'.urlencode($username).'.xml';
-				$req = xhanch_my_twitter_get_file($api_url_reply); 
-				if($req == ''){
+				$det = xhanch_my_twitter_get_detail(); 
+				if(!$det['avatar']){
 					echo '<div class="header_48"><a href="'.$twitter_url.'" '.($open_link_in_new_window?'target="_blank"':'').'><img src="'.$img_url.'twitter-bird-1.png" class="img_left" alt="'.$username.'"/></a><a '.($open_link_in_new_window?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.get_option("xhanch_my_twitter_name").'</a><div class="clear"></div></div>';
 				}else{
-					$xml = @new SimpleXMLElement($req);
-					$img_url = $xml->profile_image_url;
-
-					echo '<div class="header_48"><a href="'.$twitter_url.'" '.($open_link_in_new_window?'target="_blank"':'').'><img src="'.$img_url.'" class="img_left" alt="'.$username.'"/></a><a '.($open_link_in_new_window?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.get_option("xhanch_my_twitter_name").'</a><div class="clear"></div></div>';
+					echo '<div class="header_48"><a href="'.$twitter_url.'" '.($open_link_in_new_window?'target="_blank"':'').'><img src="'.$det['avatar'].'" class="img_left" alt="'.$username.'"/></a><a '.($open_link_in_new_window?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.get_option("xhanch_my_twitter_name").'</a><div class="clear"></div></div>';
 				}
 				break;
 			default:
