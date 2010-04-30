@@ -1,4 +1,12 @@
 <?php
+	function xhanch_my_twitter_replace_vars($str){		
+		$str = convert_smilies(html_entity_decode(get_option("xhanch_my_twitter_text_footer")));
+		
+		$det = xhanch_my_twitter_get_detail(); 	
+		$str = str_replace('@followers_count', intval($det['followers_count']), $str);	
+		return $str; 
+	}
+
 	function xhanch_my_twitter_log($str){
 		$log_file = dirname(__FILE__).'/log.log';
 		$fp = @fopen($log_file, 'a+');

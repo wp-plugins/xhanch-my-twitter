@@ -307,6 +307,13 @@
 
 				<b>Footer Text</b>
 				<textarea id="xhanch_my_twitter_text_footer" name="xhanch_my_twitter_text_footer" style="width:100%" rows="2"><?php echo $text_footer; ?></textarea>
+				<br/>
+
+				<b><i>Available variables for footer and header text</i></b>
+				<ul>
+					<li><b>@followers_count</b>: display a number of your followers</li>
+				</ul>
+
 				<input type="hidden" id="xhanch_my_twitter_submit" name="xhanch_my_twitter_submit" value="1" />
 				<p class="submit">
 					<input type="submit" name="cmd_submit" value="Save"/>
