@@ -98,6 +98,8 @@
 
 			update_option('xhanch_my_twitter_cache_date', 0);
 			update_option('xhanch_my_twitter_cache_data', serialize(array()));
+			update_option('xhanch_my_twitter_profile_cache_date', 0);
+			update_option('xhanch_my_twitter_profile_cache_data', serialize(array()));
 
 			echo '<div id="message" class="updated fade"><p>Configuration Updated</p></div>';
 		}
@@ -312,6 +314,9 @@
 				<b><i>Available variables for footer and header text</i></b>
 				<ul>
 					<li><b>@followers_count</b>: display a number of your followers</li>
+					<li><b>@statuses_count</b>: display a number of your total statuses/tweets</li>
+					<li><b>@favourites_count</b>: display a number of your favourites</li>
+					<li><b>@friends_count</b>: display a number of your friends</li>
 				</ul>
 
 				<input type="hidden" id="xhanch_my_twitter_submit" name="xhanch_my_twitter_submit" value="1" />

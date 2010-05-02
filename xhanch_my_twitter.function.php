@@ -3,7 +3,10 @@
 		$str = convert_smilies(html_entity_decode($str));
 		
 		$det = xhanch_my_twitter_get_detail(); 	
-		$str = str_replace('@followers_count', intval($det['followers_count']), $str);	
+		$str = str_replace('@followers_count', intval($det['followers_count']), $str);
+		$str = str_replace('@friends_count', intval($det['friends_count']), $str);
+		$str = str_replace('@favourites_count', intval($det['favourites_count']), $str);
+		$str = str_replace('@statuses_count', intval($det['statuses_count']), $str);
 		return $str; 
 	}
 
@@ -383,7 +386,10 @@
 
 			$arr = array(
 				'avatar' => (string)$xml->profile_image_url,
-				'followers_count' => intval($xml->followers_count)
+				'followers_count' => intval($xml->followers_count),
+				'friends_count' => intval($xml->friends_count),
+				'favourites_count' => intval($xml->favourites_count),
+				'statuses_count' => intval($xml->statuses_count),
 			);
 			if($req){
 				update_option('xhanch_my_twitter_profile_cache_date', time());
