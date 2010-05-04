@@ -7,6 +7,10 @@
 		$str = str_replace('@friends_count', intval($det['friends_count']), $str);
 		$str = str_replace('@favourites_count', intval($det['favourites_count']), $str);
 		$str = str_replace('@statuses_count', intval($det['statuses_count']), $str);
+		$str = str_replace('@avatar', $det['avatar'], $str);
+		$str = str_replace('@name', $det['name'], $str);
+		$str = str_replace('@screen_name', $det['screen_name'], $str);
+		$str = str_replace('@joined_since', $det['joined_since'], $str);
 		return $str; 
 	}
 
@@ -390,6 +394,9 @@
 				'friends_count' => intval($xml->friends_count),
 				'favourites_count' => intval($xml->favourites_count),
 				'statuses_count' => intval($xml->statuses_count),
+				'name' => (string)$xml->name,
+				'screen_name' => (string)$xml->screen_name,
+				'joined_since' => xhanch_my_twitter_parse_time((string)$xml->created_at),
 			);
 			if($req){
 				update_option('xhanch_my_twitter_profile_cache_date', time());

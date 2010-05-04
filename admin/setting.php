@@ -313,10 +313,14 @@
 
 				<b><i>Available variables for footer and header text</i></b>
 				<ul>
+					<li><b>@avatar</b>: display URL of your Twitter avatar</li>
+					<li><b>@name</b>: display your full name on Twitter</li>
+					<li><b>@screen_name</b>: display your screen name on Twitter</li>
 					<li><b>@followers_count</b>: display a number of your followers</li>
 					<li><b>@statuses_count</b>: display a number of your total statuses/tweets</li>
 					<li><b>@favourites_count</b>: display a number of your favourites</li>
 					<li><b>@friends_count</b>: display a number of your friends</li>
+					<li><b>@joined_since</b>: display a date when you joined Twitter</li>
 				</ul>
 
 				<input type="hidden" id="xhanch_my_twitter_submit" name="xhanch_my_twitter_submit" value="1" />
