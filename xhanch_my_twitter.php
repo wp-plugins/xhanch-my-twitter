@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.6.8
+		Version: 1.6.9
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -21,11 +21,19 @@
 	function xhanch_my_twitter_css() {		
 		$avatar_width = get_option('xhanch_my_twitter_avatar_width');
 		$avatar_height = get_option('xhanch_my_twitter_avatar_height');
+		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
 
 		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.css" type="text/css" media="screen" />';
 
-		if($avatar_width && $avatar_height)
-			echo '<style type="text/css">/*<![CDATA[*/ #xhanch_my_twitter .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} /*]]>*/</style>';
+		$css = '';
+		if($avatar_width && $avatar_height){
+			$css .= '#xhanch_my_twitter .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
+			if($show_post_by == 'avatar' || $show_post_by == 'avatar_name')
+				$css .= '#xhanch_my_twitter .tweet_list{min-height:'.($avatar_height+5).'px} ';
+		}
+
+		if($css)
+			echo '<style type="text/css">/*<![CDATA[*/ '.$css.' /*]]>*/</style>';		
 	}
 	add_action('wp_print_styles', 'xhanch_my_twitter_css');
 
@@ -95,12 +103,12 @@
 				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
 			}
 		} 
-		echo '<ul id="xhanch_my_twitter_list">';
+		echo '<ul>';
 		foreach($res as $row){
 			echo '<li class="tweet_list">';
 				if($show_hr) 
 					echo '<hr />';
-				echo '<div>';
+				
 				if($show_post_by != '' && $show_post_by != 'hidden_personal'){					
 					echo '<a href="'.$row['author_url'].'">';
 					if($show_post_by == 'avatar'){
@@ -114,11 +122,11 @@
 				echo $row['tweet'];
 				if($row['timestamp'])
 					echo ' '.str_replace('@date', $row['timestamp'], convert_smilies(html_entity_decode($date_string))); 
-				echo '<div class="clear"></div>';
-				echo '</div>';
 			echo '</li>';
 		}
 		echo '</ul>';
+		if($show_hr) 
+			echo '<hr />';
 		if($scroll_mode){
 			if($scroll_animate){
 				echo '</div></div>';							

@@ -14,18 +14,21 @@
 	font-size:18px
 }
 
-#xhanch_my_twitter .img_left{	
+#xhanch_my_twitter .img_left{
 	float:left;
 	margin:0 5px 0 0;
 	border:none
 }
 
 #xhanch_my_twitter_list{
-	padding-left:0px;	
-	margin-left:0px
+	padding:0px;	
+	margin:0px;
+	border:1px solid blue
 }
 
 #xhanch_my_twitter ul{
+	padding:0;	
+	margin:0;
 	line-height:150%;
 	list-style:none;
 }
@@ -39,7 +42,7 @@
 	display:block;
 	white-space: normal; 
 	word-wrap: break-word;
-	clear:both; 
+	min-height:53px
 }
 
 #xhanch_my_twitter .tweet_date_gray{
@@ -94,5 +97,5 @@
 }
 
 #xhanch_my_twitter .clear{
-	clear:both; 
+	clear:both !important; 
 }
