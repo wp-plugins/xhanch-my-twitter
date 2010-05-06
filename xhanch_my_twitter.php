@@ -5,10 +5,11 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.6.9
+		Version: 1.7.0
 	*/
 
 	define('xhanch_my_twitter', true);
+	global $xhanch_my_twitter_timed;
 
 	function xhanch_my_twitter_install () {
 		require_once(dirname(__FILE__).'/installer.php');
@@ -30,6 +31,9 @@
 			$css .= '#xhanch_my_twitter .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
 			if($show_post_by == 'avatar' || $show_post_by == 'avatar_name')
 				$css .= '#xhanch_my_twitter .tweet_list{min-height:'.($avatar_height+5).'px} ';
+		}else{
+			if($show_post_by == 'avatar' || $show_post_by == 'avatar_name')
+				$css .= '#xhanch_my_twitter .tweet_list{min-height:53px} ';
 		}
 
 		if($css)
@@ -61,6 +65,11 @@
 	add_shortcode('xhanch_my_twitter', 'xhanch_my_twitter_short_code');
 	
 	function widget_xhanch_my_twitter($args) {		
+		global $xhanch_my_twitter_timed;
+		$xhanch_my_twitter_timed = time();
+
+		xhanch_my_twitter_log('Starting to generate output');		
+
 		extract($args);
 
 		$res = xhanch_my_twitter_get_tweets();
@@ -74,7 +83,8 @@
 		$scroll_animate_delay = intval(get_option('xhanch_my_twitter_scroll_delay'));
 		$link_on_title = intval(get_option('xhanch_my_twitter_link_on_title'));	
 		$username = get_option('xhanch_my_twitter_id');
-
+		
+		xhanch_my_twitter_timed('Build Body - Start');
 		if(count($res) == 0) 
 			return;		
 		echo $before_widget;
@@ -166,6 +176,8 @@
 		}
 		echo '</div>';
 		echo $after_widget;
+		xhanch_my_twitter_timed('Build Body - Finished');
+		xhanch_my_twitter_timed('Finished');
 	}
 
 	function xhanch_my_twitter_control(){	

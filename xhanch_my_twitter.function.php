@@ -14,13 +14,14 @@
 		return $str; 
 	}
 
+	function xhanch_my_twitter_timed($str = ''){
+		global $xhanch_my_twitter_timed;	
+		$span = time() - $xhanch_my_twitter_timed;
+		xhanch_my_twitter_log(($str?$str.' - ':'').'Exec time - '.$span.' seconds');
+	}
+
 	function xhanch_my_twitter_log($str){
-		$log_file = dirname(__FILE__).'/log.log';
-		$fp = @fopen($log_file, 'a+');
-		if($fp){
-			@fwrite($fp, $str."\r\n");
-			@fclose($fp);
-		}
+		echo '<!-- Xhanch My Twitter: '.str_replace('--', '-', $str).' -->';
 	}
 
 	function xhanch_my_twitter_make_url_clickable_cb($matches) {
@@ -194,10 +195,12 @@
 
 		if($req == '')
 			return $arr;
-		$xml = @new SimpleXMLElement($req);	
+
+		$xml = @simplexml_load_string($req);	
 			
-		if(!$xml)
-			xhanch_my_twitter_log('Failed to parse feeds retrieved from twitter');	
+		if($xml->error)
+			xhanch_my_twitter_log($xml->error);	
+		
 		$items_count= count($xml->entry);
 		$limit = $items_count;
 		foreach($xml->status as $res){
@@ -252,7 +255,8 @@
 		return $res;
 	}
 
-	function xhanch_my_twitter_get_tweets(){
+	function xhanch_my_twitter_get_tweets(){		
+		xhanch_my_twitter_timed('Get Tweets - Start');
 		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
 		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry')) * 60;	
 		$cache_date = intval(get_option('xhanch_my_twitter_cache_date'));
@@ -305,7 +309,7 @@
 				if($req == '')
 					return array();
 
-				$xml = @new SimpleXMLElement($req);		
+				$xml = @simplexml_load_string($req);		
 				$items_count = count($xml->entry);
 				
 				$limit = intval(get_option('xhanch_my_twitter_count'));
@@ -367,6 +371,7 @@
 		
 		if($tweet_order == 'otl')
 			$arr = array_reverse($arr);
+		xhanch_my_twitter_timed('Get Tweets - Finished');
 		return $arr;
 	}
 
@@ -386,7 +391,7 @@
 		if(!$use_cache){
 			$api_url_reply = 'http://twitter.com/users/'.urlencode($username).'.xml';
 			$req = xhanch_my_twitter_get_file($api_url_reply);
-			$xml = @new SimpleXMLElement($req);
+			$xml = @simplexml_load_string($req);
 
 			$arr = array(
 				'avatar' => (string)$xml->profile_image_url,
