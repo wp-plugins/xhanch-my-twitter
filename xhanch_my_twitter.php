@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.7.0
+		Version: 1.7.1
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -108,7 +108,7 @@
 
 		if($scroll_mode){
 			if($scroll_animate){
-				echo '<div onmouseover="xmt_scroll_stop()" onmouseout="xmt_scroll()"  style="max-height:'.$scroll_h.'px;overflow:hidden"><div id="xhanch_my_twitter_tweet_area" style="margin-bottom:'.$scroll_h.'px">';
+				echo '<div onmouseover="xmt_scroll_stop()" onmouseout="xmt_scroll()"  style="'.(xhanch_my_twitter_is_ie6()?'':'max-').'height:'.$scroll_h.'px;overflow:hidden"><div id="xhanch_my_twitter_tweet_area" style="margin-bottom:'.$scroll_h.'px">';
 			}else{				
 				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
 			}

@@ -1,6 +1,20 @@
 <?php
+	function xhanch_my_twitter_is_ie6() {
+		  $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+		  if (ereg("msie 6.0", $userAgent))
+				return true;
+		  else
+			return false;		  
+	}
+
+
 	function xhanch_my_twitter_replace_vars($str){		
+		if(trim($str) == '')
+			return $str;
+
 		$str = convert_smilies(html_entity_decode($str));
+		if(strpos($str, '@') === false)
+			return $str;
 		
 		$det = xhanch_my_twitter_get_detail(); 	
 		$str = str_replace('@followers_count', intval($det['followers_count']), $str);
@@ -10,18 +24,17 @@
 		$str = str_replace('@avatar', $det['avatar'], $str);
 		$str = str_replace('@name', $det['name'], $str);
 		$str = str_replace('@screen_name', $det['screen_name'], $str);
-		$str = str_replace('@joined_since', $det['joined_since'], $str);
 		return $str; 
 	}
 
 	function xhanch_my_twitter_timed($str = ''){
 		global $xhanch_my_twitter_timed;	
 		$span = time() - $xhanch_my_twitter_timed;
-		xhanch_my_twitter_log(($str?$str.' - ':'').'Exec time - '.$span.' seconds');
+		xhanch_my_twitter_log(($str?$str.' - ':'').'Exec time - '.$span.' s');
 	}
 
 	function xhanch_my_twitter_log($str){
-		echo '<!-- Xhanch My Twitter: '.str_replace('--', '-', $str).' -->';
+		echo '<!-- XMT: '.str_replace('--', '-', $str).' -->';
 	}
 
 	function xhanch_my_twitter_make_url_clickable_cb($matches) {
@@ -166,7 +179,7 @@
 			case 'Dec':$tmp[1]=12;break;
 		}
 		$gmt_add = get_option('gmt_offset') * 60 * 60;
-		return mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add;
+		return @mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add;
 	}
 
 	function xhanch_my_twitter_parse_time($dt){
@@ -401,13 +414,12 @@
 				'statuses_count' => intval($xml->statuses_count),
 				'name' => (string)$xml->name,
 				'screen_name' => (string)$xml->screen_name,
-				'joined_since' => xhanch_my_twitter_parse_time((string)$xml->created_at),
 			);
 			if($req){
 				update_option('xhanch_my_twitter_profile_cache_date', time());
 				update_option('xhanch_my_twitter_profile_cache_data', serialize($arr));
 			}else
-				$use_cache = true;		
+				$use_cache = true;
 		}
 
 		if($use_cache)
