@@ -235,8 +235,8 @@
 			}
 
 			if($clickable_user_tag){
-				$pattern = '/\@([a-zA-Z0-9]+)/';
-				$replace = '<a href="http://twitter.com/'.strtolower('\1').'" '.($open_link_in_new_window?'target="_blank"':'').'>@\1</a>';
+				$pattern = '/(@([_a-z0-9\-]+))/i';
+				$replace = '<a href="http://twitter.com/$2" title="Follow $2" '.($open_link_in_new_window?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
