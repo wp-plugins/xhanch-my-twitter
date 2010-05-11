@@ -229,8 +229,8 @@
 				$output = (string)$res->text;
 
 			if($clickable_hash_tag){
-				$pattern = '/\#([a-zA-Z0-9]+)/';
-				$replace = '<a href="http://search.twitter.com/search?q=%23'.strtolower('\1').'" '.($open_link_in_new_window?'target="_blank"':'').'>#\1</a>';
+				$pattern = '/(\#([_a-z0-9\-]+))/i';
+				$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($open_link_in_new_window?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
