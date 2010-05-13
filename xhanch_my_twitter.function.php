@@ -152,9 +152,9 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 			$res = curl_exec($ch);
-			
-			if(!$res)
-				xhanch_my_twitter_log('Failed to read feeds from twitter');
+			if($res === false){
+				xhanch_my_twitter_log('Failed to read feeds from twitter because of ' . curl_error($ch));	
+			}
 			curl_close($ch);
 		}		
 		return $res;
