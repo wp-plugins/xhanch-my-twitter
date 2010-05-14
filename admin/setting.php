@@ -15,6 +15,8 @@
 			'bird_with_text-7' => 'Twitter bird 7 + display name',
 			'bird_with_text-8' => 'Twitter bird 8 + display name',
 			'bird_with_text-9' => 'Twitter bird 9 + display name',
+			'bird_with_text-10' => 'Twitter bird 10 + display name',
+			'bird_with_text-11' => 'Twitter bird 11 + display name',
 			'logo_with_text-1' => 'Twitter logo 1 + display name',
 			'logo_with_text-2' => 'Twitter logo 2 + display name',
 		);
