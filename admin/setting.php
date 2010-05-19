@@ -322,7 +322,6 @@
 					<li><b>@statuses_count</b>: display a number of your total statuses/tweets</li>
 					<li><b>@favourites_count</b>: display a number of your favourites</li>
 					<li><b>@friends_count</b>: display a number of your friends</li>
-					<li><b>@joined_since</b>: display a date when you joined Twitter</li>
 				</ul>
 
 				<input type="hidden" id="xhanch_my_twitter_submit" name="xhanch_my_twitter_submit" value="1" />
