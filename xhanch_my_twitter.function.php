@@ -379,8 +379,11 @@
 				$use_cache = true;			
 		}
 
-		if($use_cache)
-			$arr = unserialize(get_option('xhanch_my_twitter_cache_data'));
+		if($use_cache){
+			$arr = @unserialize(get_option('xhanch_my_twitter_cache_data'));
+			if($arr === false)
+				$arr = array();
+		}
 		
 		if($tweet_order == 'otl')
 			$arr = array_reverse($arr);
