@@ -34,7 +34,8 @@
 	}
 
 	function xhanch_my_twitter_log($str){
-		echo '<!-- XMT: '.str_replace('--', '-', $str).' -->';
+		if(isset($_GET['xmt_debug']))
+			echo '<!-- XMT: '.str_replace('--', '-', $str).' -->';
 	}
 
 	function xhanch_my_twitter_make_url_clickable_cb($matches) {
@@ -374,16 +375,13 @@
 
 			if(count($arr)){
 				update_option('xhanch_my_twitter_cache_date', time());
-				update_option('xhanch_my_twitter_cache_data', serialize($arr));
+				update_option('xhanch_my_twitter_cache_data', $arr);
 			}else
 				$use_cache = true;			
 		}
 
-		if($use_cache){
-			$arr = @unserialize(get_option('xhanch_my_twitter_cache_data'));
-			if($arr === false)
-				$arr = array();
-		}
+		if($use_cache)
+			$arr = get_option('xhanch_my_twitter_cache_data');		
 		
 		if($tweet_order == 'otl')
 			$arr = array_reverse($arr);
@@ -420,13 +418,13 @@
 			);
 			if($req){
 				update_option('xhanch_my_twitter_profile_cache_date', time());
-				update_option('xhanch_my_twitter_profile_cache_data', serialize($arr));
+				update_option('xhanch_my_twitter_profile_cache_data', $arr);
 			}else
 				$use_cache = true;
 		}
 
 		if($use_cache)
-			$arr = unserialize(get_option('xhanch_my_twitter_profile_cache_data'));
+			$arr = get_option('xhanch_my_twitter_profile_cache_data');
 		return $arr;
 	}
 ?>
