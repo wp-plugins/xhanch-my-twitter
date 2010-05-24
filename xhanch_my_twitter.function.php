@@ -78,11 +78,22 @@
 		return $ret;
 	}
 
+	function xhanch_my_twitter_time_in_zone() {
+		if ($tz = get_option ('timezone_string') ) {
+			$tz_obj = timezone_open ($tz);
+			$offset = timezone_offset_get($tz_obj, new datetime('now',$tz_obj));
+		}else if (($gmt_offset = get_option ('gmt_offset')) && (!(is_null($gmt_offset))) && (is_numeric($gmt_offset)))
+			$offset = $gmt_offset;
+		else 
+			return(time());
+		return (time() + $offset);
+	}
+
 	function xhanch_my_twitter_time_span($unix_date){	 
 		$periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
 		$lengths = array("60","60","24","7","4.35","12","10");
 	 
-		$now = time();
+		$now = xhanch_my_twitter_time_in_zone();
 	 
 		if(empty($unix_date))  
 			return "Bad date";
