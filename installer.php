@@ -212,7 +212,7 @@
 
 	if($cur_ver == '1.2.9'){
 		update_option('xhanch_my_twitter_profile_cache_date', 0);
-		update_option('xhanch_my_twitter_profile_cache_data', serialize(array()));
+		update_option('xhanch_my_twitter_profile_cache_data', array());
 
 		$cur_ver = '1.3.0'; 
 		update_option("xhanch_my_twitter_version", $cur_ver);
@@ -220,11 +220,19 @@
 
 	if($cur_ver == '1.3.0'){
 		update_option('xhanch_my_twitter_cache_date', 0);
-		update_option('xhanch_my_twitter_cache_data', serialize(array()));
+		update_option('xhanch_my_twitter_cache_data', array());
 		update_option('xhanch_my_twitter_profile_cache_date', 0);
-		update_option('xhanch_my_twitter_profile_cache_data', serialize(array()));
+		update_option('xhanch_my_twitter_profile_cache_data', array());
 
 		$cur_ver = '1.3.1'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
+
+	if($cur_ver == '1.3.1'){
+		add_option("xhanch_my_twitter_tweet_string", '@tweet '.get_option("xhanch_my_twitter_date_string"));
+		delete_option('xhanch_my_twitter_date_string');
+
+		$cur_ver = '1.3.2'; 
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
 	update_option("xhanch_my_twitter_credit", 1);

@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.8.0
+		Version: 1.8.1
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -73,7 +73,7 @@
 		extract($args);
 
 		$res = xhanch_my_twitter_get_tweets();
-		$date_string = get_option('xhanch_my_twitter_date_string');
+		$tweet_string = get_option('xhanch_my_twitter_tweet_string');
 		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
 		$scroll_mode = intval(get_option('xhanch_my_twitter_scroll_enable'));
 		$scroll_h = intval(get_option('xhanch_my_twitter_scroll_area_height'));
@@ -114,7 +114,8 @@
 			}
 		} 
 		echo '<ul>';
-		foreach($res as $row){
+		$tweet_string = convert_smilies(html_entity_decode($tweet_string));
+		foreach($res as $row){			
 			echo '<li class="tweet_list">';
 				if($show_hr) 
 					echo '<hr />';
@@ -123,15 +124,15 @@
 					echo '<a href="'.$row['author_url'].'">';
 					if($show_post_by == 'avatar'){
 						echo '<img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';					
-					}else if($show_post_by == 'avatar_name'){
-						echo '<img class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/> '.$row['author_name'].': </a>';			
-					}else{ 
-						echo $row['author_name'].'</a>: '; 
 					}
 				}
-				echo $row['tweet'];
-				if($row['timestamp'])
-					echo ' '.str_replace('@date', $row['timestamp'], convert_smilies(html_entity_decode($date_string))); 
+				$tmp_str = str_replace('@name_plain', $row['author_name'], $tmp_str);
+				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tweet_string);
+				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
+				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
+				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
+				
+				echo $tmp_str;
 			echo '</li>';
 		}
 		echo '</ul>';

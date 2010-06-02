@@ -7,7 +7,6 @@
 			return false;		  
 	}
 
-
 	function xhanch_my_twitter_replace_vars($str){		
 		if(trim($str) == '')
 			return $str;
@@ -263,6 +262,7 @@
 				'author_name' => $author_name,
 				'author_url' => 'http://twitter.com/'.$author_uid,
 				'author_img' => $author_img,
+				'source' => (string)$res->source,
 			);
 		}
 		unset($xml);
@@ -328,12 +328,12 @@
 				$arr = xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options);			
 			}
 
-			if($show_post_by != 'hidden_personal'){
+			if(true){
 				$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($uid);
 				$req = xhanch_my_twitter_get_file($api_url_reply); 
 				if($req == '')
 					return array();
-
+				$req = str_replace('twitter:source', 'source', $req);
 				$xml = @simplexml_load_string($req);		
 				$items_count = count($xml->entry);
 				
@@ -371,6 +371,7 @@
 						'author_name' => $author_name,
 						'author_url' => (string)$xml->entry[$i]->author->uri,
 						'author_img' => $author_img,
+						'source' => (string)$xml->entry[$i]->source,
 					);
 					$i++;
 				}

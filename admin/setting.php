@@ -22,7 +22,6 @@
 		);
 
 		$arr_date_format = array(
-			'' => 'Hidden',
 			'd/m/Y H:i:s' => 'dd/mm/yyyy hh:mm:ss',
 			'd/m/Y H:i' => 'dd/mm/yyyy hh:mm',
 			'd/m/Y h:i a' => 'dd/mm/yyyy hh:mm am/pm',
@@ -49,9 +48,7 @@
 		$arr_post_by = array(
 			'' => 'Hidden',
 			'hidden_personal' => 'Hidden (Show my tweets only)',
-			'avatar' => 'Avatar',
-			'avatar_name' => 'Avatar + Name',
-			'name' => 'Name',
+			'avatar' => 'Avatar'
 		);
 
 		$arr_tweet_order = array(
@@ -72,7 +69,7 @@
 			update_option("xhanch_my_twitter_avatar_height", intval(htmlspecialchars($_POST['xhanch_my_twitter_avatar_height'])));
 
 			update_option("xhanch_my_twitter_date_format", htmlspecialchars($_POST['xhanch_my_twitter_date_format']));
-			update_option("xhanch_my_twitter_date_string", htmlspecialchars($_POST['xhanch_my_twitter_date_string']));
+			update_option("xhanch_my_twitter_tweet_string", htmlspecialchars($_POST['xhanch_my_twitter_tweet_string']));
 			update_option("xhanch_my_twitter_show_hr", intval($_POST['xhanch_my_twitter_show_hr']));
 			update_option("xhanch_my_twitter_credit", intval($_POST['xhanch_my_twitter_credit']));
 
@@ -118,7 +115,7 @@
 		$avatar_height = get_option('xhanch_my_twitter_avatar_height');		
 
 		$date_format = get_option('xhanch_my_twitter_date_format');
-		$date_string = get_option('xhanch_my_twitter_date_string');
+		$tweet_string = get_option('xhanch_my_twitter_tweet_string');
 		$show_hr = intval(get_option('xhanch_my_twitter_show_hr'));
 		$credit = intval(get_option('xhanch_my_twitter_credit'));
 		
@@ -216,8 +213,17 @@
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" valign="top">Date Layout</th>
-						<td><input type="text" id="xhanch_my_twitter_date_string" name="xhanch_my_twitter_date_string" size="50" value="<?php echo $date_string; ?>" /></td>
+						<th scope="row" valign="top">Tweet Layout</th>
+						<td><input type="text" id="xhanch_my_twitter_tweet_string" name="xhanch_my_twitter_tweet_string" style="width:100%" value="<?php echo $tweet_string; ?>" />
+							<b><i>Available variables</i></b>
+							<ul>
+								<li><b>@name</b>: display the username who posts the tweet (Link Mode)</li>
+								<li><b>@name_plain</b>: display the username who posts the tweet</li>
+								<li><b>@tweet</b>: content of the tweet</li>
+								<li><b>@date</b>: formatted publish date time of a tweet</li>
+								<li><b>@source</b>: display how/where the tweet is posted</li>
+							</ul>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" valign="top">Show Divider Line</th>
