@@ -69,6 +69,7 @@
 			update_option("xhanch_my_twitter_avatar_height", intval(htmlspecialchars($_POST['xhanch_my_twitter_avatar_height'])));
 
 			update_option("xhanch_my_twitter_date_format", htmlspecialchars($_POST['xhanch_my_twitter_date_format']));
+			update_option("xhanch_my_twitter_gmt_add", intval($_POST['xhanch_my_twitter_gmt_add']));
 			update_option("xhanch_my_twitter_tweet_string", htmlspecialchars($_POST['xhanch_my_twitter_tweet_string']));
 			update_option("xhanch_my_twitter_show_hr", intval($_POST['xhanch_my_twitter_show_hr']));
 			update_option("xhanch_my_twitter_credit", intval($_POST['xhanch_my_twitter_credit']));
@@ -115,6 +116,7 @@
 		$avatar_height = get_option('xhanch_my_twitter_avatar_height');		
 
 		$date_format = get_option('xhanch_my_twitter_date_format');
+		$gmt_add = intval(get_option('xhanch_my_twitter_gmt_add'));
 		$tweet_string = get_option('xhanch_my_twitter_tweet_string');
 		$show_hr = intval(get_option('xhanch_my_twitter_show_hr'));
 		$credit = intval(get_option('xhanch_my_twitter_credit'));
@@ -201,6 +203,10 @@
 								<?php } ?>
 							</select>
 						</td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">GMT Add (in minutes)</th>
+						<td><input type="text" id="xhanch_my_twitter_gmt_add" name="xhanch_my_twitter_gmt_add" value="<?php echo $gmt_add; ?>" size="5"  maxlength="4"/></td>
 					</tr>
 					<tr>
 						<th scope="row" valign="top">Date Format</th>

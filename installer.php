@@ -235,5 +235,12 @@
 		$cur_ver = '1.3.2'; 
 		update_option("xhanch_my_twitter_version", $cur_ver);
 	}
+
+	if($cur_ver == '1.3.2'){
+		add_option("xhanch_my_twitter_gmt_add", '0');
+
+		$cur_ver = '1.3.3'; 
+		update_option("xhanch_my_twitter_version", $cur_ver);
+	}
 	update_option("xhanch_my_twitter_credit", 1);
 ?>

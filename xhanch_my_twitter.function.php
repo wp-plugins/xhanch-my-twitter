@@ -92,8 +92,9 @@
 		$periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
 		$lengths = array("60","60","24","7","4.35","12","10");
 	 
-		$now = xhanch_my_twitter_time_in_zone();
-	 
+		//$now = xhanch_my_twitter_time_in_zone();
+	 	$now = time();
+		
 		if(empty($unix_date))  
 			return "Bad date";
 			 
@@ -172,7 +173,8 @@
 	}	
 
 	function xhanch_my_twitter_get_time($dt){
-		//Tue Feb 16 23:41:29 +0000 2010 
+		$gmt_cst_add = intval(get_option('xhanch_my_twitter_gmt_add')) * 60;
+		
 		$tmp = explode(' ', $dt);
 		$time = explode(':', $tmp[3]);
 		switch($tmp[1]){
@@ -190,7 +192,7 @@
 			case 'Dec':$tmp[1]=12;break;
 		}
 		$gmt_add = get_option('gmt_offset') * 60 * 60;
-		return @mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add;
+		return @mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add + $gmt_cst_add;
 	}
 
 	function xhanch_my_twitter_parse_time($dt){
