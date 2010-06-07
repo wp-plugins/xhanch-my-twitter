@@ -24,7 +24,7 @@ Your latest tweets can be displayed via sidebar, post or page
 - Display/hide post date(changeable format)
 - Display date time based on timezone setting on your WordPress
 - (NEW) Multi widget support
-- (NEW) Multiple profile system that will let you put multiple Xhanch My Twitter widgets with separate settings for each widget.
+- (NEW) Multiple profile system that will let you put multiple Xhanch - My Twitter widgets with separate settings for each widget. Each new profile will provide a new Xhanch - My Twitter widget.
 - Flexible way to show your tweets since you can arrange your tweet content
 - Show how/where a tweet is posted
 - Convert all url, @username, and #tag (hash tags) to click-able links
