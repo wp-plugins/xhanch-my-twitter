@@ -7,7 +7,7 @@
 			return false;		  
 	}
 
-	function xhanch_my_twitter_replace_vars($str){		
+	function xhanch_my_twitter_replace_vars($str, $profile){		
 		if(trim($str) == '')
 			return $str;
 
@@ -15,7 +15,7 @@
 		if(strpos($str, '@') === false)
 			return $str;
 		
-		$det = xhanch_my_twitter_get_detail(); 	
+		$det = xhanch_my_twitter_get_detail($profile); 	
 		$str = str_replace('@followers_count', intval($det['followers_count']), $str);
 		$str = str_replace('@friends_count', intval($det['friends_count']), $str);
 		$str = str_replace('@favourites_count', intval($det['favourites_count']), $str);
@@ -37,17 +37,15 @@
 			echo '<!-- XMT: '.str_replace('--', '-', $str).' -->';
 	}
 
-	function xhanch_my_twitter_make_url_clickable_cb($matches) {
-		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
+	function xhanch_my_twitter_make_url_clickable_cb($matches, $new_tab_link = true){
 		$url = $matches[2];
 		$url = esc_url($url);
 		if ( empty($url) )
 			return $matches[0];
-		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($open_link_in_new_window?'target="_blank"':'').'>'.$url.'</a>';
+		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($new_tab_link?'target="_blank"':'').'>'.$url.'</a>';
 	}
 
-	function xhanch_my_twitter_make_web_ftp_clickable_cb($matches) {
-		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
+	function xhanch_my_twitter_make_web_ftp_clickable_cb($matches, $new_tab_link = true) {
 		$ret = '';
 		$dest = $matches[2];
 		$dest = 'http://' . $dest;
@@ -58,7 +56,7 @@
 			$ret = substr($dest, -1);
 			$dest = substr($dest, 0, strlen($dest)-1);
 		}
-		return $matches[1].'<a href="'.$dest.'" rel="nofollow" '.($open_link_in_new_window?'target="_blank"':'').'>'.$dest.'</a>'.$ret;
+		return $matches[1].'<a href="'.$dest.'" rel="nofollow" '.($new_tab_link?'target="_blank"':'').'>'.$dest.'</a>'.$ret;
 	}
 
 	function xhanch_my_twitter_make_email_clickable_cb($matches) {
@@ -66,7 +64,7 @@
 		return $matches[1] . "<a href=\"mailto:$email\" target=\"_blank\">$email</a>";
 	}
 
-	function xhanch_my_twitter_make_clickable($ret) {
+	function xhanch_my_twitter_make_clickable($ret, $new_tab_link = true) {
 		$ret = ' ' . $ret;
 		$ret = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', 'xhanch_my_twitter_make_url_clickable_cb', $ret);
 		$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', 'xhanch_my_twitter_make_web_ftp_clickable_cb', $ret);
@@ -120,7 +118,7 @@
 	function xhanch_my_twitter_form_get($str){
 		if(!isset($_GET[$str]))
 			return false;
-		return urldecode($_GET[$str]);
+		return xhanch_my_twitter_read_var(urldecode($_GET[$str]));
 	}
 
 	function xhanch_my_twitter_read_var($str){
@@ -172,8 +170,8 @@
 		return $res;
 	}	
 
-	function xhanch_my_twitter_get_time($dt){
-		$gmt_cst_add = intval(get_option('xhanch_my_twitter_gmt_add')) * 60;
+	function xhanch_my_twitter_get_time($dt, $gmt_cst_add = 0){		
+		$gmt_cst_add = $gmt_cst_add * 60;
 		
 		$tmp = explode(' ', $dt);
 		$time = explode(':', $tmp[3]);
@@ -195,23 +193,25 @@
 		return @mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add + $gmt_cst_add;
 	}
 
-	function xhanch_my_twitter_parse_time($dt){
+	function xhanch_my_twitter_parse_time($dt, $date_format, $gmt_cst_add = 0){		
 		$timestamp = '';
-		$date_format = get_option('xhanch_my_twitter_date_format');
 		if($date_format != ''){
 			if($date_format == 'span')
-				$timestamp .= xhanch_my_twitter_time_span(xhanch_my_twitter_get_time($dt));
+				$timestamp .= xhanch_my_twitter_time_span(xhanch_my_twitter_get_time($dt, $gmt_cst_add));
 			else
-				$timestamp .= date($date_format, xhanch_my_twitter_get_time($dt));
+				$timestamp .= date($date_format, xhanch_my_twitter_get_time($dt, $gmt_cst_add));
 		}
 		return $timestamp;
 	}
 
-	function xhanch_my_twitter_split_xml($arr, $req, $kind = '') {
-		$clickable_user_tag = intval(get_option('xhanch_my_twitter_clickable_user_tag'));	
-		$clickable_hash_tag = intval(get_option('xhanch_my_twitter_clickable_hash_tag'));	
-		$clickable_url = intval(get_option('xhanch_my_twitter_clickable_url'));	
-		$open_link_in_new_window = intval(get_option('xhanch_my_twitter_open_link_in_new_window'));
+	function xhanch_my_twitter_split_xml($profile, $arr, $req, $kind = '') {
+		global $xmt_accounts;		
+		$cfg = $xmt_accounts[$profile];
+		
+		$clickable_user_tag = intval($cfg['tweet']['make_clickable']['user_tag']);	
+		$clickable_hash_tag = intval($cfg['tweet']['make_clickable']['hash_tag']);	
+		$clickable_url = intval($cfg['tweet']['make_clickable']['url']);	
+		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);
 
 		if($kind == 'direct') {
 			$req = str_replace('direct-messages', 'statuses', $req);
@@ -234,7 +234,7 @@
 			$rpl = (string)$res->in_reply_to_status_id;
 			$date_time = (string)$res->created_at;
 			
-			$timestamp = xhanch_my_twitter_parse_time($date_time);
+			$timestamp = xhanch_my_twitter_parse_time($date_time, $cfg['tweet']['date_format'], $cfg['tweet']['time_add']);
 			
 			if($clickable_url)
 				$output = xhanch_my_twitter_make_clickable($res->text);
@@ -243,13 +243,13 @@
 
 			if($clickable_hash_tag){
 				$pattern = '/(\#([_a-z0-9\-]+))/i';
-				$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($open_link_in_new_window?'target="_blank"':'').'>$1</a>';
+				$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($new_tab_link?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
 			if($clickable_user_tag){
 				$pattern = '/(@([_a-z0-9\-]+))/i';
-				$replace = '<a href="http://twitter.com/$2" title="Follow $2" '.($open_link_in_new_window?'target="_blank"':'').'>$1</a>';
+				$replace = '<a href="http://twitter.com/$2" title="Follow $2" '.($new_tab_link?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
@@ -271,49 +271,51 @@
 		return $arr;
 	}
 
-	function xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options){
+	function xhanch_my_twitter_merge_messages($profile, $std_req, $rep_req, $dir_req, $extra_options){
         $res = array();
 		if($extra_options['rep_msg'])
-			$res = xhanch_my_twitter_split_xml($res, $rep_req, 'reply');
+			$res = xhanch_my_twitter_split_xml($profile, $res, $rep_req, 'reply');
 		if($extra_options['dir_msg'])
-			$res = xhanch_my_twitter_split_xml($res, $dir_req, 'direct');
-		$res = xhanch_my_twitter_split_xml($res, $std_req, 'standard');
+			$res = xhanch_my_twitter_split_xml($profile, $res, $dir_req, 'direct');
+		$res = xhanch_my_twitter_split_xml($profile, $res, $std_req, 'standard');
 		krsort($res);
 		return $res;
 	}
 
-	function xhanch_my_twitter_get_tweets(){		
+	function xhanch_my_twitter_get_tweets($profile){
+		global $xmt_accounts;		
+		$cfg = $xmt_accounts[$profile];
+		
 		xhanch_my_twitter_timed('Get Tweets - Start');
-		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
-		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry')) * 60;	
-		$cache_date = intval(get_option('xhanch_my_twitter_cache_date'));
-		$tweet_order = get_option('xhanch_my_twitter_tweet_order');
+		$cache_enable = intval($cfg['tweet']['cache']['enable']);	
+		$cache_expiry = intval($cfg['tweet']['cache']['expiry']) * 60;	
+		$cache_date = intval($cfg['tweet']['cache']['tweet_cache']['date']);
+		$tweet_order = $cfg['tweet']['order'];
 
 		$use_cache = false;
 		if($cache_enable && $cache_date > 0){
 			$cache_age = time() - $cache_date;
 			if($cache_age <= $cache_expiry)
-				$use_cache = true;			
+				$use_cache = true;
 		}
 		if(!$use_cache){
-			$uid = get_option('xhanch_my_twitter_id');
-			$pwd = get_option('xhanch_my_twitter_pw');
-			$limit = intval(get_option('xhanch_my_twitter_count'));
-			$show_post_by = intval(get_option('xhanch_my_twitter_show_post_by'));
+			$uid = $cfg['tweet']['username'];
+			$pwd = $cfg['tweet']['password'];
 			
+			$limit = intval($cfg['tweet']['count']);			
 			if($limit <= 0)
 				$limit = 5;
 			
 			$arr = array();
 			if($pwd == ''){			
-				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
-				$arr = xhanch_my_twitter_split_xml($arr, xhanch_my_twitter_get_file($api_url));
+				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);				
+				$arr = xhanch_my_twitter_split_xml($profile, $arr, xhanch_my_twitter_get_file($api_url));
 				if(count($arr) == 0)
 					$use_cache = true;
 			}else{			
 				$extra_options = Array();
-				$extra_options['rep_msg'] = intval(get_option("xhanch_my_twitter_rep_msg_enable"));
-				$extra_options['dir_msg'] = intval(get_option("xhanch_my_twitter_dir_msg_enable"));
+				$extra_options['rep_msg'] = intval($cfg['tweet']['include']['non_public_replies']);
+				$extra_options['dir_msg'] = intval($cfg['tweet']['include']['direct_message']);
 				$extra_options['credentials'] = sprintf("%s:%s", $uid, $pwd);
 
 				if($extra_options['rep_msg']) {
@@ -327,10 +329,10 @@
 				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);
 				$std_req = xhanch_my_twitter_get_file($api_url, $extra_options['credentials']);
 
-				$arr = xhanch_my_twitter_merge_messages($std_req, $rep_req, $dir_req, $extra_options);			
+				$arr = xhanch_my_twitter_merge_messages($profile, $std_req, $rep_req, $dir_req, $extra_options);			
 			}
 
-			if(true){
+			if(intval($cfg['tweet']['include']['public_replies'])){
 				$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($uid);
 				$req = xhanch_my_twitter_get_file($api_url_reply); 
 				if($req == '')
@@ -339,11 +341,11 @@
 				$xml = @simplexml_load_string($req);		
 				$items_count = count($xml->entry);
 				
-				$limit = intval(get_option('xhanch_my_twitter_count'));
+				$limit = intval($cfg['tweet']['count']);	
 				if($items_count < $limit)
 					$limit = $items_count;
-
-				$i = 0;			
+					
+				$i = 0;	
 				while($i < $limit){
 					$id_tag = (string)$xml->entry[$i]->id;			
 					$id_tag_part = explode(':', $id_tag);
@@ -362,7 +364,7 @@
 					$author_name = substr($author, strpos($author, ' ') + 2, strlen($author) - (strpos($author, ' ') + 3));
 					$author_uid = substr($author, 0, strpos($author, ' '));
 
-					$author_img = $xml->entry[$i]->link[1]->attributes();	
+					$author_img = $xml->entry[$i]->link[1]->attributes();
 					$author_img = (string)$author_img['href'];
 
 					$arr[$sts_id] = array(
@@ -379,7 +381,7 @@
 				}
 				krsort($arr);
 
-				$limit = intval(get_option('xhanch_my_twitter_count'));
+				$limit = intval($cfg['tweet']['count']);
 				if(count($arr) > $limit){
 					do{
 						array_pop($arr);
@@ -388,14 +390,17 @@
 			}
 
 			if(count($arr)){
-				update_option('xhanch_my_twitter_cache_date', time());
-				update_option('xhanch_my_twitter_cache_data', $arr);
+				$cfg['tweet']['cache']['tweet_cache']['date'] = time();
+				$cfg['tweet']['cache']['tweet_cache']['data'] = $arr;
+				
+				$xmt_accounts[$profile] = $cfg;
+				update_option('xmt_accounts', $xmt_accounts);					
 			}else
 				$use_cache = true;			
 		}
 
 		if($use_cache)
-			$arr = get_option('xhanch_my_twitter_cache_data');		
+			$arr = $cfg['tweet']['cache']['tweet_cache']['data'];		
 		
 		if($tweet_order == 'otl')
 			$arr = array_reverse($arr);
@@ -403,11 +408,14 @@
 		return $arr;
 	}
 
-	function xhanch_my_twitter_get_detail(){		
-		$username = get_option('xhanch_my_twitter_id');
-		$cache_enable = intval(get_option('xhanch_my_twitter_cache_enable'));	
-		$cache_expiry = intval(get_option('xhanch_my_twitter_cache_expiry')) * 60;	
-		$cache_date = intval(get_option('xhanch_my_twitter_profile_cache_date'));
+	function xhanch_my_twitter_get_detail($profile){
+		global $xmt_accounts;
+		
+		$cfg = $xmt_accounts[$profile];
+				
+		$cache_enable = intval($cfg['tweet']['cache']['enable']);	
+		$cache_expiry = intval($cfg['tweet']['cache']['expiry']) * 60;	
+		$cache_date = intval($cfg['tweet']['cache']['profile_cache']['date']);
 
 		$use_cache = false;
 		if($cache_enable && $cache_date > 0){
@@ -417,7 +425,7 @@
 		}
 
 		if(!$use_cache){
-			$api_url_reply = 'http://twitter.com/users/'.urlencode($username).'.xml';
+			$api_url_reply = 'http://twitter.com/users/'.urlencode($cfg['tweet']['username']).'.xml';
 			$req = xhanch_my_twitter_get_file($api_url_reply);
 			$xml = @simplexml_load_string($req);
 
@@ -430,15 +438,18 @@
 				'name' => (string)$xml->name,
 				'screen_name' => (string)$xml->screen_name,
 			);
-			if($req){
-				update_option('xhanch_my_twitter_profile_cache_date', time());
-				update_option('xhanch_my_twitter_profile_cache_data', $arr);
+			if($req){			
+				$cfg['tweet']['cache']['profile_cache']['date'] = time();
+				$cfg['tweet']['cache']['profile_cache']['data'] = $arr;
+				
+				$xmt_accounts[$profile] = $cfg;
+				update_option('xmt_accounts', $xmt_accounts);	
 			}else
 				$use_cache = true;
 		}
 
 		if($use_cache)
-			$arr = get_option('xhanch_my_twitter_profile_cache_data');
+			$arr = $cfg['tweet']['cache']['profile_cache']['data'];
 		return $arr;
 	}
 ?>

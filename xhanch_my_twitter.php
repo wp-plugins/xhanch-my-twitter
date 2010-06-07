@@ -5,11 +5,100 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.8.2
+		Version: 1.8.3
 	*/
 
 	define('xhanch_my_twitter', true);
 	global $xhanch_my_twitter_timed;
+	global $xmt_accounts;
+	global $xmt_default;
+	
+	$xmt_default = array(
+		'widget' => array(
+			'title' => 'Latest Tweets',
+			'name' => '',
+			'link_title' => 0,
+			'header_style' => 'default',
+			'custom_text' => array(
+				'header' => '',
+				'footer' => ''
+			)
+		),
+		'tweet' => array(
+			'username' => '',
+			'password' => '',
+			'order' => 'lto',	
+			'count' => '5',
+			'time_add' => '0',
+			'date_format' => 'd/m/Y H:i:s',
+			'layout' => '@tweet - posted on @date',
+			'show_hr' => 0,
+			'make_clickable' => array(
+				'user_tag' => 1,
+				'hash_tag' => 1,
+				'url' => 1
+			),
+			'avatar' => array(
+				'show' => 1,
+				'size' => array(
+					'w' => 0,
+					'h' => 0
+				)
+			),
+			'include' => array(
+				'public_replies' => 1,
+				'non_public_replies' => 0,
+				'direct_message' => 0
+			),
+			'cache' => array(
+				'enable' => 1,
+				'expiry' => 60,
+				'tweet_cache' => array(
+					'date' => 0,
+					'data' => array()
+				),
+				'profile_cache' => array(
+					'date' => 0,
+					'data' => array()
+				)								
+			)
+		),
+		'display_mode' => array(
+			'default' => array(
+				'enable' => 1
+			),
+			'scrolling' => array(
+				'enable' => 0,
+				'height' => 200,
+				'animate' => array(
+					'enable' => 0,
+					'amount' => 2,
+					'delay' => 10
+				),
+			)
+		),
+		'other' => array(
+			'open_link_on_new_window' => 1,
+			'show_credit' => 1
+		),
+	);
+		
+	$xmt_accounts = get_option('xmt_accounts');
+	if($xmt_accounts === false){
+		$xmt_accounts = array();
+	}
+	
+	foreach($xmt_accounts as $acc=>$acc_set){
+		$php_wid_function = '
+			function widget_xhanch_my_twitter_'.$acc.'($args){
+				widget_xhanch_my_twitter($args, \''.$acc.'\');
+			}
+			function widget_xhanch_my_twitter_control_'.$acc.'(){
+				widget_xhanch_my_twitter_control(\''.$acc.'\');
+			}
+		';
+		eval($php_wid_function);
+	}
 
 	function xhanch_my_twitter_install () {
 		require_once(dirname(__FILE__).'/installer.php');
@@ -19,25 +108,35 @@
 	require_once(dirname(__FILE__).'/xhanch_my_twitter.function.php');	
 	require_once(dirname(__FILE__).'/xhanch_my_twitter_header_style.php');	
 	
-	function xhanch_my_twitter_css() {		
-		$avatar_width = get_option('xhanch_my_twitter_avatar_width');
-		$avatar_height = get_option('xhanch_my_twitter_avatar_height');
-		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
-
-		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.css" type="text/css" media="screen" />';
-
+	function xhanch_my_twitter_css_cst($profile){
+		global $xmt_accounts;
+		$cfg = $xmt_accounts[$profile];
+						
+		$avatar_width = intval($cfg['tweet']['avatar']['size']['w']);
+		$avatar_height = intval($cfg['tweet']['avatar']['size']['h']);
+		$show_avatar = intval($cfg['tweet']['avatar']['show']);
+		
 		$css = '';
+		
 		if($avatar_width && $avatar_height){
-			$css .= '#xhanch_my_twitter .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
-			if($show_post_by == 'avatar' || $show_post_by == 'avatar_name')
-				$css .= '#xhanch_my_twitter .tweet_list{min-height:'.($avatar_height+5).'px} ';
+			$css .= '.xmt.xmt_'.$profile.' .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
+			if($show_avatar)
+				$css .= '.xmt.xmt_'.$profile.' .tweet_list{min-height:'.($avatar_height+5).'px} ';
 		}else{
-			if($show_post_by == 'avatar' || $show_post_by == 'avatar_name')
-				$css .= '#xhanch_my_twitter .tweet_list{min-height:53px} ';
+			if($show_avatar)
+				$css .= '.xmt.xmt_'.$profile.' .tweet_list{min-height:53px} ';
 		}
-
+		
 		if($css)
-			echo '<style type="text/css">/*<![CDATA[*/ '.$css.' /*]]>*/</style>';		
+			echo '<style type="text/css">/*<![CDATA[*/ '.$css.' /*]]>*/</style>';	
+	}
+	
+	function xhanch_my_twitter_css(){	
+		global $xmt_accounts;
+		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.css" type="text/css" media="screen" />';
+		
+		foreach($xmt_accounts as $acc=>$acc_set)
+			xhanch_my_twitter_css_cst($acc);		
 	}
 	add_action('wp_print_styles', 'xhanch_my_twitter_css');
 
@@ -64,52 +163,63 @@
 	}
 	add_shortcode('xhanch_my_twitter', 'xhanch_my_twitter_short_code');
 	
-	function widget_xhanch_my_twitter($args) {		
+	function widget_xhanch_my_twitter($args, $profile){		
 		global $xhanch_my_twitter_timed;
+		global $xmt_accounts;
+				
 		$xhanch_my_twitter_timed = time();
-
+		
 		xhanch_my_twitter_log('Starting to generate output');		
 
-		extract($args);
-
-		$res = xhanch_my_twitter_get_tweets();
-		$tweet_string = get_option('xhanch_my_twitter_tweet_string');
-		$show_post_by = get_option('xhanch_my_twitter_show_post_by');
-		$scroll_mode = intval(get_option('xhanch_my_twitter_scroll_enable'));
-		$scroll_h = intval(get_option('xhanch_my_twitter_scroll_area_height'));
-        $show_hr = intval(get_option('xhanch_my_twitter_show_hr'));
-		$scroll_animate = intval(get_option('xhanch_my_twitter_scroll_animate'));
-		$scroll_animate_amount = intval(get_option('xhanch_my_twitter_scroll_amount'));
-		$scroll_animate_delay = intval(get_option('xhanch_my_twitter_scroll_delay'));
-		$link_on_title = intval(get_option('xhanch_my_twitter_link_on_title'));	
-		$username = get_option('xhanch_my_twitter_id');
+		if(!array_key_exists($profile, $xmt_accounts))
+			return;
+		$cfg = $xmt_accounts[$profile];
 		
+		extract($args);
+				
+		$res = xhanch_my_twitter_get_tweets($profile);
+		
+		$tweet_string = $cfg['tweet']['layout'];
+		$show_avatar = intval($cfg['tweet']['avatar']['show']);
+		
+		$link_on_title = intval($cfg['widget']['link_title']);
+		$show_hr = intval($cfg['tweet']['show_hr']);	
+		
+		$scroll_cfg = $cfg['display_mode']['scrolling'];
+		$scroll_mode = intval($scroll_cfg['enable']);
+		$scroll_h = intval($scroll_cfg['height']);
+        $scroll_ani = intval($scroll_cfg['animate']['enable']);
+		$scroll_ani_amount = intval($scroll_cfg['animate']['amount']);
+		$scroll_ani_delay = intval($scroll_cfg['animate']['delay']);
+		
+		$username = $cfg['tweet']['username'];
+				
 		xhanch_my_twitter_timed('Build Body - Start');
 		if(count($res) == 0) 
 			return;		
 		echo $before_widget;
-		if (get_option("xhanch_my_twitter_title")!=''){
+		if ($cfg['widget']['title'] != ''){
 			echo $before_title;
 			
 			if($link_on_title)
 				echo '<a href="http://twitter.com/'.$username.'" target="_blank">';
-			echo get_option("xhanch_my_twitter_title");
+			echo $cfg['widget']['title'];
 
 			if($link_on_title)
 				echo '</a>';
 			
-			echo $after_title;				
+			echo $after_title;		
 		}
 
-		echo '<div id="xhanch_my_twitter">';
-		xhanch_my_twitter_header_style();
+		echo '<div id="xmt_'.$profile.'" class="xmt xmt_'.$profile.'">';
+		xhanch_my_twitter_header_style($profile);
 
-		echo xhanch_my_twitter_replace_vars(get_option("xhanch_my_twitter_text_header"));
+		echo xhanch_my_twitter_replace_vars($cfg['widget']['custom_text']['header'], $profile);
 
 		if($scroll_mode){
-			if($scroll_animate){
-				echo '<div onmouseover="xmt_scroll_stop()" onmouseout="xmt_scroll()"  style="'.(xhanch_my_twitter_is_ie6()?'':'max-').'height:'.$scroll_h.'px;overflow:hidden"><div id="xhanch_my_twitter_tweet_area" style="margin-bottom:'.$scroll_h.'px">';
-			}else{				
+			if($scroll_ani){
+				echo '<div onmouseover="xmt_'.$profile.'_scroll_stop()" onmouseout="xmt_'.$profile.'_scroll()"  style="'.(xhanch_my_twitter_is_ie6()?'':'max-').'height:'.$scroll_h.'px;overflow:hidden"><div id="xmt_'.$profile.'_tweet_area" style="margin-bottom:'.$scroll_h.'px">';
+			}else{
 				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
 			}
 		} 
@@ -120,11 +230,8 @@
 				if($show_hr) 
 					echo '<hr />';
 				
-				if($show_post_by != '' && $show_post_by != 'hidden_personal'){					
-					echo '<a href="'.$row['author_url'].'">';
-					if($show_post_by == 'avatar'){
-						echo '<img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';					
-					}
+				if($show_avatar){					
+					echo '<a href="'.$row['author_url'].'"><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
 				}
 				$tmp_str = str_replace('@name_plain', $row['author_name'], $tmp_str);
 				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tweet_string);
@@ -139,30 +246,30 @@
 		if($show_hr) 
 			echo '<hr />';
 		if($scroll_mode){
-			if($scroll_animate){
+			if($scroll_ani){
 				echo '</div></div>';							
 				echo '
 					<script language="javascript" type="text/javascript">
 						//<![CDATA[
-							var xmt_pos = '.$scroll_h.';
-							var xmt_ti;
-							var xmt_tweet_area = document.getElementById("xhanch_my_twitter_tweet_area");
-							var xmt_ta_limit = xmt_tweet_area.offsetHeight * -1;
+							var xmt_'.$profile.'_pos = '.$scroll_h.';
+							var xmt_'.$profile.'_ti;
+							var xmt_'.$profile.'_ta = document.getElementById("xmt_'.$profile.'_tweet_area");
+							var xmt_'.$profile.'_ta_limit = xmt_'.$profile.'_ta.offsetHeight * -1;
 
-							function xmt_scroll(){
-								xmt_scroll_stop();
-								xmt_pos = xmt_pos - '.$scroll_animate_amount.';
-								if(xmt_pos < xmt_ta_limit)
-									xmt_pos = '.$scroll_h.';
-								xmt_tweet_area.style.marginTop = xmt_pos.toString() + "px";
-								xmt_ti = setTimeout("xmt_scroll()",50);
+							function xmt_'.$profile.'_scroll(){
+								xmt_'.$profile.'_scroll_stop();
+								xmt_'.$profile.'_pos = xmt_'.$profile.'_pos - '.$scroll_ani_amount.';
+								if(xmt_'.$profile.'_pos < xmt_'.$profile.'_ta_limit)
+									xmt_'.$profile.'_pos = '.$scroll_h.';
+								xmt_'.$profile.'_ta.style.marginTop = xmt_'.$profile.'_pos.toString() + "px";
+								xmt_'.$profile.'_ti = setTimeout("xmt_'.$profile.'_scroll()", '.$scroll_ani_delay.');
 							}
-							function xmt_scroll_stop(){
-								if(xmt_ti)
-									clearTimeout(xmt_ti);
+							function xmt_'.$profile.'_scroll_stop(){
+								if(xmt_'.$profile.'_ti)
+									clearTimeout(xmt_'.$profile.'_ti);
 							}
-							xmt_tweet_area.style.marginTop = xmt_pos.toString() + "px";
-							xmt_scroll();
+							xmt_'.$profile.'_ta.style.marginTop = xmt_'.$profile.'_pos.toString() + "px";
+							xmt_'.$profile.'_scroll();
 						//]]>
 					</script>
 				';
@@ -170,9 +277,9 @@
 				echo '</div>';			
 		} 
 					
-		echo xhanch_my_twitter_replace_vars(get_option("xhanch_my_twitter_text_footer")); 
+		echo xhanch_my_twitter_replace_vars($cfg['widget']['custom_text']['footer'], $profile); 
 
-		if (get_option("xhanch_my_twitter_credit")){
+		if ($cfg['other']['show_credit']){
 			echo '<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="Xhanch My Twitter - A free WordPress plugin to display your latest tweets from Twitter">My Twitter</a>, <a href="http://xhanch.com/" rel="section" title="Developed by Xhanch Studio">by Xhanch</a></div>';
 		}
 		echo '</div>';
@@ -181,15 +288,18 @@
 		xhanch_my_twitter_timed('Finished');
 	}
 
-	function xhanch_my_twitter_control(){	
+	function widget_xhanch_my_twitter_control($id){	
 ?>
-		<a href="admin.php?page=xhanch-my-twitter">Click here to configure this plugin</a>
+		<a href="admin.php?page=xhanch-my-twitter&profile=<?php echo $id; ?>">Click here to configure this plugin</a>
 <?php		
 	}
 
 	function widget_xhanch_my_twitter_init(){
-		register_sidebar_widget('Xhanch - My Twitter', 'widget_xhanch_my_twitter');
-		register_widget_control('Xhanch - My Twitter', 'xhanch_my_twitter_control', 300, 200 );     
+		global $xmt_accounts;
+		foreach($xmt_accounts as $acc=>$acc_set){
+			wp_register_sidebar_widget('xmt_'.$acc, 'Xhanch - My Twitter : '.$acc, 'widget_xhanch_my_twitter_'.$acc);
+			register_widget_control('xmt_'.$acc, 'widget_xhanch_my_twitter_control_'.$acc, 300, 200 );
+		}
 	}
 	add_action("plugins_loaded", "widget_xhanch_my_twitter_init");
 
