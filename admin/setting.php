@@ -428,6 +428,16 @@
 				
 			<br/><br/>
 			<a name="guide"></a>
+			<b><big>Support This Plugin Development</big></b><br/>		
+			<br/>	
+			Do you like this plugin? Do you think this plugin very helpful?<br/>
+			Why don't you support this plugin developement by donating any amount you are willing to give?<br/>
+			<br/>
+			If you wish to support the developer and make a donation, please click the following button. Thanks!<br/>
+			<a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank"><img src="http://xhanch.com/image/paypal/btn_donate.gif" alt="Donate"></a></p>
+
+			<br/><br/>
+			<a name="guide"></a>
 			<b><big>Complete Info and Share Room</big></b><br/>		
 			<br/>	
 			<div class="spoiler">
