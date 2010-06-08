@@ -9,7 +9,7 @@
 		
 	$xmt_accounts = get_option('xmt_accounts');
 	if($xmt_accounts === false){
-		$xmt_accounts = array();			
+		$xmt_accounts = array();	
 		add_option('xmt_accounts', $xmt_accounts);
 	}else{			
 		foreach($xmt_accounts as $acc=>$acc_set){
@@ -17,6 +17,11 @@
 			$xmt_res = array_merge($xmt_default, $acc_set);
 			$xmt_accounts[$acc] = $xmt_res;
 		}
+		update_option('xmt_accounts', $xmt_accounts);
+	}
+	
+	if(count($xmt_accounts) == 0){
+		$xmt_accounts['primary'] = $xmt_default;
 		update_option('xmt_accounts', $xmt_accounts);
 	}
 ?>

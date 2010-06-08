@@ -26,36 +26,30 @@
 			'logo_with_text-1' => 'Twitter logo 1 + display name',
 			'logo_with_text-2' => 'Twitter logo 2 + display name',
 		);
-
-		$arr_date_format = array(
-			'd/m/Y H:i:s' => 'dd/mm/yyyy hh:mm:ss',
-			'd/m/Y H:i' => 'dd/mm/yyyy hh:mm',
-			'd/m/Y h:i a' => 'dd/mm/yyyy hh:mm am/pm',
-			'd/m/Y' => 'dd/mm/yyyy',
-			'm/d/Y H:i:s' => 'mm/dd/yyyy hh:mm:ss',
-			'm/d/Y H:i' => 'mm/dd/yyyy hh:mm',
-			'm/d/Y h:i a' => 'mm/dd/yyyy hh:mm am/pm',
+		
+		$arr_dt_format = array(
+			'd/m/Y' => 'dd/mm/yyyy',	
+			'd.m.y' => 'dd.mm.yy',	
 			'm/d/Y' => 'mm/dd/yyyy',
-			'M d, Y H:i:s' => 'mmm dd, yyyy hh:mm:ss',
-			'M d, Y H:i' => 'mmm dd, yyyy hh:mm',
-			'M d, Y h:i a' => 'mmm dd, yyyy hh:mm am/pm',
+			'Y-m-d' => 'yyyy-mm-dd',
 			'M d, Y' => 'mmm dd, yyyy',
-			'd-F-Y H:i:s' => 'dd-month-yyyy hh:mm:ss',
-			'd-F-Y H:i' => 'dd-month-yyyy hh:mm',
-			'd-F-Y h:i a' => 'dd-month-yyyy hh:mm am/pm',
 			'd-F-Y' => 'dd-month-yyyy',
-			'l, F d, Y H:i:s' => 'dayname, month dd, yyyy hh:mm:ss',
-			'l, F d, Y H:i' => 'dayname, month dd, yyyy hh:mm',
-			'l, F d, Y h:i a' => 'dayname, month dd, yyyy hh:mm am/pm',
 			'l, F d, Y' => 'dayname, month dd, yyyy',
-			'span' => '? period ago',
-		);		
-
-		$arr_post_by = array(
-			'' => 'Hidden',
-			'hidden_personal' => 'Hidden (Show my tweets only)',
-			'avatar' => 'Avatar'
 		);
+		
+		$arr_tm_format = array(		
+			'H:i' => 'hh:mm',
+			'H:i:s' => 'hh:mm:ss',
+			'h:i a' => 'hh:mm am/pm',
+		);
+
+		$arr_date_format = array();
+		foreach($arr_dt_format as $dt_f=>$dt_v){
+			$arr_date_format[$dt_f] = $dt_v;
+			foreach($arr_tm_format as $tm_f=>$tm_v)
+				$arr_date_format[$dt_f.' '.$tm_f] = $dt_v.' '.$tm_v;							
+		}
+		$arr_date_format['span'] = '? period ago';		
 
 		$arr_tweet_order = array(
 			'lto' => 'Latest to oldest',
@@ -63,7 +57,7 @@
 		);
 				
 		if(isset($_POST['cmd_xmt_create_profile'])){
-			$acc_name = xhanch_my_twitter_form_post('txt_xmt_account_name');
+			$acc_name = strtolower(xhanch_my_twitter_form_post('txt_xmt_account_name'));
 			$valid_chars = str_split('abcdefghijklmnopqrstuvwxyz0123456789');
 		
 			if(empty($acc_name))
