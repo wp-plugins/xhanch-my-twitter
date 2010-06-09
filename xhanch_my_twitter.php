@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.8.4
+		Version: 1.8.5
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -115,16 +115,14 @@
 		$avatar_width = intval($cfg['tweet']['avatar']['size']['w']);
 		$avatar_height = intval($cfg['tweet']['avatar']['size']['h']);
 		$show_avatar = intval($cfg['tweet']['avatar']['show']);
-		
-		$css = '';
-		
+				
 		if($avatar_width && $avatar_height){
-			$css .= '.xmt.xmt_'.$profile.' .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
+			$css .= '#xmt_'.$profile.'.xmt .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
 			if($show_avatar)
-				$css .= '.xmt.xmt_'.$profile.' .tweet_list{min-height:'.($avatar_height+5).'px} ';
+				$css .= '#xmt_'.$profile.'.xmt ul li.tweet_list{min-height:'.($avatar_height+7).'px} ';
 		}else{
 			if($show_avatar)
-				$css .= '.xmt.xmt_'.$profile.' .tweet_list{min-height:53px} ';
+				$css .= '#xmt_'.$profile.'.xmt ul li.tweet_list{min-height:57px} ';
 		}
 		
 		if($css)
@@ -133,15 +131,17 @@
 	
 	function xhanch_my_twitter_css(){	
 		global $xmt_accounts;
-		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.css" type="text/css" media="screen" />';
+		
+		$profiles = array_keys($xmt_accounts);
+		echo '<link rel="stylesheet" href="'.xhanch_my_twitter_get_dir('url').'/css.php?profile='.implode(',', $profiles).'" type="text/css" media="screen" />';
 		
 		foreach($xmt_accounts as $acc=>$acc_set)
 			xhanch_my_twitter_css_cst($acc);		
 	}
 	add_action('wp_print_styles', 'xhanch_my_twitter_css');
 
-	function xhanch_my_twitter($args = array()){	
-		widget_xhanch_my_twitter($args);
+	function xhanch_my_twitter($args = array(), $profile){	
+		widget_xhanch_my_twitter($args, $profile);
 	}
 
 	function xhanch_my_twitter_short_code($atts) {
@@ -150,6 +150,7 @@
 			'after_widget' => '',
 			'before_title' => '',
 			'after_title' => '',
+			'profile' => '',
 		), $atts));
 
 		$args = array(
@@ -159,7 +160,7 @@
 			'after_title' => $after_title,
 		);
 
-		xhanch_my_twitter($args);
+		xhanch_my_twitter($args, $profile);
 	}
 	add_shortcode('xhanch_my_twitter', 'xhanch_my_twitter_short_code');
 	
@@ -223,7 +224,7 @@
 				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
 			}
 		} 
-		echo '<ul>';
+		echo '<ul class="tweet_area">';
 		$tweet_string = convert_smilies(html_entity_decode($tweet_string));
 		foreach($res as $row){			
 			echo '<li class="tweet_list">';

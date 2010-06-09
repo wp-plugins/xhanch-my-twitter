@@ -1,39 +1,39 @@
-.xmt hr{
+{xmt_id}.xmt hr{
 	height:1px;
 	width:100%;
 	color:#000000
 }
 
-.xmt .header_48{
+{xmt_id}.xmt .header_48{
 	height:48px;
 	line-height:48px;
 	vertical-align:middle
 }
 
-.xmt .text_18{	
+{xmt_id}.xmt .text_18{	
 	font-size:18px
 }
 
-.xmt .img_left{
+{xmt_id}.xmt .img_left{
 	float:left;
 	margin:0 5px 0 0;
 	border:none
 }
 
-.xmt_list{
+{xmt_id}.xmt_list{
 	padding:0px;	
 	margin:0px;
 	border:1px solid blue
 }
 
-.xmt ul{
+{xmt_id}.xmt ul{
 	padding:0;	
 	margin:0;
 	line-height:150%;
 	list-style:none;
 }
 
-.xmt ul li.tweet_list{
+{xmt_id}.xmt ul li.tweet_list{
 	font:inherit;
 	text-indent:0;
 	background: none;
@@ -44,57 +44,57 @@
 	word-wrap: break-word;
 }
 
-.xmt .tweet_date_gray{
+{xmt_id}.xmt .tweet_date_gray{
 	font:inherit;
 	color:gray;
 	font-style:italic
 }
 
-.xmt .tweet_date_black{
+{xmt_id}.xmt .tweet_date_black{
 	font:inherit;
 	color:#000000;
 	font-style:italic
 }
 
-.xmt .tweet_date_white{
+{xmt_id}.xmt .tweet_date_white{
 	font:inherit;
 	color:#ffffff;
 	font-style:italic
 }
 
-.xmt .tweet_date_red{
+{xmt_id}.xmt .tweet_date_red{
 	font:inherit;
 	color:#ff0000;
 	font-style:italic
 }
 
-.xmt ul li.tweet_list:before{
+{xmt_id}.xmt ul li.tweet_list:before{
 	content:""
 }
 
-.xmt .tweet_avatar{
+{xmt_id}.xmt .tweet_avatar{
 	float:left;
-	padding:0px 3px 3px 0;
+	padding:4px 3px 3px 0;
 	width:48px;
 	height:48px;
 	border:none;
 	display:block
 }
 
-.xmt .credit{
+{xmt_id}.xmt .credit{
 	font-size:10px;
 	text-align:right;
 }
 
-.xmt .credit a{
+{xmt_id}.xmt .credit a{
 	text-decoration:none;
 	font-size:10px
 }
 
-.xmt .credit a:hover{
+{xmt_id}.xmt .credit a:hover{
 	text-decoration:underline;
 }
 
-.xmt .clear{
+{xmt_id}.xmt .clear{
 	clear:both !important; 
 }
