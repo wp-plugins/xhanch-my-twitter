@@ -14,10 +14,10 @@
 		$twitter_url = 'http://twitter.com/'.$username;
 		$img_url = xhanch_my_twitter_get_dir('url').'/img/';
 
-		$part = explode('-', $header_style); 
+		$part = explode('-', $header_style); 		
 		$sty_type = $part[0];
-		$sty_var = $part[1];
-
+		if(count($part) >=2 )
+			$sty_var = $part[1];
 
 		switch($sty_type){
 			case '':

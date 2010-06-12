@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.8.6
+		Version: 1.8.7
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -237,13 +237,13 @@
 				
 				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author_name'].' '.strip_tags($row['tweet']));
 				
-				$tmp_str = str_replace('@name_plain', $row['author_name'], $tmp_str);
-				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tweet_string);
+				$tmp_str = str_replace('@name_plain', $row['author_name'], $tweet_string);
+				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tmp_str);
 				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
 				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
 				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
 				$tmp_str = str_replace('@retweet_url', $retweet_link, $tmp_str);
-				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'" target="_blank">retweet</a>', $tmp_str);
+				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'" target="_blank" rel="external nofollow">retweet</a>', $tmp_str);
 				
 				echo $tmp_str;
 			echo '</li>';
