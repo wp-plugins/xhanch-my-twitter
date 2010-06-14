@@ -23,5 +23,5 @@
 	
 	$profiles = explode(',',$_GET['profile']);
 	foreach($profiles as $profile)
-		echo str_replace('{xmt_id}', '#xmt_'.$profile, $css);
+		echo str_replace('{xmt_id}', '#xmt_'.$profile.'_wid', $css);
 ?>

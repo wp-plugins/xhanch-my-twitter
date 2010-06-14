@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.8.7
+		Version: 1.8.8
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -212,7 +212,7 @@
 			echo $after_title;		
 		}
 
-		echo '<div id="xmt_'.$profile.'" class="xmt xmt_'.$profile.'">';
+		echo '<div id="xmt_'.$profile.'_wid" class="xmt xmt_'.$profile.'">';
 		xhanch_my_twitter_header_style($profile);
 
 		echo xhanch_my_twitter_replace_vars($cfg['widget']['custom_text']['header'], $profile);

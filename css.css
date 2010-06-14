@@ -1,7 +1,7 @@
 {xmt_id}.xmt hr{
 	height:1px;
 	width:100%;
-	color:#000000
+	color:#000000;
 }
 
 {xmt_id}.xmt .header_48{
@@ -42,12 +42,13 @@
 	display:block;
 	white-space: normal; 
 	word-wrap: break-word;
+	color:inherit
 }
 
 {xmt_id}.xmt .tweet_date_gray{
 	font:inherit;
 	color:gray;
-	font-style:italic
+	font-style:italic;
 }
 
 {xmt_id}.xmt .tweet_date_black{
