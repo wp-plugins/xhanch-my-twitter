@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.8.8
+		Version: 1.8.9
 	*/
 
 	define('xhanch_my_twitter', true);
@@ -162,7 +162,9 @@
 
 		xhanch_my_twitter($args, $profile);
 	}
-	add_shortcode('xhanch_my_twitter', 'xhanch_my_twitter_short_code');
+	
+	if(function_exists('add_shortcode'))
+		add_shortcode('xhanch_my_twitter', 'xhanch_my_twitter_short_code');
 	
 	function widget_xhanch_my_twitter($args, $profile){		
 		global $xhanch_my_twitter_timed;
@@ -226,7 +228,7 @@
 		} 
 		echo '<ul class="tweet_area">';
 		$tweet_string = convert_smilies(html_entity_decode($tweet_string));
-		foreach($res as $row){			
+		foreach($res as $sts_id=>$row){			
 			echo '<li class="tweet_list">';
 				if($show_hr) 
 					echo '<hr />';
@@ -236,12 +238,15 @@
 				}
 				
 				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author_name'].' '.strip_tags($row['tweet']));
+				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author_name']).'&in_reply_to_status_id='.$sts_id.'&in_reply_to='.urlencode($row['author_name']);
 				
 				$tmp_str = str_replace('@name_plain', $row['author_name'], $tweet_string);
 				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tmp_str);
 				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
 				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
 				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
+				$tmp_str = str_replace('@reply_url', $reply_link, $tmp_str);
+				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'" target="_blank" rel="external nofollow">reply</a>', $tmp_str);
 				$tmp_str = str_replace('@retweet_url', $retweet_link, $tmp_str);
 				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'" target="_blank" rel="external nofollow">retweet</a>', $tmp_str);
 				

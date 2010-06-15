@@ -331,6 +331,8 @@
 									<li><small><b>@tweet</b>: content of the tweet</small></li>
 									<li><small><b>@date</b>: formatted publish date time of a tweet</small></li>
 									<li><small><b>@source</b>: display how/where the tweet is posted</small></li>
+									<li><small><b>@reply_url</b>: URL to reply a status</small></li>
+									<li><small><b>@reply_link</b>: Link to reply a status</small></li>
 									<li><small><b>@retweet_url</b>: URL to retweet a status</small></li>
 									<li><small><b>@retweet_link</b>: Link to retweet a status</small></li>
 								</ul>
