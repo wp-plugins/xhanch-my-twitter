@@ -5,14 +5,14 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.9.0
+		Version: 1.9.1
 	*/
-
+	
 	define('xhanch_my_twitter', true);
 	global $xhanch_my_twitter_timed;
 	global $xmt_accounts;
 	global $xmt_default;
-	
+		
 	$xmt_default = array(
 		'widget' => array(
 			'title' => 'Latest Tweets',

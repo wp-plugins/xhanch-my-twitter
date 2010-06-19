@@ -1,5 +1,5 @@
 <?php
-	require_once(ABSPATH . 'wp-admin/upgrade.php');
+	// require_once(ABSPATH . 'wp-admin/upgrade.php');
 
 	global $wpdb;
 	global $xmt_accounts;
