@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.9.1
+		Version: 1.9.2
 	*/
 	
 	define('xhanch_my_twitter', true);
@@ -237,8 +237,8 @@
 					echo '<a href="'.$row['author_url'].'"><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
 				}
 				
-				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author_name'].' '.strip_tags($row['tweet']));
-				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author_name']).'&in_reply_to_status_id='.$sts_id.'&in_reply_to='.urlencode($row['author_name']);
+				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author'].' '.strip_tags($row['tweet']));
+				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&in_reply_to_status_id='.$sts_id.'&in_reply_to='.urlencode($row['author']);
 				
 				$tmp_str = str_replace('@name_plain', $row['author_name'], $tweet_string);
 				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tmp_str);
