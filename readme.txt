@@ -5,7 +5,7 @@ Author URI: http://xhanch.com
 Donate link: http://xhanch.com/wp-plugin-my-twitter/
 Tags: twitter, tweet, status, sidebar, post, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll
 Requires at least: 2.3
-Tested up to: 2.9.2
+Tested up to: 3.0
 Stable tag: 1.9.2
 
 The best plugin to display your latest tweets, replies, direct messages, avatars, post date, click-able links, smilies, etc. Simple but powerful!
