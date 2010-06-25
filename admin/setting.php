@@ -58,7 +58,12 @@
 				
 		if(isset($_POST['cmd_xmt_create_profile'])){
 			$acc_name = strtolower(xhanch_my_twitter_form_post('txt_xmt_account_name'));
-			$valid_chars = str_split('abcdefghijklmnopqrstuvwxyz0123456789');
+			$valid_chars = array(
+				'a','b','c','d','e','f','g','h','i','j',
+				'k','l','m','n','o','p','q','r','s','t',
+				'u','v','w','x','y','z',
+				'0','1','2','3','4','5','6','7','8','9'
+			);
 		
 			if(empty($acc_name))
 				echo '<div id="message" class="updated fade"><p>Profile name is empty</p></div>';			
