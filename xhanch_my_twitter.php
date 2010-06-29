@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.9.3
+		Version: 1.9.4
 	*/
 	
 	define('xhanch_my_twitter', true);
@@ -77,6 +77,9 @@
 				),
 			)
 		),
+		'css' => array(
+			'custom_css' => ''
+		),
 		'other' => array(
 			'open_link_on_new_window' => 1,
 			'show_credit' => 1
@@ -115,6 +118,7 @@
 		$avatar_width = intval($cfg['tweet']['avatar']['size']['w']);
 		$avatar_height = intval($cfg['tweet']['avatar']['size']['h']);
 		$show_avatar = intval($cfg['tweet']['avatar']['show']);
+		$custom_css = $cfg['css']['custom_css'];
 				
 		if($avatar_width && $avatar_height){
 			$css .= '#xmt_'.$profile.'_wid.xmt .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
@@ -123,6 +127,11 @@
 		}else{
 			if($show_avatar)
 				$css .= '#xmt_'.$profile.'_wid.xmt ul li.tweet_list{min-height:57px} ';
+		}
+		
+		if($custom_css){
+			$custom_css = str_replace('{xmt_id}', '#xmt_'.$profile.'_wid', $custom_css);
+			$css .= $custom_css.' ';
 		}
 		
 		if($css)

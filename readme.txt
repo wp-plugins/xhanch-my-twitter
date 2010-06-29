@@ -6,7 +6,7 @@ Donate link: http://xhanch.com/wp-plugin-my-twitter/
 Tags: twitter, tweet, status, sidebar, post, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll
 Requires at least: 2.3
 Tested up to: 3.0
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 
 The best plugin to display your latest tweets, replies, direct messages, avatars, post date, click-able links, smilies, etc. Simple but powerful!
 
@@ -42,6 +42,7 @@ Your latest tweets can be displayed via sidebar, post or page
 - Choose one of available header styles that suits your taste
 - Generates very clean, optimized, table-less and valid W3C XHTML codes.
 - You can activate scrolling mode to save space on your webpage and to display more tweets
+- Personalize the layout of the widget by adding custom CSS codes
 - Theme friendly
 - Optimized and very efficient SQL queries and performance
 

@@ -154,6 +154,9 @@
 						),
 					)
 				),
+				'css' => array(
+					'custom_css' => xhanch_my_twitter_form_post('txa_xmt_css_custom_css'),
+				),
 				'other' => array(
 					'open_link_on_new_window' => xhanch_my_twitter_form_post('chk_xmt_other_open_link_on_new_window'),
 					'show_credit' => xhanch_my_twitter_form_post('chk_xmt_other_show_credit')
@@ -409,6 +412,17 @@
 						</tr>
 					</table>
 					<br/>
+										
+					<b>Custom CSS</b><br/>
+					<br/>
+					<table cellpadding="0" cellspacing="0" width="710px">
+						<tr>
+							<td>
+                            	<textarea style="width:710px" rows="5" id="txa_xmt_css_custom_css" name="txa_xmt_css_custom_css"><?php echo $set['css']['custom_css']; ?></textarea><br/>
+                                <i>{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile</i>
+                            </td>
+						</tr>
+					</table><br/>
 										
 					<b>Other Settings</b><br/>
 					<br/>
