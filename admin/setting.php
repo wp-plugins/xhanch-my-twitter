@@ -435,6 +435,31 @@
 							<td width="200px"><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
 						</tr>
 					</table><br/>
+										
+					<b>Codes for Template and Post/Page</b><br/>
+					<br/>
+					<table cellpadding="0" cellspacing="0" width="710px">
+						<tr>
+							<td>
+                            	This plugin provides widgets for your dynamic sidebars. <br/>
+                                But, if your theme does not support dynamic sidebars, you can use these codes<br/>
+                                <br/>
+                            	Here is your template code
+                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="7" readonly="readonly">&lt;?php
+    $args = array(
+		'before_widget' => '',
+		'after_widget' => '',
+		'before_title' => '',
+		'after_title' => '',
+    );
+    xhanch_my_twitter($args, '<?php echo $sel_account; ?>');
+?&gt;</textarea><br/><br/>
+                            	Here is your template code
+                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xhanch_my_twitter profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/>
+                                
+                            </td>
+						</tr>
+					</table><br/>
 					
 					<p class="submit">
 						<input type="submit" name="cmd_xmt_update_profile" value="Update Profile"/>
