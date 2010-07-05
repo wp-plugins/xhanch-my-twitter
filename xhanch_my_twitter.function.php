@@ -35,6 +35,8 @@
 	function xhanch_my_twitter_log($str){
 		if(isset($_GET['xmt_debug']))
 			echo '<!-- XMT: '.str_replace('--', '-', $str).' -->';
+		elseif(isset($_GET['xmt_debug_show']))
+			echo '<i>- XMT: '.str_replace('--', '-', $str).' -</i><br/>';
 	}
 
 	function xhanch_my_twitter_make_url_clickable_cb($matches, $new_tab_link = true){
