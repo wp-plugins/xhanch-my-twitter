@@ -7,6 +7,16 @@
 			return false;		  
 	}
 
+	function xhanch_my_twitter_check(){
+		$issues = array();
+		if(!function_exists('curl_init'))
+			$issues[] = 'Ups, your web server does not provide/support/enable the CURL Extension. But, this plugin may work if you just leave the password field empty/blank or you can ask your hosting provider to enable it for you';
+		if(!function_exists('simplexml_load_string'))
+			$issues[] = 'SimpleXML cannot be found. You can ask your hosting provider to enable it or you can\'t use this plugin.';
+		if(count($issues))
+			echo '<div id="message" class="updated fade"><p><b>Plugin requirements issue(s)</b>:<br/><br/>'.implode('<br/><br/>', $issues).'</p></div>';
+	}
+
 	function xhanch_my_twitter_replace_vars($str, $profile){		
 		if(trim($str) == '')
 			return $str;

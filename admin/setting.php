@@ -1,16 +1,6 @@
 <?php
 	if(!defined('xhanch_my_twitter'))
 		exit;
-		
-	function xhanch_my_twitter_check(){
-		$issues = array();
-		if(!function_exists('curl_init'))
-			$issues[] = 'Ups, your web server does not provide/support/enable the CURL Extension. But, this plugin may work if you just leave the password field empty/blank or you can ask your hosting provider to enable it for you';
-		if(!function_exists('simplexml_load_string'))
-			$issues[] = 'SimpleXML cannot be found. You can ask your hosting provider to enable it or you can\'t use this plugin';
-		if(count($issues))
-			echo '<div id="message" class="updated fade"><p><b>Plugin requirements issue(s)</b>:<br/><br/>'.implode('<br/><br/>', $issues).'</p></div>';
-	}
 	
 	function xhanch_my_twitter_setting(){
 		global $wpdb;
@@ -387,7 +377,8 @@
 							<td></td>
 							<td>Cache Expiry (in minutes)</td>
 							<td><input type="text" id="int_xmt_tweet_cache_expire" name="int_xmt_tweet_cache_expire" value="<?php echo $set['tweet']['cache']['expiry']; ?>" size="5"  maxlength="3"/></td>
-						</tr>			
+						</tr>	
+                        <tr><td colspan="5"><small><i>It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue</i></small></td></tr>
 					</table>
 					<br/>
 	
