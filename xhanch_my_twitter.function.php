@@ -269,7 +269,7 @@
 			$author_name = (string)$res->user->name;
 			$author_uid = (string)$res->user->screen_name;
 			$author_img = (string)$res->user->profile_image_url;
-			$arr[date('YmdHis', xhanch_my_twitter_get_time($date_time))] = array(
+			$arr[$sts_id] = array(
 				'timestamp' => $timestamp,
 				'tweet' => $output,
 				'author' => $author_uid,

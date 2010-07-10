@@ -344,6 +344,7 @@
 									<li><small><b>@reply_link</b>: Link to reply a status</small></li>
 									<li><small><b>@retweet_url</b>: URL to retweet a status</small></li>
 									<li><small><b>@retweet_link</b>: Link to retweet a status</small></li>
+									<li><small><b>@status_url</b>: URL to view the status on Twitter page</small></li>
 								</ul>
 							</td>
 						</tr>

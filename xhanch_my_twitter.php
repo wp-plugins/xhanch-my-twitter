@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 1.9.8
+		Version: 1.9.9
 	*/
 	
 	define('xhanch_my_twitter', true);
@@ -246,6 +246,7 @@
 					echo '<a href="'.$row['author_url'].'"><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
 				}
 				
+				$status_link = 'http://twitter.com/'.$row['author'].'/status/'.$sts_id;
 				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author'].' '.strip_tags($row['tweet']));
 				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&in_reply_to_status_id='.$sts_id.'&in_reply_to='.urlencode($row['author']);
 				
@@ -258,6 +259,7 @@
 				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'" target="_blank" rel="external nofollow">reply</a>', $tmp_str);
 				$tmp_str = str_replace('@retweet_url', $retweet_link, $tmp_str);
 				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'" target="_blank" rel="external nofollow">retweet</a>', $tmp_str);
+				$tmp_str = str_replace('@status_url', $status_link, $tmp_str);
 				
 				echo $tmp_str;
 			echo '</li>';
