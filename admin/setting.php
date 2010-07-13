@@ -422,7 +422,10 @@
 						<tr>
 							<td>
                             	<textarea style="width:710px" rows="5" id="txa_xmt_css_custom_css" name="txa_xmt_css_custom_css"><?php echo $set['css']['custom_css']; ?></textarea><br/>
-                                <i>{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile</i>
+                                <i>
+                                	{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile<br/>
+                                    <a href="http://xhanch.com/wp-content/plugins/xhanch-my-twitter/css.css" target="_blank">Need reference to set your custom CSS? Click here to view the default CSS codes</a>
+                                </i>
                             </td>
 						</tr>
 					</table><br/>
