@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.0.1
+		Version: 2.0.2
 	*/
 	
 	define('xhanch_my_twitter', true);

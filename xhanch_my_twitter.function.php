@@ -371,6 +371,12 @@
 					$date_part = explode('-', $date_raw);
 					$date = $date_part[2].'/'.$date_part[1].'/'.$date_part[0];
 					$time = substr($date_time, $pos_t+1, $pos_z-$pos_t-1);
+					$arr_date = explode('/', $date);
+					$arr_time = explode(':', $time);
+					$tmp_ts = mktime($arr_time[0], $arr_time[1], $arr_time[2], $arr_date[1], $arr_date[0], $arr_date[2]);
+					$date_time = date('D M d H:i:s O Y', $tmp_ts);
+					
+					$timestamp = xhanch_my_twitter_parse_time($date_time, $cfg['tweet']['date_format'], $cfg['tweet']['time_add']);
 
 					$author = (string)$xml->entry[$i]->author->name;
 					$author_name = substr($author, strpos($author, ' ') + 2, strlen($author) - (strpos($author, ' ') + 3));
@@ -380,8 +386,7 @@
 					$author_img = (string)$author_img['href'];
 
 					$arr[$sts_id] = array(
-						'date' => $date,
-						'time' => $time,
+						'timestamp' => $timestamp,
 						'tweet' => (string)$xml->entry[$i]->content,
 						'author' => $author_uid,
 						'author_name' => $author_name,
