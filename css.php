@@ -5,6 +5,10 @@
 	header("Pragma: public");
 	header("Cache-Control: maxage=".$expires);
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+$expires).' GMT');
+	
+	include_once('../../../wp-config.php');
+	include_once('../../../wp-load.php');
+	include_once('../../../wp-includes/wp-db.php');
 
 	function css_minify($v){
 		$v = trim($v);
@@ -21,7 +25,12 @@
 	
 	$css = css_minify(file_get_contents("css.css"));
 	
-	$profiles = explode(',',$_GET['profile']);
+	$xmt_accounts = get_option('xmt_accounts');
+	if($xmt_accounts === false){
+		$xmt_accounts = array();
+	}
+	
+	$profiles = array_keys($xmt_accounts);
 	foreach($profiles as $profile)
 		echo str_replace('{xmt_id}', '#xmt_'.$profile.'_wid', $css);
 ?>
