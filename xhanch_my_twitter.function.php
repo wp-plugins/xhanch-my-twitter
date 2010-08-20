@@ -223,7 +223,7 @@
 		$clickable_user_tag = intval($cfg['tweet']['make_clickable']['user_tag']);	
 		$clickable_hash_tag = intval($cfg['tweet']['make_clickable']['hash_tag']);	
 		$clickable_url = intval($cfg['tweet']['make_clickable']['url']);	
-		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);
+		$new_tab_link = 1;
 
 		if($kind == 'direct') {
 			$req = str_replace('direct-messages', 'statuses', $req);

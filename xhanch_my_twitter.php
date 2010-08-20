@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.0.4
+		Version: 2.0.5
 	*/
 	
 	define('xhanch_my_twitter', true);
@@ -81,7 +81,6 @@
 			'custom_css' => ''
 		),
 		'other' => array(
-			'open_link_on_new_window' => 1,
 			'show_credit' => 1
 		),
 	);
@@ -256,7 +255,7 @@
 				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&amp;in_reply_to_status_id='.$sts_id.'&amp;in_reply_to='.urlencode($row['author']);
 				
 				$tmp_str = str_replace('@name_plain', $row['author_name'], $tweet_string);
-				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'">'.$row['author_name'].'</a>', $tmp_str);
+				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'" target="_blank" rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
 				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
 				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
 				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);

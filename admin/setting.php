@@ -158,7 +158,6 @@
 					'custom_css' => xhanch_my_twitter_form_post('txa_xmt_css_custom_css'),
 				),
 				'other' => array(
-					'open_link_on_new_window' => xhanch_my_twitter_form_post('chk_xmt_other_open_link_on_new_window'),
 					'show_credit' => xhanch_my_twitter_form_post('chk_xmt_other_show_credit')
 				),
 			);
@@ -434,11 +433,11 @@
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px">Open link on new tab?</td>
-							<td width="200px"><input type="checkbox" id="chk_xmt_other_open_link_on_new_window" name="chk_xmt_other_open_link_on_new_window" value="1" <?php echo ($set['other']['open_link_on_new_window']?'checked="checked"':''); ?>/></td>
-							<td width="10px"></td>
 							<td width="150px">Show credit?</td>
 							<td width="200px"><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
+							<td width="10px"></td>
+							<td width="150px"></td>
+							<td width="200px"></td>
 						</tr>
 					</table><br/>
 										
