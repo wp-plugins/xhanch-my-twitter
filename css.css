@@ -2,6 +2,7 @@
 	height:1px;
 	width:100%;
 	color:#000000;
+	background:transparent
 }
 
 {xmt_id}.xmt .header_48{
@@ -49,18 +50,21 @@
 	font:inherit;
 	color:gray;
 	font-style:italic;
+	background:transparent
 }
 
 {xmt_id}.xmt .tweet_date_black{
 	font:inherit;
 	color:#000000;
-	font-style:italic
+	font-style:italic;
+	background:transparent
 }
 
 {xmt_id}.xmt .tweet_date_white{
 	font:inherit;
 	color:#ffffff;
-	font-style:italic
+	font-style:italic;
+	background:transparent
 }
 
 {xmt_id}.xmt .tweet_date_red{
