@@ -23,6 +23,10 @@
 			'bird_with_text-9' => 'Twitter bird - side view + display name',
 			'bird_with_text-10' => 'Twitter bird with one wing down + display name',
 			'bird_with_text-11' => 'Twitter bird stands next to \'Twitter\' board + display name',
+			'bird_with_text-12' => 'Cute Twitter bird + display name',
+			'bird_with_text-13' => 'Silenced Twitter bird + display name',
+			'bird_with_text-14' => 'Twitter bird on a tree branch + display name',
+			'bird_with_text-15' => 'Winking Twitter bird  + display name',
 			'logo_with_text-1' => 'Twitter logo 1 + display name',
 			'logo_with_text-2' => 'Twitter logo 2 + display name',
 		);
@@ -158,7 +162,8 @@
 					'custom_css' => xhanch_my_twitter_form_post('txa_xmt_css_custom_css'),
 				),
 				'other' => array(
-					'show_credit' => xhanch_my_twitter_form_post('chk_xmt_other_show_credit')
+					'show_credit' => xhanch_my_twitter_form_post('chk_xmt_other_show_credit'),
+					'open_link_on_new_window' => xhanch_my_twitter_form_post('chk_xmt_open_link_on_new_window')
 				),
 			);
 			
@@ -436,8 +441,8 @@
 							<td width="150px">Show credit?</td>
 							<td width="200px"><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
 							<td width="10px"></td>
-							<td width="150px"></td>
-							<td width="200px"></td>
+							<td width="150px">Open link in new tab?</td>
+							<td width="200px"><input type="checkbox" id="chk_xmt_open_link_on_new_window" name="chk_xmt_open_link_on_new_window" value="1" <?php echo ($set['other']['open_link_on_new_window']?'checked="checked"':''); ?>/></td>
 						</tr>
 					</table><br/>
 										

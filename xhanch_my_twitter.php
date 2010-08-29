@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.0.6
+		Version: 2.0.7
 	*/
 	
 	define('xhanch_my_twitter', true);
@@ -81,7 +81,8 @@
 			'custom_css' => ''
 		),
 		'other' => array(
-			'show_credit' => 1
+			'show_credit' => 1,
+			'open_link_on_new_window' => 1
 		),
 	);
 		
@@ -206,7 +207,9 @@
 		$scroll_h = intval($scroll_cfg['height']);
         $scroll_ani = intval($scroll_cfg['animate']['enable']);
 		$scroll_ani_amount = intval($scroll_cfg['animate']['amount']);
-		$scroll_ani_delay = intval($scroll_cfg['animate']['delay']);
+		$scroll_ani_delay = intval($scroll_cfg['animate']['delay']);	
+		
+		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);	
 		
 		$username = $cfg['tweet']['username'];
 				
@@ -218,7 +221,7 @@
 			echo $before_title;
 			
 			if($link_on_title)
-				echo '<a href="http://twitter.com/'.$username.'" target="_blank">';
+				echo '<a href="http://twitter.com/'.$username.'" rel="external nofollow" '.($new_tab_link?'target="_blank"':'').'>';
 			echo $cfg['widget']['title'];
 
 			if($link_on_title)
@@ -247,7 +250,7 @@
 					echo '<hr />';
 				
 				if($show_avatar){					
-					echo '<a href="'.$row['author_url'].'"><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
+					echo '<a href="'.$row['author_url'].'" '.($new_tab_link?'target="_blank"':'').'><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
 				}
 				
 				$status_link = 'http://twitter.com/'.$row['author'].'/status/'.$sts_id;
@@ -255,14 +258,14 @@
 				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&amp;in_reply_to_status_id='.$sts_id.'&amp;in_reply_to='.urlencode($row['author']);
 				
 				$tmp_str = str_replace('@name_plain', $row['author_name'], $tweet_string);
-				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'" target="_blank" rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
+				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
 				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
 				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
 				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
 				$tmp_str = str_replace('@reply_url', $reply_link, $tmp_str);
-				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'" target="_blank" rel="external nofollow">reply</a>', $tmp_str);
+				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">reply</a>', $tmp_str);
 				$tmp_str = str_replace('@retweet_url', $retweet_link, $tmp_str);
-				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'" target="_blank" rel="external nofollow">retweet</a>', $tmp_str);
+				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">retweet</a>', $tmp_str);
 				$tmp_str = str_replace('@status_url', $status_link, $tmp_str);
 				
 				echo $tmp_str;
