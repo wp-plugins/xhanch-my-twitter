@@ -242,6 +242,10 @@
 		$items_count= count($xml->entry);
 		$limit = $items_count;
 		foreach($xml->status as $res){
+			if($res->retweeted_status){
+				$res = $res->retweeted_status;
+			}
+
 			$sts_id = (string)$res->id;
 			$rpl = (string)$res->in_reply_to_status_id;
 			$date_time = (string)$res->created_at;
@@ -320,7 +324,8 @@
 			
 			$arr = array();
 			if($pwd == ''){			
-				$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);				
+				//$api_url = sprintf('http://twitter.com/statuses/user_timeline/%s.xml?count=%s',urlencode($uid),$limit);	
+				$api_url = sprintf('http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=%s&count=%s&include_rts=true',urlencode($uid),$limit);			
 				$arr = xhanch_my_twitter_split_xml($profile, $arr, xhanch_my_twitter_get_file($api_url));
 				if(count($arr) == 0)
 					$use_cache = true;
