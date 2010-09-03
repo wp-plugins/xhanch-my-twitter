@@ -13,6 +13,7 @@
 		foreach($xmt_accounts as $acc=>$acc_set){
 			$acc_set['general']['show_credit'] = 1;
 			$xmt_res = array_merge($xmt_default, $acc_set);
+			unset($xmt_res['tweet']['password']);
 			$xmt_accounts[$acc] = $xmt_res;
 		}
 		update_option('xmt_accounts', $xmt_accounts);

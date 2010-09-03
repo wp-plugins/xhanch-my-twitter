@@ -107,7 +107,6 @@
 				),
 				'tweet' => array(
 					'username' => xhanch_my_twitter_form_post('txt_xmt_tweet_username'),
-					'password' => xhanch_my_twitter_form_post('pwd_xmt_tweet_password'),
 					'order' => xhanch_my_twitter_form_post('cbo_xmt_tweet_order'),	
 					'count' => xhanch_my_twitter_form_post('int_xmt_tweet_count'),
 					'include' => array(
@@ -284,14 +283,13 @@
 					
 					<b>Tweet Settings</b><br/>
 					<br/>
-					<small><i>Note: password is not required. Fill in your password will allow you to show non-public tweet replies and direct messages.</i></small>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td width="150px">Username</td>
 							<td width="200px"><input type="text" id="txt_xmt_tweet_username" name="txt_xmt_tweet_username" value="<?php echo htmlspecialchars($set['tweet']['username']); ?>" style="width:100%"/></td>
 							<td width="10px"></td>
-							<td width="150px">Password</td>
-							<td width="200px"><input type="password" id="pwd_xmt_tweet_password" name="pwd_xmt_tweet_password" value="<?php echo htmlspecialchars($set['tweet']['password']); ?>" style="width:100%"/></td>
+							<td width="150px"></td>
+							<td width="200px"></td>
 						</tr>
 						<tr>
 							<td>Tweet order</td>
@@ -310,13 +308,13 @@
 							<td>Inc. public replies?</td>
 							<td><input type="checkbox" id="chk_xmt_tweet_include_public_replies" name="chk_xmt_tweet_include_public_replies" value="1" <?php echo ($set['tweet']['include']['public_replies']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td>Inc. replies?</td>
-							<td><input type="checkbox" id="chk_xmt_tweet_include_non_public_replies" name="chk_xmt_tweet_include_non_public_replies" value="1" <?php echo ($set['tweet']['include']['non_public_replies']?'checked="checked"':''); ?>/></td>
+							<td><!--Inc. replies?--></td>
+							<td><!--<input type="checkbox" id="chk_xmt_tweet_include_non_public_replies" name="chk_xmt_tweet_include_non_public_replies" value="1" <?php echo ($set['tweet']['include']['non_public_replies']?'checked="checked"':''); ?>/>--></td>
 						</tr>
-						<tr>
+						<!--<tr>
 							<td>Inc. direct messages?</td>
 							<td><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/></td>
-						</tr>
+						</tr>-->
 						<tr>
 							<td>Date format</td>
 							<td>
