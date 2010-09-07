@@ -1,13 +1,13 @@
 <?php
-	if(!defined('xhanch_my_twitter'))
+	if(!defined('xmt'))
 		exit;
 	
-	function xhanch_my_twitter_setting(){
+	function xmt_setting(){
 		global $wpdb;
 		global $xmt_accounts;
 		global $xmt_default;
-		
-		$sel_account = urldecode(xhanch_my_twitter_form_get('profile'));
+				
+		$sel_account = urldecode(xmt_form_get('profile'));
 			
 		$arr_header_style = array(
 			'' => 'No Header',
@@ -61,7 +61,7 @@
 		);
 				
 		if(isset($_POST['cmd_xmt_create_profile'])){
-			$acc_name = strtolower(xhanch_my_twitter_form_post('txt_xmt_account_name'));
+			$acc_name = strtolower(xmt_form_post('txt_xmt_account_name'));
 			$valid_chars = array(
 				'a','b','c','d','e','f','g','h','i','j',
 				'k','l','m','n','o','p','q','r','s','t',
@@ -93,46 +93,57 @@
 			unset($xmt_accounts[$sel_account]);
 			update_option('xmt_accounts', $xmt_accounts);	
 			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($sel_account).'</b> has been deleted</p></div>';				
+		}elseif(isset($_POST['cmd_xmt_disconnect'])){
+			$set = $xmt_accounts[$sel_account];
+			$set['tweet']['oauth_token'] = '';
+			$set['tweet']['oauth_secret'] = '';
+			$set['tweet']['oauth_use'] = 0;
+			$xmt_accounts[$sel_account] = $set;
+			update_option('xmt_accounts', $xmt_accounts);
+			echo '<div id="message" class="updated fade"><p>This profile has been disconnected with Twitter</p></div>';				
 		}elseif($_POST['cmd_xmt_update_profile']){
+			$set = $xmt_accounts[$sel_account];
 			$xmt_config = array(
 				'widget' => array(
-					'title' => xhanch_my_twitter_form_post('txt_xmt_widget_title'),
-					'name' => xhanch_my_twitter_form_post('txt_xmt_widget_name'),
-					'link_title' => intval(xhanch_my_twitter_form_post('chk_xmt_widget_link_title')),
-					'header_style' => xhanch_my_twitter_form_post('cbo_xmt_widget_header_style'),
+					'title' => xmt_form_post('txt_xmt_widget_title'),
+					'name' => xmt_form_post('txt_xmt_widget_name'),
+					'link_title' => intval(xmt_form_post('chk_xmt_widget_link_title')),
+					'header_style' => xmt_form_post('cbo_xmt_widget_header_style'),
 					'custom_text' => array(
-						'header' => xhanch_my_twitter_form_post('txa_xmt_widget_custom_text_header'),
-						'footer' => xhanch_my_twitter_form_post('txa_xmt_widget_custom_text_footer')
+						'header' => xmt_form_post('txa_xmt_widget_custom_text_header'),
+						'footer' => xmt_form_post('txa_xmt_widget_custom_text_footer')
 					)
 				),
 				'tweet' => array(
-					'username' => xhanch_my_twitter_form_post('txt_xmt_tweet_username'),
-					'order' => xhanch_my_twitter_form_post('cbo_xmt_tweet_order'),	
-					'count' => xhanch_my_twitter_form_post('int_xmt_tweet_count'),
+					'username' => xmt_form_post('txt_xmt_tweet_username'),
+					'oauth_use' => $set['tweet']['oauth_use'],
+					'oauth_token' => $set['tweet']['oauth_token'],
+					'oauth_secret' => $set['tweet']['oauth_secret'],
+					'order' => xmt_form_post('cbo_xmt_tweet_order'),	
+					'count' => xmt_form_post('int_xmt_tweet_count'),
 					'include' => array(
-						'public_replies' => xhanch_my_twitter_form_post('chk_xmt_tweet_include_public_replies'),
-						'non_public_replies' => xhanch_my_twitter_form_post('chk_xmt_tweet_include_non_public_replies'),
-						'direct_message' => xhanch_my_twitter_form_post('chk_xmt_tweet_include_direct_message')
+						'replies' => xmt_form_post('chk_xmt_tweet_include_replies'),
+						'direct_message' => xmt_form_post('chk_xmt_tweet_include_direct_message')
 					),
-					'date_format' => xhanch_my_twitter_form_post('cbo_xmt_tweet_date_format'),
-					'time_add' => xhanch_my_twitter_form_post('int_xmt_tweet_time_add'),
-					'layout' => xhanch_my_twitter_form_post('txa_xmt_tweet_layout'),
-					'show_hr' => xhanch_my_twitter_form_post('chk_xmt_tweet_show_hr'),
+					'date_format' => xmt_form_post('cbo_xmt_tweet_date_format'),
+					'time_add' => xmt_form_post('int_xmt_tweet_time_add'),
+					'layout' => xmt_form_post('txa_xmt_tweet_layout'),
+					'show_hr' => xmt_form_post('chk_xmt_tweet_show_hr'),
 					'make_clickable' => array(
-						'user_tag' => xhanch_my_twitter_form_post('chk_xmt_tweet_make_clickable_user_tag'),
-						'hash_tag' => xhanch_my_twitter_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
-						'url' => xhanch_my_twitter_form_post('chk_xmt_tweet_make_clickable_url')
+						'user_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_user_tag'),
+						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
+						'url' => xmt_form_post('chk_xmt_tweet_make_clickable_url')
 					),
 					'avatar' => array(
-						'show' => xhanch_my_twitter_form_post('chk_xmt_tweet_avatar_show'),
+						'show' => xmt_form_post('chk_xmt_tweet_avatar_show'),
 						'size' => array(
-							'w' => xhanch_my_twitter_form_post('int_xmt_tweet_avatar_size_w'),
-							'h' => xhanch_my_twitter_form_post('int_xmt_tweet_avatar_size_h')
+							'w' => xmt_form_post('int_xmt_tweet_avatar_size_w'),
+							'h' => xmt_form_post('int_xmt_tweet_avatar_size_h')
 						)
 					),
 					'cache' => array(
-						'enable' => xhanch_my_twitter_form_post('chk_xmt_tweet_cache_enable'),
-						'expiry' => xhanch_my_twitter_form_post('int_xmt_tweet_cache_expire'),
+						'enable' => xmt_form_post('chk_xmt_tweet_cache_enable'),
+						'expiry' => xmt_form_post('int_xmt_tweet_cache_expire'),
 						'tweet_cache' => array(
 							'date' => 0,
 							'data' => array()
@@ -145,33 +156,34 @@
 				),
 				'display_mode' => array(
 					'default' => array(
-						'enable' => (xhanch_my_twitter_form_post('cbo_xmt_display_mode') == 'default')?1:0
+						'enable' => (xmt_form_post('cbo_xmt_display_mode') == 'default')?1:0
 					),
 					'scrolling' => array(
-						'enable' => (xhanch_my_twitter_form_post('cbo_xmt_display_mode') == 'scrolling')?1:0,
-						'height' => xhanch_my_twitter_form_post('int_xmt_display_mode_scrolling_height'),
+						'enable' => (xmt_form_post('cbo_xmt_display_mode') == 'scrolling')?1:0,
+						'height' => xmt_form_post('int_xmt_display_mode_scrolling_height'),
 						'animate' => array(
-							'enable' => xhanch_my_twitter_form_post('chk_xmt_display_mode_scrolling_animate_enable'),
-							'amount' => xhanch_my_twitter_form_post('int_xmt_display_mode_scrolling_animate_amount'),
-							'delay' => xhanch_my_twitter_form_post('int_xmt_display_mode_scrolling_animate_delay')
+							'enable' => xmt_form_post('chk_xmt_display_mode_scrolling_animate_enable'),
+							'amount' => xmt_form_post('int_xmt_display_mode_scrolling_animate_amount'),
+							'delay' => xmt_form_post('int_xmt_display_mode_scrolling_animate_delay')
 						),
 					)
 				),
 				'css' => array(
-					'custom_css' => xhanch_my_twitter_form_post('txa_xmt_css_custom_css'),
+					'custom_css' => xmt_form_post('txa_xmt_css_custom_css'),
 				),
 				'other' => array(
-					'show_credit' => xhanch_my_twitter_form_post('chk_xmt_other_show_credit'),
-					'open_link_on_new_window' => xhanch_my_twitter_form_post('chk_xmt_open_link_on_new_window')
+					'show_credit' => xmt_form_post('chk_xmt_other_show_credit'),
+					'open_link_on_new_window' => xmt_form_post('chk_xmt_open_link_on_new_window')
 				),
 			);
-			
+						
 			$xmt_accounts[$sel_account] = $xmt_config;
 			update_option('xmt_accounts', $xmt_accounts);	
 			echo '<div id="message" class="updated fade"><p>Configuration Updated</p></div>';
 		}
 				
-		ksort($xmt_accounts);		
+		ksort($xmt_accounts);
+			
 ?>
 		<style type="text/css">
 			table, td{font-family:Arial;font-size:12px}
@@ -190,7 +202,7 @@
 		<div class="wrap">
 			<h2>Xhanch - My Twitter - Configuration</h2>			
 			<br/>
-            <?php xhanch_my_twitter_check(); ?>
+            <?php xmt_check(); ?>
 			<form action="" method="post">
 				<?php if(count($xmt_accounts) == 0){ ?>
 					You have not created any profile yet.<br/><br/>
@@ -229,11 +241,65 @@
 				</table>					
 			<?php } ?>
 					
-			<?php if(array_key_exists($sel_account, $xmt_accounts)){ ?>		
+			<?php 
+				if(array_key_exists($sel_account, $xmt_accounts)){ 
+					$conn = false;
+					$set = $xmt_accounts[$sel_account];
+					
+					if($set['temp']['oauth_req_token'] != '' || $set['temp']['oauth_req_secret'] != ''){
+						$set['tweet']['oauth_use'] = 0;
+							
+						$res = xmt_req('get-auth-token', $sel_account, array(
+							'ort' => $set['temp']['oauth_req_token'],
+							'ors' => $set['temp']['oauth_req_secret'],
+							'ov' => $_GET['oauth_verifier'],							
+						));
+						
+						$set['tweet']['oauth_token'] = $res['ot'];
+						$set['tweet']['oauth_secret'] = $res['os'];
+						
+						$set['temp']['oauth_req_token'] = '';
+						$set['temp']['oauth_req_secret'] = '';
+						
+						$xmt_accounts[$sel_account] = $set;
+						update_option('xmt_accounts', $xmt_accounts);	
+						
+						unset($_SESSION['xmt']);
+					}
+					
+					if($set['tweet']['oauth_token'] != '' && $set['tweet']['oauth_secret'] != ''){
+						$res_prof = xmt_req('get-profile', $sel_account);
+						if(!count($res_prof['err'])){
+							$set['tweet']['username'] = $res_prof['scr_name'];
+							$set['tweet']['oauth_use'] = 1;
+							$xmt_accounts[$sel_account] = $set;
+							update_option('xmt_accounts', $xmt_accounts);
+							$conn = true;			
+						}
+					}
+					
+					$blog_url = get_option('siteurl');
+					if(substr($blog_url,-1) != '/')
+						$blog_url .= '/';
+					$url_cb = $blog_url.'wp-admin/admin.php?page=xhanch-my-twitter&profile='.$sel_account;
+					
+					if(!$conn){
+						$res = xmt_req('reg', $sel_account, array('cb' => $url_cb));	
+						
+						
+						$set['temp']['oauth_req_token'] = $res['ort'];
+						$set['temp']['oauth_req_secret'] = $res['ors'];
+						
+						$xmt_accounts[$sel_account] = $set;
+						update_option('xmt_accounts', $xmt_accounts);	
+					}					
+					
+			?>		
 				<form action="" method="post">
-					<?php $set = $xmt_accounts[$sel_account]; ?>				
+					<?php  ?>				
 					<i><small>Note: <a href="#guide">Click here for a complete explaination about these configurations' fields</a></small></i><br/>
 					<br/>				
+                   	
 					<b>Widget Setting</b><br/>
 					<br/>
 					<table cellpadding="0" cellspacing="0">
@@ -286,7 +352,7 @@
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td width="150px">Username</td>
-							<td width="200px"><input type="text" id="txt_xmt_tweet_username" name="txt_xmt_tweet_username" value="<?php echo htmlspecialchars($set['tweet']['username']); ?>" style="width:100%"/></td>
+							<td width="200px"><input type="text" <?php echo ($conn?'value="'.$res_prof['scr_name'].'" disabled="disabled"':'value="'.htmlspecialchars($set['tweet']['username']).'"'); ?> id="txt_xmt_tweet_username" name="txt_xmt_tweet_username" style="width:100%"/></td>
 							<td width="10px"></td>
 							<td width="150px"></td>
 							<td width="200px"></td>
@@ -305,11 +371,11 @@
 							<td><input type="text" id="int_xmt_tweet_count" name="int_xmt_tweet_count" value="<?php echo htmlspecialchars($set['tweet']['count']); ?>" size="5"  maxlength="3"/></td>
 						</tr>
 						<tr>
-							<td>Inc. public replies?</td>
-							<td><input type="checkbox" id="chk_xmt_tweet_include_public_replies" name="chk_xmt_tweet_include_public_replies" value="1" <?php echo ($set['tweet']['include']['public_replies']?'checked="checked"':''); ?>/></td>
+							<td>Inc. replies?</td>
+							<td><input type="checkbox" id="chk_xmt_tweet_include_replies" name="chk_xmt_tweet_include_replies" value="1" <?php echo ($set['tweet']['include']['replies']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td><!--Inc. replies?--></td>
-							<td><!--<input type="checkbox" id="chk_xmt_tweet_include_non_public_replies" name="chk_xmt_tweet_include_non_public_replies" value="1" <?php echo ($set['tweet']['include']['non_public_replies']?'checked="checked"':''); ?>/>--></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<!--<tr>
 							<td>Inc. direct messages?</td>
@@ -384,6 +450,27 @@
                         <tr><td colspan="5"><small><i>It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue</i></small></td></tr>
 					</table>
 					<br/>
+                        	
+                    <b>Advanced Features</b><br/><br/>
+                    <small><b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, please consider to "Enable Cache" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.</small><br/>
+                    <br/>
+                    <?php if(!$conn){ ?>                 
+                        To enable advanced features, you need to grant read-write permission to Xhanch - My Twitter (Xhanch - MT) by clicking the following button.<br/>
+                        <a href="<?php echo $res['auth-url']; ?>"><img src="<?php echo xmt_base_url.'/img/button/sign-in.png'; ?>" alt="Click here to connect this application with your Twitter Account"/></a>
+                   	<?php }else{ ?>
+                    	You are currently connected as <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td width="150px">Inc. direct messages?</td>
+                                <td width="200px"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/></td>
+                                <td width="10px"></td>
+                                <td width="150px"></td>
+                                <td width="200px"></td>
+                            </tr>
+                      	</table><br/>
+                    	<input type="submit" name="cmd_xmt_disconnect" value="Disconnect From Twitter"/>
+                    <?php } ?>
+                    <br/><br/>                    
 	
 					<b>Display Mode</b><br/>					
 					<br/>
@@ -426,7 +513,7 @@
                             	<textarea style="width:710px" rows="5" id="txa_xmt_css_custom_css" name="txa_xmt_css_custom_css"><?php echo $set['css']['custom_css']; ?></textarea><br/>
                                 <i>
                                 	{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile<br/>
-                                    <a href="http://xhanch.com/wp-content/plugins/xhanch-my-twitter/css.css" target="_blank">Need reference to set your custom CSS? Click here to view the default CSS codes</a>
+                                    <a href="http://xhanch.com/wp-content/plugins/xhanch-my-twitter/css/css.css" target="_blank">Need reference to set your custom CSS? Click here to view the default CSS codes</a>
                                 </i>
                             </td>
 						</tr>
@@ -449,7 +536,7 @@
 					<table cellpadding="0" cellspacing="0" width="710px">
 						<tr>
 							<td>
-                            	This plugin provides widgets for your dynamic sidebars. <br/>
+                            	This plugin provides widgets for your dynamic sidebars.<br/>
                                 But, if your theme does not support dynamic sidebars, you can use these codes<br/>
                                 <br/>
                             	Here is your template code
@@ -460,10 +547,10 @@
 		'before_title' => '',
 		'after_title' => '',
     );
-    xhanch_my_twitter($args, '<?php echo $sel_account; ?>');
+    xmt($args, '<?php echo $sel_account; ?>');
 ?&gt;</textarea><br/><br/>
                             	Here is your template code
-                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xhanch_my_twitter profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/>
+                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xmt profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/>
                                 
                             </td>
 						</tr>

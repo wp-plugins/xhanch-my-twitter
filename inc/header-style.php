@@ -1,10 +1,10 @@
 <?php
-	function xhanch_my_twitter_header_style($profile){		
+	function xmt_header_style($profile){		
 		global $xmt_accounts;
 		
 		$cfg = $xmt_accounts[$profile];
 		
-		xhanch_my_twitter_timed('Build header - Start');
+		xmt_timed('Build header - Start');
 
 		$header_style = $cfg['widget']['header_style'];
 		$username = $cfg['tweet']['username'];
@@ -12,7 +12,7 @@
 		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);
 
 		$twitter_url = 'http://twitter.com/'.$username;
-		$img_url = xhanch_my_twitter_get_dir('url').'/img/';
+		$img_url = xmt_get_dir('url').'/img/icon/';
 
 		$part = explode('-', $header_style); 		
 		$sty_type = $part[0];
@@ -29,7 +29,7 @@
 				echo '<div class="header_48"><a href="'.$twitter_url.'" '.($new_tab_link?'target="_blank"':'').'><img src="'.$img_url.'twitter-logo-'.$sty_var.'.png" class="img_left" alt="'.$username.'"/></a><a '.($new_tab_link?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.$name.'</a></div>';
 				break;
 			case 'avatar':
-				$det = xhanch_my_twitter_get_detail($profile); 
+				$det = xmt_get_detail($profile); 
 				if(!$det['avatar']){
 					echo '<div class="header_48"><a href="'.$twitter_url.'" '.($new_tab_link?'target="_blank"':'').'><img src="'.$img_url.'twitter-bird-1.png" class="img_left" alt="'.$username.'"/></a><a '.($new_tab_link?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.$name.'</a></div>';
 				}else{
@@ -40,6 +40,6 @@
 				echo '<div class="header_48"><a href="'.$twitter_url.'" '.($new_tab_link?'target="_blank"':'').'><img src="'.$img_url.'twitter-bird-1.png" class="img_left" alt="'.$username.'"/></a><a '.($new_tab_link?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.$name.'</a></div>';
 				break;
 		}
-		xhanch_my_twitter_timed('Build header - Finished');
+		xmt_timed('Build header - Finished');
 	}
 ?>

@@ -4,7 +4,7 @@
 	global $xmt_default;
 	
 	$wpdb->query("delete from ".$wpdb->prefix."options where option_name like='%xhanch_my_twitter%'");
-		
+			
 	$xmt_accounts = get_option('xmt_accounts');
 	if($xmt_accounts === false){
 		$xmt_accounts = array();	

@@ -6,9 +6,9 @@
 	header("Cache-Control: maxage=".$expires);
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+$expires).' GMT');
 	
-	include_once('../../../wp-config.php');
-	include_once('../../../wp-load.php');
-	include_once('../../../wp-includes/wp-db.php');
+	include_once('../../../../wp-config.php');
+	include_once('../../../../wp-load.php');
+	include_once('../../../../wp-includes/wp-db.php');
 
 	function css_minify($v){
 		$v = trim($v);

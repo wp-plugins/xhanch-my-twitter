@@ -3,10 +3,10 @@ Contributors: xhanch_studio
 Plugin URI: http://xhanch.com/wp-plugin-my-twitter/
 Author URI: http://xhanch.com
 Donate link: http://xhanch.com/wp-plugin-my-twitter/
-Tags: twitter, tweet, status, sidebar, post, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll
+Tags: twitter, tweet, status, sidebar, post, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll, oauth, mention, hash
 Requires at least: 2.3
 Tested up to: 3.0
-Stable tag: 2.0.9
+Stable tag: 2.1.0
 The best plugin to display your latest tweets, replies, direct messages, avatars, post date, click-able links, smilies, etc. Simple but powerful!
 
 == Description ==
@@ -26,10 +26,12 @@ Your latest tweets can be displayed via sidebar, post or page
 - Multiple profile system that will let you put multiple Xhanch - My Twitter widgets with separate settings for each widget. Each new profile will provide a new Xhanch - My Twitter widget.
 - Retweet a status
 - Reply a status
-- view a status on Twitter page
+- Connect to your Twitter account via Oauth for more functionality
+- View a status on Twitter page
 - Flexible way to show your tweets since you can arrange your tweet content
 - Show how/where a tweet is posted
 - Convert all url, @username, and #tag (hash tags) to click-able links
+- Show your replies
 - Show your direct messages
 - Cache System
 - Display a number of your followers, total statuses/tweets, favorites, and friends
@@ -42,7 +44,7 @@ Your latest tweets can be displayed via sidebar, post or page
 - Choose one of available header styles that suits your taste
 - Generates very clean, optimized, table-less and valid W3C XHTML codes.
 - You can activate scrolling mode to save space on your webpage and to display more tweets
-- Personalize the layout of the widget by adding custom CSS codes
+- Personalize the layout of the widget by adding/using custom CSS codes
 - Theme friendly
 - Optimized and very efficient SQL queries and performance
 
