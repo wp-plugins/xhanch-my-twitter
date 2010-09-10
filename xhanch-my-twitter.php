@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.1.0
+		Version: 2.1.1
 	*/
 	
 	define('xmt', true);
@@ -201,7 +201,22 @@
 		$cfg = $xmt_accounts[$profile];
 		
 		extract($args);
-				
+		
+		$cur_role = xmt_get_role();
+		$msg = '';
+		
+		if($cur_role == 'administrator' && isset($_POST['cmd_xmt_post'])){
+			$t_tweet = trim(xmt_form_post('txa_xmt_tweet'));
+			if($t_tweet == '')
+				$msg = 'Your tweet is empty!';
+			if(strlen($t_tweet) > 140)
+				$msg = 'Your tweet exceeds 140 characters!';
+			if($msg == ''){			
+				xmt_req('post-tweet', $profile,array('tweet' => $t_tweet), false);
+				$msg = 'Your tweet has been posted';
+			}
+		}
+		
 		$res = xmt_get_tweets($profile);
 		
 		$tweet_string = $cfg['tweet']['layout'];
@@ -242,6 +257,12 @@
 		xmt_header_style($profile);
 
 		echo xmt_replace_vars($cfg['widget']['custom_text']['header'], $profile);
+		
+		if($cur_role == 'administrator'){
+			if($msg)
+				echo $msg.'<br/>';
+			echo '<form action="" method="post">What\'s happening?<br/><textarea name="txa_xmt_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_post" value="Tweet"/><div class="clear"></div></form>';
+		}
 
 		if($scroll_mode){
 			if($scroll_ani){

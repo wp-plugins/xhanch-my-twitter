@@ -103,3 +103,26 @@
 {xmt_id}.xmt .clear{
 	clear:both !important; 
 }
+
+
+/* Tweet From */
+
+{xmt_id}.xmt form{
+	padding:0;
+	margin:5px 0
+}
+
+{xmt_id}.xmt textarea{
+	width:97%;
+	height:40px;
+	font-family:arial;
+	font-size:12px;
+	color:#000;
+	background:#fff;
+	border:1px solid #666;
+	padding:2.5px
+}
+
+{xmt_id}.xmt input.submit{
+	float:right
+}
