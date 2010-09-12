@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.1.1
+		Version: 2.1.2
 	*/
 	
 	define('xmt', true);
@@ -37,6 +37,7 @@
 			'date_format' => 'd/m/Y H:i:s',
 			'layout' => '@tweet - posted on @date',
 			'show_hr' => 0,
+			'show_post_form' => 1,
 			'make_clickable' => array(
 				'user_tag' => 1,
 				'hash_tag' => 1,
@@ -85,7 +86,7 @@
 		),
 		'other' => array(
 			'show_credit' => 1,
-			'open_link_on_new_window' => 1
+			'open_link_on_new_window' => 1,
 		),
 		'temp' => array(
 			'oauth_req_token' => '',
@@ -203,9 +204,13 @@
 		extract($args);
 		
 		$cur_role = xmt_get_role();
+		$allow_tweet = false;
 		$msg = '';
 		
-		if($cur_role == 'administrator' && isset($_POST['cmd_xmt_post'])){
+		if($cur_role == 'administrator' && $cfg['tweet']['oauth_use'] && $cfg['tweet']['show_post_form'])
+			$allow_tweet = true;
+		
+		if($allow_tweet && isset($_POST['cmd_xmt_post'])){
 			$t_tweet = trim(xmt_form_post('txa_xmt_tweet'));
 			if($t_tweet == '')
 				$msg = 'Your tweet is empty!';
@@ -258,10 +263,11 @@
 
 		echo xmt_replace_vars($cfg['widget']['custom_text']['header'], $profile);
 		
-		if($cur_role == 'administrator'){
+		if($allow_tweet){
+			echo '<a name="xmt_'.$profile.'"></a>';
 			if($msg)
 				echo $msg.'<br/>';
-			echo '<form action="" method="post">What\'s happening?<br/><textarea name="txa_xmt_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_post" value="Tweet"/><div class="clear"></div></form>';
+			echo '<form action="#xmt_'.$profile.'" method="post">What\'s happening?<br/><textarea name="txa_xmt_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_post" value="Tweet"/><div class="clear"></div></form>';
 		}
 
 		if($scroll_mode){

@@ -129,6 +129,7 @@
 					'time_add' => xmt_form_post('int_xmt_tweet_time_add'),
 					'layout' => xmt_form_post('txa_xmt_tweet_layout'),
 					'show_hr' => xmt_form_post('chk_xmt_tweet_show_hr'),
+					'show_post_form' => xmt_form_post('chk_xmt_tweet_show_post_form'),
 					'make_clickable' => array(
 						'user_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_user_tag'),
 						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
@@ -188,7 +189,8 @@
 		<style type="text/css">
 			table, td{font-family:Arial;font-size:12px}
 			tr{height:22px}
-			ul li{line-height:2px}			
+			ul li{line-height:2px}	
+			.clear{clear:both}		
 		</style>
 		<script type="text/javascript">
 			function show_spoiler(obj){
@@ -200,7 +202,15 @@
 			}
     	</script>
 		<div class="wrap">
-			<h2>Xhanch - My Twitter - Configuration</h2>			
+			<h2>Xhanch - My Twitter - Configuration</h2>		
+            <div style="float:right;line-height:21px">
+            	<b>Do you like this plugin? If yes, click this button -&gt;</b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fxhanch.com%2Fwp-plugin-my-twitter%2F&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
+            </div>
+            <div class="clear"></div>	
+            <div style="float:right;line-height:21px">
+            	<b>Do you like our service and support? If yes, click this button -&gt;</b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FXhanch-Studio%2F146245898739871&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
+            </div>
+            <div class="clear"></div>
 			<br/>
             <?php xmt_check(); ?>
 			<form action="" method="post">
@@ -209,7 +219,7 @@
 				<?php } ?>
 				
 				<b><big>Add Profile</big></b><br/>
-				<br/>	
+				<br/>
 				Fill the following form to create a new profile
 				<br/><br/>
 				<table cellpadding="0" cellspacing="0">
@@ -296,7 +306,6 @@
 					
 			?>		
 				<form action="" method="post">
-					<?php  ?>				
 					<i><small>Note: <a href="#guide">Click here for a complete explaination about these configurations' fields</a></small></i><br/>
 					<br/>				
                    	
@@ -461,8 +470,14 @@
                     	You are currently connected as <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
                         <table cellpadding="0" cellspacing="0">
                             <tr>
-                                <td width="150px">Inc. direct messages?</td>
-                                <td width="200px"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_show_post_form" value="1" <?php echo ($set['tweet']['show_post_form']?'checked="checked"':''); ?>/> Show a form to post a tweet/status when logged in as Admin?</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/> Show direct messages?</td>
+                            </tr>
+                            <tr>
+                                <td width="150px"></td>
+                                <td width="200px"></td>
                                 <td width="10px"></td>
                                 <td width="150px"></td>
                                 <td width="200px"></td>
