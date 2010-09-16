@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.1.3
+		Version: 2.1.4
 	*/
 	
 	define('xmt', true);
@@ -219,6 +219,10 @@
 			if($msg == ''){			
 				xmt_req('post-tweet', $profile,array('tweet' => $t_tweet), false);
 				$msg = 'Your tweet has been posted';
+				
+				$cfg['tweet']['cache']['tweet_cache']['date'] = 0;
+				$xmt_accounts[$profile] = $cfg;
+				update_option('xmt_accounts', $xmt_accounts);
 			}
 		}
 		
@@ -266,7 +270,7 @@
 		if($allow_tweet){
 			echo '<a name="xmt_'.$profile.'"></a>';
 			if($msg)
-				echo $msg.'<br/>';
+				echo '<div>'.$msg.'</div>';
 			echo '<form action="#xmt_'.$profile.'" method="post">What\'s happening?<br/><textarea name="txa_xmt_'.$profile.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$profile.'_post" value="Tweet"/><div class="clear"></div></form>';
 		}
 
