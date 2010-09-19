@@ -94,13 +94,16 @@
 			update_option('xmt_accounts', $xmt_accounts);	
 			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($sel_account).'</b> has been deleted</p></div>';				
 		}elseif(isset($_POST['cmd_xmt_disconnect'])){
-			$set = $xmt_accounts[$sel_account];
-			$set['tweet']['oauth_token'] = '';
-			$set['tweet']['oauth_secret'] = '';
-			$set['tweet']['oauth_use'] = 0;
+			$set = $xmt_accounts[$sel_account];		
+			$set['tweet']['cache']['tweet_cache']['date'] = 0;
+			$set['tweet']['cache']['tweet_cache']['data'] = array();
+			$set['tweet']['cache']['profile_cache']['date'] = 0;
+			$set['tweet']['cache']['profile_cache']['data'] = array();				
 			$xmt_accounts[$sel_account] = $set;
 			update_option('xmt_accounts', $xmt_accounts);
 			echo '<div id="message" class="updated fade"><p>This profile has been disconnected with Twitter</p></div>';				
+		}elseif(isset($_POST['cmd_xmt_clear_cache'])){
+			
 		}elseif($_POST['cmd_xmt_update_profile']){
 			$set = $xmt_accounts[$sel_account];
 			$xmt_config = array(
@@ -199,6 +202,13 @@
 					inner.style.display = "";
 				else
 					inner.style.display = "none";
+			}
+			function show_more(obj_nm){
+				var obj = document.getElementById(obj_nm);
+				if (obj.style.display == "none")
+					obj.style.display = "";
+				else
+					obj.style.display = "none";
 			}
     	</script>
 		<div class="wrap">
@@ -334,24 +344,27 @@
 						</tr>
 						<tr>
 							<td colspan="5">
-								Header text
+								Header text (<a href="javascript:show_more('sct_text_var')">show/hide available variables</a>)
 								<textarea id="txa_xmt_widget_custom_text_header" name="txa_xmt_widget_custom_text_header" style="width:100%;height:40px"><?php echo htmlspecialchars($set['widget']['custom_text']['header']); ?></textarea>
 								<br/>
 				
-								Footer text
+								Footer text (<a href="javascript:show_more('sct_text_var')">show/hide available variables</a>)
 								<textarea id="txa_xmt_widget_custom_text_footer" name="txa_xmt_widget_custom_text_footer" style="width:100%;height:40px"><?php echo htmlspecialchars($set['widget']['custom_text']['footer']); ?></textarea>
 								<br/>
-				
-								<small><i>Available variables for footer and header text</i></small>
-								<ul>
-									<li><small><b>@avatar</b>: display URL of your Twitter avatar</small></li>
-									<li><small><b>@name</b>: display your full name on Twitter</small></li>
-									<li><small><b>@screen_name</b>: display your screen name on Twitter</small></li>
-									<li><small><b>@followers_count</b>: display a number of your followers</small></li>
-									<li><small><b>@statuses_count</b>: display a number of your total statuses/tweets</small></li>
-									<li><small><b>@favourites_count</b>: display a number of your favourites</small></li>
-									<li><small><b>@friends_count</b>: display a number of your friends</small></li>
-								</ul>
+                                
+                                <div id="sct_text_var" style="display:none;">		
+                                    <small><i>Available variables for footer and header text</i></small>
+                                    <ul>
+                                        <li><small><b>@avatar</b>: display URL of your Twitter avatar</small></li>
+                                        <li><small><b>@name</b>: display your full name on Twitter</small></li>
+                                        <li><small><b>@screen_name</b>: display your screen name on Twitter</small></li>
+                                        <li><small><b>@followers_count</b>: display a number of your followers</small></li>
+                                        <li><small><b>@statuses_count</b>: display a number of your total statuses/tweets</small></li>
+                                        <li><small><b>@favourites_count</b>: display a number of your favourites</small></li>
+                                        <li><small><b>@friends_count</b>: display a number of your friends</small></li>
+                                    </ul>
+                                </div>
+												
 							</td>
 						</tr>
 					</table><br/>
@@ -404,25 +417,25 @@
 							<td><input type="text" id="int_xmt_tweet_time_add" name="int_xmt_tweet_time_add" value="<?php echo intval($set['tweet']['time_add']); ?>" size="5"  maxlength="4"/></td>
 						</tr>
 						<tr>
-							<td>Tweet layout</td>
-							<td colspan="4"><input type="text" id="txa_xmt_tweet_layout" name="txa_xmt_tweet_layout" style="width:100%" value="<?php echo htmlspecialchars($set['tweet']['layout']); ?>" />
-							</td>
-						</tr>
-						<tr>
 							<td colspan="5">
-								<small><i>Available variables for tweet layout</i></small>
-								<ul>
-									<li><small><b>@name</b>: display the username who posts the tweet (Link Mode)</small></li>
-									<li><small><b>@name_plain</b>: display the username who posts the tweet</small></li>
-									<li><small><b>@tweet</b>: content of the tweet</small></li>
-									<li><small><b>@date</b>: formatted publish date time of a tweet</small></li>
-									<li><small><b>@source</b>: display how/where the tweet is posted</small></li>
-									<li><small><b>@reply_url</b>: URL to reply a status</small></li>
-									<li><small><b>@reply_link</b>: Link to reply a status</small></li>
-									<li><small><b>@retweet_url</b>: URL to retweet a status</small></li>
-									<li><small><b>@retweet_link</b>: Link to retweet a status</small></li>
-									<li><small><b>@status_url</b>: URL to view the status on Twitter page</small></li>
-								</ul>
+                            	Tweet layout (<a href="javascript:show_more('sct_twt_layout_var')">show/hide available variables</a>)<br/>
+								<textarea id="txa_xmt_tweet_layout" name="txa_xmt_tweet_layout" style="width:100%;height:40px"><?php echo htmlspecialchars($set['tweet']['layout']); ?></textarea><br/>
+                                <div id="sct_twt_layout_var" style="display:none;">		
+                                    <small><i>Available variables for tweet layout</i></small>
+                                    <ul>
+                                        <li><small><b>@name</b>: display the username who posts the tweet (Link Mode)</small></li>
+                                        <li><small><b>@name_plain</b>: display the username who posts the tweet</small></li>
+                                        <li><small><b>@tweet</b>: content of the tweet</small></li>
+                                        <li><small><b>@date</b>: formatted publish date time of a tweet</small></li>
+                                        <li><small><b>@source</b>: display how/where the tweet is posted</small></li>
+                                        <li><small><b>@reply_url</b>: URL to reply a status</small></li>
+                                        <li><small><b>@reply_link</b>: Link to reply a status</small></li>
+                                        <li><small><b>@retweet_url</b>: URL to retweet a status</small></li>
+                                        <li><small><b>@retweet_link</b>: Link to retweet a status</small></li>
+                                        <li><small><b>@status_url</b>: URL to view the status on Twitter page</small></li>
+                                    </ul>
+                                </div>
+                                
 							</td>
 						</tr>
 						<tr>
@@ -573,6 +586,7 @@
 					
 					<p class="submit">
 						<input type="submit" name="cmd_xmt_update_profile" value="Update Profile"/>
+						<input type="submit" name="cmd_xmt_clear_cache" value="Clear Cache"/>
 						<input type="submit" name="cmd_xmt_delete_profile" value="Delete Profile"/>
 					</p>
 				</form>
