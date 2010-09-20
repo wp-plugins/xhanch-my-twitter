@@ -94,6 +94,16 @@
 			update_option('xmt_accounts', $xmt_accounts);	
 			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($sel_account).'</b> has been deleted</p></div>';				
 		}elseif(isset($_POST['cmd_xmt_disconnect'])){
+			$set = $xmt_accounts[$sel_account];				
+			$set['tweet']['oauth_use'] = 0;						
+			$set['tweet']['oauth_token'] = $res['ot'];
+			$set['tweet']['oauth_secret'] = $res['os'];						
+			$set['temp']['oauth_req_token'] = '';
+			$set['temp']['oauth_req_secret'] = '';						
+			$xmt_accounts[$sel_account] = $set;
+			update_option('xmt_accounts', $xmt_accounts);
+			echo '<div id="message" class="updated fade"><p>This profile has been disconnected with Twitter</p></div>';				
+		}elseif(isset($_POST['cmd_xmt_clear_cache'])){
 			$set = $xmt_accounts[$sel_account];		
 			$set['tweet']['cache']['tweet_cache']['date'] = 0;
 			$set['tweet']['cache']['tweet_cache']['data'] = array();
@@ -101,9 +111,7 @@
 			$set['tweet']['cache']['profile_cache']['data'] = array();				
 			$xmt_accounts[$sel_account] = $set;
 			update_option('xmt_accounts', $xmt_accounts);
-			echo '<div id="message" class="updated fade"><p>This profile has been disconnected with Twitter</p></div>';				
-		}elseif(isset($_POST['cmd_xmt_clear_cache'])){
-			
+			echo '<div id="message" class="updated fade"><p>Cache has been cleared</p></div>';				
 		}elseif($_POST['cmd_xmt_update_profile']){
 			$set = $xmt_accounts[$sel_account];
 			$xmt_config = array(
@@ -209,6 +217,15 @@
 					obj.style.display = "";
 				else
 					obj.style.display = "none";
+			}
+			function show_mode_opt(){
+				var obj = document.getElementById("cbo_xmt_display_mode");				
+				var md_scrolling = document.getElementById("sct_md_scrolling");
+				
+				md_scrolling.style.display = "none";	
+				
+				if(obj.value == "scrolling")
+					md_scrolling.style.display = "";	
 			}
     	</script>
 		<div class="wrap">
@@ -506,30 +523,39 @@
 						<tr>
 							<td width="150px">Selected mode</td>
 							<td width="200px">	
-								<select id="cbo_xmt_display_mode" name="cbo_xmt_display_mode" style="width:100%">															
+								<select id="cbo_xmt_display_mode" name="cbo_xmt_display_mode" style="width:100%" onchange="show_mode_opt()">															
 								<?php foreach($set['display_mode'] as $key=>$val){ ?>
 									<option value="<?php echo $key; ?>" <?php echo ($val['enable'])?'selected="selected"':''; ?>><?php echo ucwords($key); ?></option>									
 								<?php } ?>
 								</select>
 							</td>
+                            <td width="10px"></td>
+                            <td width="150px"></td>
+                            <td width="200px"></td>
 						</tr>
 						<tr>
-							<td colspan="5"><br/><i>Scrolling option (only applied when selected mode is scrolling)</i><br/>&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="150px">Area Height</td>
-							<td width="200px"><input type="text" id="int_xmt_display_mode_scrolling_height" name="int_xmt_display_mode_scrolling_height" value="<?php echo $set['display_mode']['scrolling']['height']; ?>" size="5"  maxlength="5"/> px</td>
-							<td width="10px"></td>
-							<td width="150px">Animate Scrolling?</td>
-							<td width="200px"><input type="checkbox" id="chk_xmt_display_mode_scrolling_animate_enable" name="chk_xmt_display_mode_scrolling_animate_enable" value="1" <?php echo ($set['display_mode']['scrolling']['animate']['enable']?'checked="checked"':''); ?>/></td>
-						</tr>
-						<tr>
-							<td>Scroll Amount</td>
-							<td><input type="text" id="int_xmt_display_mode_scrolling_animate_amount" name="int_xmt_display_mode_scrolling_animate_amount" value="<?php echo $set['display_mode']['scrolling']['animate']['amount']; ?>" size="5"  maxlength="5"/> px</td>
-							<td width="10px"></td>
-							<td>Scroll Delay</td>
-							<td><input type="text" id="int_xmt_display_mode_scrolling_animate_delay" name="int_xmt_display_mode_scrolling_animate_delay" value="<?php echo $set['display_mode']['scrolling']['animate']['delay']; ?>" size="5"  maxlength="5"/> ms</td>
-						</tr>
+							<td colspan="5">
+                            	<div id="sct_md_scrolling" style="display:none;">	
+                                	<table cellpadding="0" cellspacing="0">
+                                		<tr>
+                                            <td width="150px">Area Height</td>
+                                            <td width="200px"><input type="text" id="int_xmt_display_mode_scrolling_height" name="int_xmt_display_mode_scrolling_height" value="<?php echo $set['display_mode']['scrolling']['height']; ?>" size="5"  maxlength="5"/> px</td>
+                                            <td width="10px"></td>
+                                            <td width="150px">Animate Scrolling?</td>
+                                            <td width="200px"><input type="checkbox" id="chk_xmt_display_mode_scrolling_animate_enable" name="chk_xmt_display_mode_scrolling_animate_enable" value="1" <?php echo ($set['display_mode']['scrolling']['animate']['enable']?'checked="checked"':''); ?>/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Scroll Amount</td>
+                                            <td><input type="text" id="int_xmt_display_mode_scrolling_animate_amount" name="int_xmt_display_mode_scrolling_animate_amount" value="<?php echo $set['display_mode']['scrolling']['animate']['amount']; ?>" size="5"  maxlength="5"/> px</td>
+                                            <td width="10px"></td>
+                                            <td>Scroll Delay</td>
+                                            <td><input type="text" id="int_xmt_display_mode_scrolling_animate_delay" name="int_xmt_display_mode_scrolling_animate_delay" value="<?php echo $set['display_mode']['scrolling']['animate']['delay']; ?>" size="5"  maxlength="5"/> ms</td>
+                                        </tr>
+                                   	</table>
+                                </div>
+                                <script type="text/javascript">show_mode_opt();</script>
+                            </td>
+						</tr>						
 					</table>
 					<br/>
 										
@@ -565,8 +591,11 @@
 						<tr>
 							<td>
                             	This plugin provides widgets for your dynamic sidebars.<br/>
-                                But, if your theme does not support dynamic sidebars, you can use these codes<br/>
+                                But, if your theme does not support dynamic sidebars, you can use these codes.<br/>
                                 <br/>
+                                
+                                <a href="javascript:show_more('sct_php_code')">Show/hide paste-able code (PHP version)</a>                                
+                                <div id="sct_php_code" style="display:none;">	                                
                             	Here is your template code
                             	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="7" readonly="readonly">&lt;?php
     $args = array(
@@ -576,9 +605,10 @@
 		'after_title' => '',
     );
     xmt($args, '<?php echo $sel_account; ?>');
-?&gt;</textarea><br/><br/>
-                            	Here is your template code
-                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xmt profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/>
+?&gt;</textarea><br/></div><br/>
+                            	<a href="javascript:show_more('sct_scc_code')">Show/hide paste-able code code (WordPress short code version)</a>                                
+                                <div id="sct_scc_code" style="display:none;">	
+                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xmt profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/></div>
                                 
                             </td>
 						</tr>
