@@ -161,11 +161,11 @@
 	function xmt_req($act, $profile,$add=array(),$decode=true){		
 		global $xmt_accounts;
 		$set = $xmt_accounts[$profile];
-		$url = 'http://xhanch.com/api/xmt.php?a='.$act.'&ot='.$set['tweet']['oauth_token'].'&os='.$set['tweet']['oauth_secret'];
+		$url = 'http://xhanch.com/api/xmt.php?gz&a='.$act.'&ot='.$set['tweet']['oauth_token'].'&os='.$set['tweet']['oauth_secret'];
 		foreach($add as $aK=>$aV){
 			$url .= '&'.$aK.'='.urlencode($aV);
 		}
-		$res = xmt_get_file($url);		
+		$res = gzinflate(xmt_get_file($url));		
 		if($decode)
 			return unserialize($res);
 		else
