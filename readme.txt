@@ -17,7 +17,7 @@ You can customize it with our predefined customizations settings/options easily 
 
 You can also post a tweet/status directly from your website. 
 
-Xhanch My Twitter is going to provid complete integration between your wordpress website and your twitter account. This plugin can connect to and access from multiple Twitter accounts.
+Xhanch My Twitter is going to provide complete integration between your wordpress website and your twitter account. This plugin can connect to and access from multiple Twitter accounts.
 
 We will keep improving this plugin in order to make this plugin to be the best Twitter plugin for WordPress
 
