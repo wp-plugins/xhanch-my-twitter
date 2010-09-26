@@ -1,0 +1,535 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-26 11:43+0100\n"
+"PO-Revision-Date: 2010-09-26 02:45+0300\n"
+"Last-Translator: Susanto B.Sc (admin@xhanch.com)\n"
+"Language-Team: www.xhanch.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+
+# Plugin strings
+
+msgid "My Twitter"
+msgstr ""
+
+msgid "Xhanch My Twitter - The best WordPress plugin to integrate your WordPress website with your Twitter accounts"
+msgstr ""
+
+msgid "Developed by Xhanch Studio"
+msgstr ""
+
+msgid "by Xhanch"
+msgstr ""
+
+
+
+# Terms
+
+msgid "Tweet"
+msgstr ""
+
+msgid "reply"
+msgstr ""
+
+msgid "retweet"
+msgstr ""
+
+
+
+# Widget Strings
+
+msgid "Xhanch - My Twitter"
+msgstr ""
+
+msgid "Click here to configure this plugin"
+msgstr ""
+
+
+
+# Logging
+
+msgid "Starting to generate output"
+msgstr ""
+
+msgid "Build header - Start"
+msgstr ""
+
+msgid "Build header - Finished"
+msgstr ""
+
+msgid "Build Body - Start"
+msgstr ""
+
+msgid "Build Body - Finished"
+msgstr ""
+
+msgid "Finished"
+msgstr ""
+
+msgid "Exec time"
+msgstr ""
+
+
+
+# Post a tweet
+
+msgid "Your tweet is empty!"
+msgstr ""
+
+msgid "Your tweet exceeds 140 characters!"
+msgstr ""
+
+msgid "Your tweet has been posted"
+msgstr ""
+
+msgid "What's happening?"
+msgstr ""
+
+
+
+# Compatibilty Checker
+
+msgid "Oops, your web server does not provide/support/enable the CURL Extension. But, this plugin may work if you just leave the password field empty/blank or you can ask your hosting provider to enable it for you"
+msgstr ""
+
+msgid "SimpleXML cannot be found. You can ask your hosting provider to enable it or you can't use this plugin."
+msgstr ""
+
+msgid "Plugin requirements issue(s)"
+msgstr ""
+
+
+
+# Date Time
+
+msgid "second"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "minutes"
+msgstr ""
+
+msgid "hour"
+msgstr ""
+
+msgid "hours"
+msgstr ""
+
+msgid "day"
+msgstr ""
+
+msgid "days"
+msgstr ""
+
+msgid "week"
+msgstr ""
+
+msgid "weeks"
+msgstr ""
+
+msgid "month"
+msgstr ""
+
+msgid "months"
+msgstr ""
+
+msgid "year"
+msgstr ""
+
+msgid "years"
+msgstr ""
+
+msgid "decade"
+msgstr ""
+
+msgid "decades"
+msgstr ""
+
+msgid "ago"
+msgstr ""
+
+msgid "from now"
+msgstr ""
+
+msgid "dayname"
+msgstr ""
+
+msgid "'? period ago'"
+msgstr ""
+
+msgid "Bad date"
+msgstr ""
+
+
+
+# Configuration
+
+msgid "No Header"
+msgstr ""
+
+msgid "Your avatar + display name"
+msgstr ""
+
+msgid "Elegant Twitter bird + display name"
+msgstr ""
+
+msgid "Twitter bird - side view + display name"
+msgstr ""
+
+msgid "Twitter bird plays a notebook + display name"
+msgstr ""
+
+msgid "Twitter bird with sharp nose + display name"
+msgstr ""
+
+msgid "Twitter bird holds a 'Twitter' board + display name"
+msgstr ""
+
+msgid "Twitter bird holds a 'Follow Me' banner + display name"
+msgstr ""
+
+msgid "Twitter bird listens to music + display name"
+msgstr ""
+
+msgid "Twitter bird - front view + display name"
+msgstr ""
+
+msgid "Twitter bird - side view + display name"
+msgstr ""
+
+msgid "Twitter bird with one wing down + display name"
+msgstr ""
+
+msgid "Twitter bird stands next to 'Twitter' board + display name"
+msgstr ""
+
+msgid "Cute Twitter bird + display name"
+msgstr ""
+
+msgid "Silenced Twitter bird + display name"
+msgstr ""
+
+msgid "Twitter bird on a tree branch + display name"
+msgstr ""
+
+msgid "Winking Twitter bird  + display name"
+msgstr ""
+
+msgid "Twitter logo 1 + display name"
+msgstr ""
+
+msgid "Twitter logo 2 + display name"
+msgstr ""
+
+msgid "Latest to oldest"
+msgstr ""
+
+msgid "Oldest to latest"
+msgstr ""
+
+msgid "Profile name is empty"
+msgstr ""
+
+msgid "Profile already exists"
+msgstr ""
+
+msgid "Profile name must contain A to Z and 0 to 9"
+msgstr ""
+
+msgid "This profile has been disconnected with Twitter"
+msgstr ""
+
+msgid "Cache has been cleared"
+msgstr ""
+
+msgid "Configuration Updated"
+msgstr ""
+
+msgid "Xhanch - My Twitter - Configuration"
+msgstr ""
+
+msgid "Do you like this plugin? If yes, click this button -&gt;"
+msgstr ""
+
+msgid "Do you like our service and support? If yes, click this button -&gt;"
+msgstr ""
+
+msgid "You have not created any profile yet."
+msgstr ""
+
+msgid "Add Profile"
+msgstr ""
+
+msgid "Fill the following form to create a new profile"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)"
+msgstr ""
+
+msgid "Each profile will create a new widget to be placed to your sidebar/post/template code"
+msgstr ""
+
+msgid "Create Profile"
+msgstr ""
+
+msgid "Profile Configuration"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "- Choose a profile -"
+msgstr ""
+
+msgid "Click here for a complete explaination about these configurations' fields"
+msgstr ""
+
+msgid "Widget Setting"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Header style"
+msgstr ""
+
+msgid "Turn title to link?"
+msgstr ""
+
+msgid "Header text"
+msgstr ""
+
+msgid "show/hide available variables"
+msgstr ""
+
+msgid "Available variables for footer and header text"
+msgstr ""
+
+msgid "display URL of your Twitter avatar"
+msgstr ""
+
+msgid "display your full name on Twitter"
+msgstr ""
+
+msgid "display your screen name on Twitter"
+msgstr ""
+
+msgid "display a number of your followers"
+msgstr ""
+
+msgid "display a number of your total statuses/tweets"
+msgstr ""
+
+msgid "display a number of your favourites"
+msgstr ""
+
+msgid "display a number of your friends"
+msgstr ""
+
+msgid "Tweet Settings"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Tweet order"
+msgstr ""
+
+msgid "# Latest tweets"
+msgstr ""
+
+msgid "Inc. replies?"
+msgstr ""
+
+msgid "Date format"
+msgstr ""
+
+msgid "GMT add (in minutes)"
+msgstr ""
+
+msgid "Tweet layout"
+msgstr ""
+
+msgid "Available variables for tweet layout"
+msgstr ""
+
+msgid "display the username who posts the tweet (Link Mode)"
+msgstr ""
+
+msgid "display the username who posts the tweet"
+msgstr ""
+
+msgid "content of the tweet"
+msgstr ""
+
+msgid "formatted publish date time of a tweet"
+msgstr ""
+
+msgid "display how/where the tweet is posted"
+msgstr ""
+
+msgid "URL to reply a status"
+msgstr ""
+
+msgid "Link to reply a status"
+msgstr ""
+
+msgid "URL to retweet a status"
+msgstr ""
+
+msgid "Link to retweet a status"
+msgstr ""
+
+msgid "URL to view the status on Twitter page"
+msgstr ""
+
+msgid "Clickable URL?"
+msgstr ""
+
+msgid "Show divider line?"
+msgstr ""
+
+msgid "Clickable user tag?"
+msgstr ""
+
+msgid "Clickable hash tag?"
+msgstr ""
+
+msgid "Show avatar?"
+msgstr ""
+
+msgid "Avatar size"
+msgstr ""
+
+msgid "Enable Cache?"
+msgstr ""
+
+msgid "Cache Expiry (in minutes)"
+msgstr ""
+
+msgid "It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue"
+msgstr ""
+
+msgid "Advanced Features"
+msgstr ""
+
+msgid <b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, please consider to "Enable Cache" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.""
+msgstr ""
+
+msgid "To enable advanced features, you need to grant read-write permission to Xhanch - My Twitter (Xhanch - MT) by clicking the following button."
+msgstr ""
+
+msgid "Click here to connect this application with your Twitter Account"
+msgstr ""
+
+msgid "You are currently connected as"
+msgstr ""
+
+msgid "Show a form to post a tweet/status when logged in as Admin?"
+msgstr ""
+
+msgid "Show direct messages?"
+msgstr ""
+
+msgid "Disconnect From Twitter"
+msgstr ""
+
+msgid "Display Mode"
+msgstr ""
+
+msgid "Selected mode"
+msgstr ""
+
+msgid "Area Height"
+msgstr ""
+
+msgid "Animate Scrolling?"
+msgstr ""
+
+msgid "Scroll Amount"
+msgstr ""
+
+msgid "Scroll Delay"
+msgstr ""
+
+msgid "Custom CSS"
+msgstr ""
+
+msgid "{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile"
+msgstr ""
+
+msgid "Need reference to set your custom CSS? Click here to view the default CSS codes"
+msgstr ""
+
+msgid "Other Settings"
+msgstr ""
+
+msgid "Show credit?"
+msgstr ""
+
+msgid "Open link in new tab?"
+msgstr ""
+
+msgid "Codes for Template and Post/Page"
+msgstr ""
+
+msgid "This plugin provides widgets for your dynamic sidebars."
+msgstr ""
+
+msgid "But, if your theme does not support dynamic sidebars, you can use these codes."
+msgstr ""
+
+msgid "Show/hide paste-able code (PHP version)"
+msgstr ""
+
+msgid "Here is your template code"
+msgstr ""
+
+msgid "Show/hide paste-able code code (WordPress short code version)"
+msgstr ""
+
+msgid "Update Profile"
+msgstr ""
+
+msgid "Clear Cache"
+msgstr ""
+
+msgid "Delete Profile"
+msgstr ""
+
+msgid "Support This Plugin Development"
+msgstr ""
+
+msgid "Do you like this plugin? Do you think this plugin very helpful?"
+msgstr ""
+
+msgid "Why don't you support this plugin developement by donating any amount you are willing to give?"
+msgstr ""
+
+msgid "If you wish to support the developer and make a donation, please click the following button. Thanks!"
+msgstr ""
+
+msgid "Complete Info and Share Room"
+msgstr ""
+
+msgid "Complete information regarding Xhanch - My Twitter (Share Room)"
+msgstr ""
+
+msgid "Donate"
+msgstr ""

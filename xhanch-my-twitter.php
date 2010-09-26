@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.1.7
+		Version: 2.1.8
 	*/
 	
 	define('xmt', true);
@@ -14,6 +14,8 @@
 	global $xmt_timed;
 	global $xmt_accounts;
 	global $xmt_default;
+		
+	load_plugin_textdomain('xmt', WP_PLUGIN_URL.'/xhanch-my-twitter/lang/', 'xhanch-my-twitter/lang/');
 		
 	$xmt_default = array(
 		'widget' => array(
@@ -270,8 +272,8 @@
 		if($allow_tweet){
 			echo '<a name="xmt_'.$profile.'"></a>';
 			if($msg)
-				echo '<div>'.$msg.'</div>';
-			echo '<form action="#xmt_'.$profile.'" method="post">What\'s happening?<br/><textarea name="txa_xmt_'.$profile.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$profile.'_post" value="Tweet"/><div class="clear"></div></form>';
+				echo '<div>'.__($msg, 'xmt').'</div>';
+			echo '<form action="#xmt_'.$profile.'" method="post">'.__('What\'s happening?', 'xmt').'<br/><textarea name="txa_xmt_'.$profile.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$profile.'_post" value="'.__('Tweet', 'xmt').'"/><div class="clear"></div></form>';
 		}
 
 		if($scroll_mode){
@@ -302,9 +304,9 @@
 				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
 				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
 				$tmp_str = str_replace('@reply_url', $reply_link, $tmp_str);
-				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">reply</a>', $tmp_str);
+				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.__('reply', 'xmt').'</a>', $tmp_str);
 				$tmp_str = str_replace('@retweet_url', $retweet_link, $tmp_str);
-				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">retweet</a>', $tmp_str);
+				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.__('retweet', 'xmt').'</a>', $tmp_str);
 				$tmp_str = str_replace('@status_url', $status_link, $tmp_str);
 				
 				echo $tmp_str;
@@ -348,7 +350,7 @@
 		echo xmt_replace_vars($cfg['widget']['custom_text']['footer'], $profile); 
 
 		if ($cfg['other']['show_credit']){
-			echo '<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="Xhanch My Twitter - A free WordPress plugin to display your latest tweets from Twitter">My Twitter</a>, <a href="http://xhanch.com/" rel="section" title="Developed by Xhanch Studio">by Xhanch</a></div>';
+			echo '<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="'.__('Xhanch My Twitter - The best WordPress plugin to integrate your WordPress website with your Twitter accounts', 'xmt').'">'.__('My Twitter', 'xmt').'</a>, <a href="http://xhanch.com/" rel="section" title="'.__('Developed by Xhanch Studio', 'xmt').'">'.__('by Xhanch', 'xmt').'</a></div>';
 		}
 		echo '</div>';
 		echo $after_widget;
@@ -358,14 +360,14 @@
 
 	function widget_xmt_control($id){	
 ?>
-		<a href="admin.php?page=xhanch-my-twitter&profile=<?php echo $id; ?>">Click here to configure this plugin</a>
+		<a href="admin.php?page=xhanch-my-twitter&profile=<?php echo $id; ?>"><?php echo __('Click here to configure this plugin', 'xmt'); ?></a>
 <?php		
 	}
 
 	function widget_xmt_init(){
 		global $xmt_accounts;
 		foreach($xmt_accounts as $acc=>$acc_set){
-			wp_register_sidebar_widget('xmt_'.$acc, 'Xhanch - My Twitter : '.$acc, 'widget_xmt_'.$acc);
+			wp_register_sidebar_widget('xmt_'.$acc, __('Xhanch - My Twitter', 'xmt').' : '.$acc, 'widget_xmt_'.$acc);
 			register_widget_control('xmt_'.$acc, 'widget_xmt_control_'.$acc, 300, 200 );
 		}
 	}
@@ -386,8 +388,8 @@
 			}
 			add_submenu_page(
 				'xhanch', 
-				'My Twitter',
-				'My Twitter', 
+				__('My Twitter', 'xmt'), 
+				__('My Twitter', 'xmt'), 
 				8, 
 				'xhanch-my-twitter', 
 				'xmt_setting'

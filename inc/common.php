@@ -10,11 +10,11 @@
 	function xmt_check(){
 		$issues = array();
 		if(!function_exists('curl_init'))
-			$issues[] = 'Ups, your web server does not provide/support/enable the CURL Extension. But, this plugin may work if you just leave the password field empty/blank or you can ask your hosting provider to enable it for you';
+			$issues[] = __('Oops, your web server does not provide/support/enable the CURL Extension. But, this plugin may work if you just leave the password field empty/blank or you can ask your hosting provider to enable it for you', 'xmt');
 		if(!function_exists('simplexml_load_string'))
-			$issues[] = 'SimpleXML cannot be found. You can ask your hosting provider to enable it or you can\'t use this plugin.';
+			$issues[] = __('SimpleXML cannot be found. You can ask your hosting provider to enable it or you can\'t use this plugin.', 'xmt');
 		if(count($issues))
-			echo '<div id="message" class="updated fade"><p><b>Plugin requirements issue(s)</b>:<br/><br/>'.implode('<br/><br/>', $issues).'</p></div>';
+			echo '<div id="message" class="updated fade"><p><b>'.__('Plugin requirements issue(s)', 'xmt').'</b>:<br/><br/>'.implode('<br/><br/>', $issues).'</p></div>';
 	}
 
 	function xmt_replace_vars($str, $profile){		
@@ -39,14 +39,14 @@
 	function xmt_timed($str = ''){
 		global $xmt_timed;	
 		$span = time() - $xmt_timed;
-		xmt_log(($str?$str.' - ':'').'Exec time - '.$span.' s');
+		xmt_log(($str?__($str, 'xmt').' - ':'').__('Exec time', 'xmt').' - '.$span.' s');
 	}
 
 	function xmt_log($str){
 		if(isset($_GET['xmt_debug']))
-			echo '<!-- XMT: '.str_replace('--', '-', $str).' -->';
+			echo '<!-- XMT: '.str_replace('--', '-', __($str, 'xmt')).' -->';
 		elseif(isset($_GET['xmt_debug_show']))
-			echo '<i>- XMT: '.str_replace('--', '-', $str).' -</i><br/>';
+			echo '<i>- XMT: '.str_replace('--', '-', __($str, 'xmt')).' -</i><br/>';
 	}
 
 	function xmt_make_url_clickable_cb($matches, $new_tab_link = true){
@@ -123,8 +123,9 @@
 	 
 		if($difference != 1)
 			$periods[$j].= "s";
+		$per = __($periods[$j], 'xmt');
 			 
-		return "$difference $periods[$j] {$tense}";
+		return $difference.' '.$per.' '.__($tense, 'xmt');
 	}
 
 	function xmt_form_get($str){

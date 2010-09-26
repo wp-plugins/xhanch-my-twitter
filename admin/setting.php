@@ -37,8 +37,8 @@
 			'm/d/Y' => 'mm/dd/yyyy',
 			'Y-m-d' => 'yyyy-mm-dd',
 			'M d, Y' => 'mmm dd, yyyy',
-			'd-F-Y' => 'dd-month-yyyy',
-			'l, F d, Y' => 'dayname, month dd, yyyy',
+			'd-F-Y' => 'dd-'.__('month', 'xmt').'-yyyy',
+			'l, F d, Y' => ''.__('dayname', 'xmt').', '.__('month', 'xmt').' dd, yyyy',
 		);
 		
 		$arr_tm_format = array(		
@@ -70,23 +70,23 @@
 			);
 		
 			if(empty($acc_name))
-				echo '<div id="message" class="updated fade"><p>Profile name is empty</p></div>';			
+				echo '<div id="message" class="updated fade"><p>'.__('Profile name is empty', 'xmt').'</p></div>';			
 			elseif(array_key_exists($acc_name, $xmt_accounts))
-				echo '<div id="message" class="updated fade"><p>Profile already exists</p></div>';
+				echo '<div id="message" class="updated fade"><p>'.__('Profile already exists', 'xmt').'</p></div>';
 			else{
 				$chars = str_split($acc_name);
 				$valid = true;
 				foreach($chars as $key){
 					if(!in_array($key, $valid_chars)){		
 						$valid = false;		
-						echo '<div id="message" class="updated fade"><p>Profile name must contain A to Z and 0 to 9</p></div>';
+						echo '<div id="message" class="updated fade"><p>'.__('Profile name must contain A to Z and 0 to 9', 'xmt').'</p></div>';
 						break;
 					}
 				}
 				if($valid){
 					$xmt_accounts[$acc_name] = $xmt_default;
 					update_option('xmt_accounts', $xmt_accounts);			
-					echo '<div id="message" class="updated fade"><p>A new profile has been created</p></div>';			
+					echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
 				}
 			}
 		}elseif(isset($_POST['cmd_xmt_delete_profile'])){
@@ -102,7 +102,7 @@
 			$set['temp']['oauth_req_secret'] = '';						
 			$xmt_accounts[$sel_account] = $set;
 			update_option('xmt_accounts', $xmt_accounts);
-			echo '<div id="message" class="updated fade"><p>This profile has been disconnected with Twitter</p></div>';				
+			echo '<div id="message" class="updated fade"><p>'.__('This profile has been disconnected with Twitter', 'xmt').'</p></div>';				
 		}elseif(isset($_POST['cmd_xmt_clear_cache'])){
 			$set = $xmt_accounts[$sel_account];		
 			$set['tweet']['cache']['tweet_cache']['date'] = 0;
@@ -111,7 +111,7 @@
 			$set['tweet']['cache']['profile_cache']['data'] = array();				
 			$xmt_accounts[$sel_account] = $set;
 			update_option('xmt_accounts', $xmt_accounts);
-			echo '<div id="message" class="updated fade"><p>Cache has been cleared</p></div>';				
+			echo '<div id="message" class="updated fade"><p>'.__('Cache has been cleared', 'xmt').'</p></div>';				
 		}elseif($_POST['cmd_xmt_update_profile']){
 			$set = $xmt_accounts[$sel_account];
 			$xmt_config = array(
@@ -191,7 +191,7 @@
 						
 			$xmt_accounts[$sel_account] = $xmt_config;
 			update_option('xmt_accounts', $xmt_accounts);	
-			echo '<div id="message" class="updated fade"><p>Configuration Updated</p></div>';
+			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
 		}
 				
 		ksort($xmt_accounts);
@@ -229,46 +229,46 @@
 			}
     	</script>
 		<div class="wrap">
-			<h2>Xhanch - My Twitter - Configuration</h2>		
+			<h2><?php echo __('Xhanch - My Twitter - Configuration', 'xmt'); ?></h2>		
             <div style="float:right;line-height:21px">
-            	<b>Do you like this plugin? If yes, click this button -&gt;</b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fxhanch.com%2Fwp-plugin-my-twitter%2F&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
+            	<b><?php echo __('Do you like this plugin? If yes, click this button -&gt;', 'xmt'); ?></b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fxhanch.com%2Fwp-plugin-my-twitter%2F&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
             </div>
             <div class="clear"></div>	
             <div style="float:right;line-height:21px">
-            	<b>Do you like our service and support? If yes, click this button -&gt;</b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FXhanch-Studio%2F146245898739871&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
+            	<b><?php echo __('Do you like our service and support? If yes, click this button -&gt;', 'xmt'); ?></b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FXhanch-Studio%2F146245898739871&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
             </div>
             <div class="clear"></div>
 			<br/>
             <?php xmt_check(); ?>
 			<form action="" method="post">
 				<?php if(count($xmt_accounts) == 0){ ?>
-					You have not created any profile yet.<br/><br/>
+					<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
 				<?php } ?>
 				
-				<b><big>Add Profile</big></b><br/>
+				<b><big><?php echo __('Add Profile', 'xmt'); ?></big></b><br/>
 				<br/>
-				Fill the following form to create a new profile
+				<?php echo __('Fill the following form to create a new profile', 'xmt'); ?>
 				<br/><br/>
 				<table cellpadding="0" cellspacing="0">
 					<tr>
-						<td width="150px">Name</td>
+						<td width="150px"><?php echo __('Name', 'xmt'); ?></td>
 						<td><input type="text" id="txt_xmt_account_name" name="txt_xmt_account_name" value="" style="width:200px"/></td>
 					</tr>
 				</table>
-				<i><small>Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)</small></i><br/>
-				<i><small>Each profile will create a new widget to be placed to your sidebar/post/template code</small></i><br/>
-				<p class="submit"><input type="submit" name="cmd_xmt_create_profile" value="Create Profile"/></p>
+				<i><small><?php echo __('Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)', 'xmt'); ?></small></i><br/>
+				<i><small><?php echo __('Each profile will create a new widget to be placed to your sidebar/post/template code', 'xmt'); ?></small></i><br/>
+				<p class="submit"><input type="submit" name="cmd_xmt_create_profile" value="<?php echo __('Create Profile', 'xmt'); ?>"/></p>
 			</form>
 			<br/>
 			<?php if(count($xmt_accounts) > 0){ ?>	
-				<b><big>Profile Configuration</big></b><br/>
+				<b><big><?php echo __('Profile Configuration', 'xmt'); ?></big></b><br/>
 				<br/>
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr>
-						<td width="150px">Profile</td>
+						<td width="150px"><?php echo __('Profile', 'xmt'); ?></td>
 						<td>
 							<select name="cbo_xmt_account_name" onchange="location.href='admin.php?page=xhanch-my-twitter&profile=' + this.value" style="width:200px">
-								<option value="">- Choose a profile -</option>
+								<option value=""><?php echo __('- Choose a profile -', 'xmt'); ?></option>
 								<?php foreach($xmt_accounts as $acc=>$val){ ?>
 									<option value="<?php echo urlencode($acc); ?>" <?php echo ($acc==$sel_account)?'selected="selected"':''; ?>><?php echo ucwords(htmlspecialchars($acc)); ?></option>									
 								<?php } ?>
@@ -333,52 +333,52 @@
 					
 			?>		
 				<form action="" method="post">
-					<i><small>Note: <a href="#guide">Click here for a complete explaination about these configurations' fields</a></small></i><br/>
+					<i><small>Note: <a href="#guide"><?php echo __('Click here for a complete explaination about these configurations fields', 'xmt'); ?></a></small></i><br/>
 					<br/>				
                    	
-					<b>Widget Setting</b><br/>
+					<b><?php echo __('Widget Setting', 'xmt'); ?></b><br/>
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px">Title</td>
+							<td width="150px"><?php echo __('Title', 'xmt'); ?></td>
 							<td width="200px"><input type="text" id="txt_xmt_widget_title" name="txt_xmt_widget_title" value="<?php echo htmlspecialchars($set['widget']['title']); ?>" style="width:100%"/></td>
 							<td width="10px"></td>
-							<td width="150px">Name</td>
+							<td width="150px"><?php echo __('Name', 'xmt'); ?></td>
 							<td width="200px"><input type="text" id="txt_xmt_widget_name" name="txt_xmt_widget_name" value="<?php echo htmlspecialchars($set['widget']['name']); ?>" style="width:100%"/></td>
 						</tr>
 						<tr>
-							<td>Header style</td>
+							<td><?php echo __('Header style', 'xmt'); ?></td>
 							<td>
 								<select id="cbo_xmt_widget_header_style" name="cbo_xmt_widget_header_style" style="width:100%">
 									<?php foreach($arr_header_style as $key=>$row){ ?>
-										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($set['widget']['header_style']))?'selected="selected"':''; ?>><?php echo $row; ?></option>
+										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($set['widget']['header_style']))?'selected="selected"':''; ?>><?php echo __($row, 'xmt'); ?></option>
 									<?php } ?>
 								</select>
 							</td>
 							<td></td>
-							<td>Turn title to link?</td>
+							<td><?php echo __('Turn title to link?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_widget_link_title" name="chk_xmt_widget_link_title" value="1" <?php echo ($set['widget']['link_title']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
 							<td colspan="5">
-								Header text (<a href="javascript:show_more('sct_text_var')">show/hide available variables</a>)
+								<?php echo __('Header text', 'xmt'); ?> (<a href="javascript:show_more('sct_text_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)
 								<textarea id="txa_xmt_widget_custom_text_header" name="txa_xmt_widget_custom_text_header" style="width:100%;height:40px"><?php echo htmlspecialchars($set['widget']['custom_text']['header']); ?></textarea>
 								<br/>
 				
-								Footer text (<a href="javascript:show_more('sct_text_var')">show/hide available variables</a>)
+								<?php echo __('', 'xmt'); ?>Footer text (<a href="javascript:show_more('sct_text_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)
 								<textarea id="txa_xmt_widget_custom_text_footer" name="txa_xmt_widget_custom_text_footer" style="width:100%;height:40px"><?php echo htmlspecialchars($set['widget']['custom_text']['footer']); ?></textarea>
 								<br/>
                                 
                                 <div id="sct_text_var" style="display:none;">		
-                                    <small><i>Available variables for footer and header text</i></small>
+                                    <small><i><?php echo __('Available variables for footer and header text', 'xmt'); ?></i></small>
                                     <ul>
-                                        <li><small><b>@avatar</b>: display URL of your Twitter avatar</small></li>
-                                        <li><small><b>@name</b>: display your full name on Twitter</small></li>
-                                        <li><small><b>@screen_name</b>: display your screen name on Twitter</small></li>
-                                        <li><small><b>@followers_count</b>: display a number of your followers</small></li>
-                                        <li><small><b>@statuses_count</b>: display a number of your total statuses/tweets</small></li>
-                                        <li><small><b>@favourites_count</b>: display a number of your favourites</small></li>
-                                        <li><small><b>@friends_count</b>: display a number of your friends</small></li>
+                                        <li><small><b>@avatar</b>: <?php echo __('display URL of your Twitter avatar', 'xmt'); ?></small></li>
+                                        <li><small><b>@name</b>: <?php echo __('display your full name on Twitter', 'xmt'); ?></small></li>
+                                        <li><small><b>@screen_name</b>: <?php echo __('display your screen name on Twitter', 'xmt'); ?></small></li>
+                                        <li><small><b>@followers_count</b>: <?php echo __('display a number of your followers', 'xmt'); ?></small></li>
+                                        <li><small><b>@statuses_count</b>: <?php echo __('display a number of your total statuses/tweets', 'xmt'); ?></small></li>
+                                        <li><small><b>@favourites_count</b>: <?php echo __('display a number of your favourites', 'xmt'); ?></small></li>
+                                        <li><small><b>@friends_count</b>: <?php echo __('display a number of your friends', 'xmt'); ?></small></li>
                                     </ul>
                                 </div>
 												
@@ -386,31 +386,31 @@
 						</tr>
 					</table><br/>
 					
-					<b>Tweet Settings</b><br/>
+					<b><?php echo __('Tweet Settings', 'xmt'); ?></b><br/>
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px">Username</td>
+							<td width="150px"><?php echo __('Username', 'xmt'); ?></td>
 							<td width="200px"><input type="text" <?php echo ($conn?'value="'.$res_prof['scr_name'].'" disabled="disabled"':'value="'.htmlspecialchars($set['tweet']['username']).'"'); ?> id="txt_xmt_tweet_username" name="txt_xmt_tweet_username" style="width:100%"/></td>
 							<td width="10px"></td>
 							<td width="150px"></td>
 							<td width="200px"></td>
 						</tr>
 						<tr>
-							<td>Tweet order</td>
+							<td><?php echo __('Tweet order', 'xmt'); ?></td>
 							<td>
 								<select id="cbo_xmt_tweet_order" name="cbo_xmt_tweet_order" style="width:100%">
 									<?php foreach($arr_tweet_order as $key=>$row){ ?>
-										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($set['tweet']['order']))?'selected="selected"':''; ?>><?php echo $row; ?></option>
+										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($set['tweet']['order']))?'selected="selected"':''; ?>><?php echo __($row, 'xmt'); ?></option>
 									<?php } ?>
 								</select>
 							</td>
 							<td></td>
-							<td># Latest tweets</td>
+							<td><?php echo __('# Latest tweets', 'xmt'); ?></td>
 							<td><input type="text" id="int_xmt_tweet_count" name="int_xmt_tweet_count" value="<?php echo htmlspecialchars($set['tweet']['count']); ?>" size="5"  maxlength="3"/></td>
 						</tr>
 						<tr>
-							<td>Inc. replies?</td>
+							<td><?php echo __('Inc. replies?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_include_replies" name="chk_xmt_tweet_include_replies" value="1" <?php echo ($set['tweet']['include']['replies']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td></td>
@@ -421,89 +421,89 @@
 							<td><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/></td>
 						</tr>-->
 						<tr>
-							<td>Date format</td>
+							<td><?php echo __('Date format', 'xmt'); ?></td>
 							<td>
 								<select id="cbo_xmt_tweet_date_format" name="cbo_xmt_tweet_date_format" style="width:100%">
 									<?php foreach($arr_date_format as $fmt_val=>$fmt_ex){ ?>
-										<option value="<?php echo $fmt_val; ?>" <?php echo ($fmt_val==htmlspecialchars($set['tweet']['date_format']))?'selected="selected"':''; ?>><?php echo $fmt_ex; ?></option>
+										<option value="<?php echo $fmt_val; ?>" <?php echo ($fmt_val==htmlspecialchars($set['tweet']['date_format']))?'selected="selected"':''; ?>><?php echo __($fmt_ex, 'xmt'); ?></option>
 									<?php } ?>
 								</select>
 							</td>
 							<td></td>
-							<td>GMT add (in minutes)</td>
+							<td><?php echo __('GMT add (in minutes)', 'xmt'); ?></td>
 							<td><input type="text" id="int_xmt_tweet_time_add" name="int_xmt_tweet_time_add" value="<?php echo intval($set['tweet']['time_add']); ?>" size="5"  maxlength="4"/></td>
 						</tr>
 						<tr>
 							<td colspan="5">
-                            	Tweet layout (<a href="javascript:show_more('sct_twt_layout_var')">show/hide available variables</a>)<br/>
+                            	<?php echo __('Tweet layout', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
 								<textarea id="txa_xmt_tweet_layout" name="txa_xmt_tweet_layout" style="width:100%;height:40px"><?php echo htmlspecialchars($set['tweet']['layout']); ?></textarea><br/>
                                 <div id="sct_twt_layout_var" style="display:none;">		
-                                    <small><i>Available variables for tweet layout</i></small>
+                                    <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
                                     <ul>
-                                        <li><small><b>@name</b>: display the username who posts the tweet (Link Mode)</small></li>
-                                        <li><small><b>@name_plain</b>: display the username who posts the tweet</small></li>
-                                        <li><small><b>@tweet</b>: content of the tweet</small></li>
-                                        <li><small><b>@date</b>: formatted publish date time of a tweet</small></li>
-                                        <li><small><b>@source</b>: display how/where the tweet is posted</small></li>
-                                        <li><small><b>@reply_url</b>: URL to reply a status</small></li>
-                                        <li><small><b>@reply_link</b>: Link to reply a status</small></li>
-                                        <li><small><b>@retweet_url</b>: URL to retweet a status</small></li>
-                                        <li><small><b>@retweet_link</b>: Link to retweet a status</small></li>
-                                        <li><small><b>@status_url</b>: URL to view the status on Twitter page</small></li>
+                                        <li><small><b>@name</b>: <?php echo __('display the username who posts the tweet (Link Mode)', 'xmt'); ?></small></li>
+                                        <li><small><b>@name_plain</b>: <?php echo __('display the username who posts the tweet', 'xmt'); ?></small></li>
+                                        <li><small><b>@tweet</b>: <?php echo __('content of the tweet', 'xmt'); ?></small></li>
+                                        <li><small><b>@date</b>: <?php echo __('formatted publish date time of a tweet', 'xmt'); ?></small></li>
+                                        <li><small><b>@source</b>: <?php echo __('display how/where the tweet is posted', 'xmt'); ?></small></li>
+                                        <li><small><b>@reply_url</b>: <?php echo __('URL to reply a status', 'xmt'); ?></small></li>
+                                        <li><small><b>@reply_link</b>: <?php echo __('Link to reply a status', 'xmt'); ?></small></li>
+                                        <li><small><b>@retweet_url</b>: <?php echo __('URL to retweet a status', 'xmt'); ?></small></li>
+                                        <li><small><b>@retweet_link</b>: <?php echo __('Link to retweet a status', 'xmt'); ?></small></li>
+                                        <li><small><b>@status_url</b>: <?php echo __('URL to view the status on Twitter page', 'xmt'); ?></small></li>
                                     </ul>
                                 </div>
                                 
 							</td>
 						</tr>
 						<tr>
-							<td>Clickable URL?</td>
+							<td><?php echo __('Clickable URL?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_url" name="chk_xmt_tweet_make_clickable_url" value="1" <?php echo ($set['tweet']['make_clickable']['url']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td>Show divider line?</td>
+							<td><?php echo __('Show divider line?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_show_hr" name="chk_xmt_tweet_show_hr" value="1" <?php echo ($set['tweet']['show_hr']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
-							<td>Clickable user tag?</td>
+							<td><?php echo __('Clickable user tag?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_user_tag" name="chk_xmt_tweet_make_clickable_user_tag" value="1" <?php echo ($set['tweet']['make_clickable']['user_tag']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td>Clickable hash tag?</td>
+							<td><?php echo __('Clickable hash tag?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_hash_tag" name="chk_xmt_tweet_make_clickable_hash_tag" value="1" <?php echo ($set['tweet']['make_clickable']['hash_tag']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
-							<td>Show avatar?</td>
+							<td><?php echo __('Show avatar?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_avatar_show" name="chk_xmt_tweet_avatar_show" value="1" <?php echo ($set['tweet']['avatar']['show']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td>Avatar size</td>
+							<td><?php echo __('Avatar size', 'xmt'); ?></td>
 							<td>
 								W: <input type="text" id="int_xmt_tweet_avatar_size_w" name="int_xmt_tweet_avatar_size_w" value="<?php echo $set['tweet']['avatar']['size']['w']; ?>" size="5"  maxlength="3"/> px; 
 								H:	<input type="text" id="int_xmt_tweet_avatar_size_h" name="int_xmt_tweet_avatar_size_h" value="<?php echo $set['tweet']['avatar']['size']['h']; ?>" size="5"  maxlength="3"/> px
 							</td>
 						</tr>			
 						<tr>
-							<td>Enable Cache?</td>
+							<td><?php echo __('Enable Cache?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_cache_enable" name="chk_xmt_tweet_cache_enable" value="1" <?php echo ($set['tweet']['cache']['enable']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td>Cache Expiry (in minutes)</td>
+							<td><?php echo __('Cache Expiry (in minutes)', 'xmt'); ?></td>
 							<td><input type="text" id="int_xmt_tweet_cache_expire" name="int_xmt_tweet_cache_expire" value="<?php echo $set['tweet']['cache']['expiry']; ?>" size="5"  maxlength="3"/></td>
 						</tr>	
-                        <tr><td colspan="5"><small><i>It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue</i></small></td></tr>
+                        <tr><td colspan="5"><small><i><?php echo __('It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue', 'xmt'); ?></i></small></td></tr>
 					</table>
 					<br/>
                         	
-                    <b>Advanced Features</b><br/><br/>
-                    <small><b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, please consider to "Enable Cache" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.</small><br/>
+                    <b><?php echo __('Advanced Features', 'xmt'); ?></b><br/><br/>
+                    <small><?php echo __('<b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, please consider to "Enable Cache" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.', 'xmt'); ?></small><br/>
                     <br/>
                     <?php if(!$conn){ ?>                 
-                        To enable advanced features, you need to grant read-write permission to Xhanch - My Twitter (Xhanch - MT) by clicking the following button.<br/>
-                        <a href="<?php echo $res['auth-url']; ?>"><img src="<?php echo xmt_base_url.'/img/button/sign-in.png'; ?>" alt="Click here to connect this application with your Twitter Account"/></a>
+                        <?php echo __('To enable advanced features, you need to grant read-write permission to Xhanch - My Twitter (Xhanch - MT) by clicking the following button.', 'xmt'); ?><br/>
+                        <a href="<?php echo $res['auth-url']; ?>"><img src="<?php echo xmt_base_url.'/img/button/sign-in.png'; ?>" alt="<?php echo __('Click here to connect this application with your Twitter Account', 'xmt'); ?>"/></a>
                    	<?php }else{ ?>
-                    	You are currently connected as <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
+                    	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
                         <table cellpadding="0" cellspacing="0">
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_show_post_form" value="1" <?php echo ($set['tweet']['show_post_form']?'checked="checked"':''); ?>/> Show a form to post a tweet/status when logged in as Admin?</td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_show_post_form" value="1" <?php echo ($set['tweet']['show_post_form']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin?', 'xmt'); ?></td>
                             </tr>
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/> Show direct messages?</td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/> <?php echo __('Show direct messages?', 'xmt'); ?></td>
                             </tr>
                             <tr>
                                 <td width="150px"></td>
@@ -513,19 +513,19 @@
                                 <td width="200px"></td>
                             </tr>
                       	</table><br/>
-                    	<input type="submit" name="cmd_xmt_disconnect" value="Disconnect From Twitter"/>
+                    	<input type="submit" name="cmd_xmt_disconnect" value="<?php echo __('Disconnect From Twitter', 'xmt'); ?>"/>
                     <?php } ?>
                     <br/><br/>                    
 	
-					<b>Display Mode</b><br/>					
+					<b><?php echo __('Display Mode', 'xmt'); ?></b><br/>					
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px">Selected mode</td>
+							<td width="150px"><?php echo __('Selected mode', 'xmt'); ?></td>
 							<td width="200px">	
 								<select id="cbo_xmt_display_mode" name="cbo_xmt_display_mode" style="width:100%" onchange="show_mode_opt()">															
 								<?php foreach($set['display_mode'] as $key=>$val){ ?>
-									<option value="<?php echo $key; ?>" <?php echo ($val['enable'])?'selected="selected"':''; ?>><?php echo ucwords($key); ?></option>									
+									<option value="<?php echo $key; ?>" <?php echo ($val['enable'])?'selected="selected"':''; ?>><?php echo __(ucwords($key), 'xmt'); ?></option>									
 								<?php } ?>
 								</select>
 							</td>
@@ -538,17 +538,17 @@
                             	<div id="sct_md_scrolling" style="display:none;">	
                                 	<table cellpadding="0" cellspacing="0">
                                 		<tr>
-                                            <td width="150px">Area Height</td>
+                                            <td width="150px"><?php echo __('Area Height', 'xmt'); ?></td>
                                             <td width="200px"><input type="text" id="int_xmt_display_mode_scrolling_height" name="int_xmt_display_mode_scrolling_height" value="<?php echo $set['display_mode']['scrolling']['height']; ?>" size="5"  maxlength="5"/> px</td>
                                             <td width="10px"></td>
-                                            <td width="150px">Animate Scrolling?</td>
+                                            <td width="150px"><?php echo __('Animate Scrolling?', 'xmt'); ?></td>
                                             <td width="200px"><input type="checkbox" id="chk_xmt_display_mode_scrolling_animate_enable" name="chk_xmt_display_mode_scrolling_animate_enable" value="1" <?php echo ($set['display_mode']['scrolling']['animate']['enable']?'checked="checked"':''); ?>/></td>
                                         </tr>
                                         <tr>
-                                            <td>Scroll Amount</td>
+                                            <td><?php echo __('Scroll Amount', 'xmt'); ?></td>
                                             <td><input type="text" id="int_xmt_display_mode_scrolling_animate_amount" name="int_xmt_display_mode_scrolling_animate_amount" value="<?php echo $set['display_mode']['scrolling']['animate']['amount']; ?>" size="5"  maxlength="5"/> px</td>
                                             <td width="10px"></td>
-                                            <td>Scroll Delay</td>
+                                            <td><?php echo __('Scroll Delay', 'xmt'); ?></td>
                                             <td><input type="text" id="int_xmt_display_mode_scrolling_animate_delay" name="int_xmt_display_mode_scrolling_animate_delay" value="<?php echo $set['display_mode']['scrolling']['animate']['delay']; ?>" size="5"  maxlength="5"/> ms</td>
                                         </tr>
                                    	</table>
@@ -559,44 +559,44 @@
 					</table>
 					<br/>
 										
-					<b>Custom CSS</b><br/>
+					<b><?php echo __('Custom CSS', 'xmt'); ?></b><br/>
 					<br/>
 					<table cellpadding="0" cellspacing="0" width="710px">
 						<tr>
 							<td>
                             	<textarea style="width:710px" rows="5" id="txa_xmt_css_custom_css" name="txa_xmt_css_custom_css"><?php echo $set['css']['custom_css']; ?></textarea><br/>
                                 <i>
-                                	{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile<br/>
-                                    <a href="http://xhanch.com/wp-content/plugins/xhanch-my-twitter/css/css.css" target="_blank">Need reference to set your custom CSS? Click here to view the default CSS codes</a>
+                                	<?php echo __('{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile', 'xmt'); ?><br/>
+                                    <a href="http://xhanch.com/wp-content/plugins/xhanch-my-twitter/css/css.css" target="_blank"><?php echo __('Need reference to set your custom CSS? Click here to view the default CSS codes', 'xmt'); ?></a>
                                 </i>
                             </td>
 						</tr>
 					</table><br/>
 										
-					<b>Other Settings</b><br/>
+					<b><?php echo __('Other Settings', 'xmt'); ?></b><br/>
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px">Show credit?</td>
+							<td width="150px"><?php echo __('Show credit?', 'xmt'); ?></td>
 							<td width="200px"><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
 							<td width="10px"></td>
-							<td width="150px">Open link in new tab?</td>
+							<td width="150px"><?php echo __('Open link in new tab?', 'xmt'); ?></td>
 							<td width="200px"><input type="checkbox" id="chk_xmt_open_link_on_new_window" name="chk_xmt_open_link_on_new_window" value="1" <?php echo ($set['other']['open_link_on_new_window']?'checked="checked"':''); ?>/></td>
 						</tr>
 					</table><br/>
 										
-					<b>Codes for Template and Post/Page</b><br/>
+					<b><?php echo __('Codes for Template and Post/Page', 'xmt'); ?></b><br/>
 					<br/>
 					<table cellpadding="0" cellspacing="0" width="710px">
 						<tr>
 							<td>
-                            	This plugin provides widgets for your dynamic sidebars.<br/>
-                                But, if your theme does not support dynamic sidebars, you can use these codes.<br/>
+                            	<?php echo __('This plugin provides widgets for your dynamic sidebars.', 'xmt'); ?><br/>
+                                <?php echo __('But, if your theme does not support dynamic sidebars, you can use these codes.', 'xmt'); ?><br/>
                                 <br/>
                                 
-                                <a href="javascript:show_more('sct_php_code')">Show/hide paste-able code (PHP version)</a>                                
+                                <a href="javascript:show_more('sct_php_code')"><?php echo __('Show/hide paste-able code (PHP version)', 'xmt'); ?></a>                                
                                 <div id="sct_php_code" style="display:none;">	                                
-                            	Here is your template code
+                            	<?php echo __('Here is your template code', 'xmt'); ?>
                             	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="7" readonly="readonly">&lt;?php
     $args = array(
 		'before_widget' => '',
@@ -606,7 +606,7 @@
     );
     xmt($args, '<?php echo $sel_account; ?>');
 ?&gt;</textarea><br/></div><br/>
-                            	<a href="javascript:show_more('sct_scc_code')">Show/hide paste-able code code (WordPress short code version)</a>                                
+                            	<a href="javascript:show_more('sct_scc_code')"><?php echo __('Show/hide paste-able code code (WordPress short code version)', 'xmt'); ?></a>                                
                                 <div id="sct_scc_code" style="display:none;">	
                             	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xmt profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/></div>
                                 
@@ -615,29 +615,29 @@
 					</table><br/>
 					
 					<p class="submit">
-						<input type="submit" name="cmd_xmt_update_profile" value="Update Profile"/>
-						<input type="submit" name="cmd_xmt_clear_cache" value="Clear Cache"/>
-						<input type="submit" name="cmd_xmt_delete_profile" value="Delete Profile"/>
+						<input type="submit" name="cmd_xmt_update_profile" value="<?php echo __('Update Profile', 'xmt'); ?>"/>
+						<input type="submit" name="cmd_xmt_clear_cache" value="<?php echo __('Clear Cache', 'xmt'); ?>"/>
+						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>"/>
 					</p>
 				</form>
 			<?php } ?>		
 				
 			<br/><br/>
 			<a name="guide"></a>
-			<b><big>Support This Plugin Development</big></b><br/>		
+			<b><big><?php echo __('Support This Plugin Development', 'xmt'); ?></big></b><br/>		
 			<br/>	
-			Do you like this plugin? Do you think this plugin very helpful?<br/>
-			Why don't you support this plugin developement by donating any amount you are willing to give?<br/>
+			<?php echo __('Do you like this plugin? Do you think this plugin very helpful?', 'xmt'); ?><br/>
+			<?php echo __('Why don\'t you support this plugin developement by donating any amount you are willing to give?', 'xmt'); ?><br/>
 			<br/>
-			If you wish to support the developer and make a donation, please click the following button. Thanks!<br/>
-			<a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank"><img src="http://xhanch.com/image/paypal/btn_donate.gif" alt="Donate"></a></p>
+			<?php echo __('If you wish to support the developer and make a donation, please click the following button. Thanks!', 'xmt'); ?><br/>
+			<a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank"><img src="http://xhanch.com/image/paypal/btn_donate.gif" alt="<?php echo __('Donate', 'xmt'); ?>"></a></p>
 
 			<br/><br/>
 			<a name="guide"></a>
-			<b><big>Complete Info and Share Room</big></b><br/>		
+			<b><big><?php echo __('Complete Info and Share Room', 'xmt'); ?></big></b><br/>		
 			<br/>	
 			<div class="spoiler">
-				<input type="button" onclick="show_spoiler(this);" value="Complete information regarding Xhanch - My Twitter (Share Room)"/>
+				<input type="button" onclick="show_spoiler(this);" value="<?php echo __('Complete information regarding Xhanch - My Twitter (Share Room)', 'xmt'); ?>"/>
 				<div class="inner" style="display:none;">
 					<br/>
 					<iframe src="http://xhanch.com/wp-plugin-my-twitter/" style="width:700px;height:500px"></iframe>
