@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.1.8
+		Version: 2.1.9
 	*/
 	
 	define('xmt', true);
@@ -298,7 +298,9 @@
 				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author'].' '.strip_tags($row['tweet']));
 				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&amp;in_reply_to_status_id='.$sts_id.'&amp;in_reply_to='.urlencode($row['author']);
 				
-				$tmp_str = str_replace('@name_plain', $row['author_name'], $tweet_string);
+				$tmp_str = str_replace('@screen_name_plain', $row['author'], $tweet_string);
+				$tmp_str = str_replace('@screen_name', '<a href="'.$row['author_url'].'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.$row['author'].'</a>', $tmp_str);
+				$tmp_str = str_replace('@name_plain', $row['author_name'], $tmp_str);
 				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
 				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
 				$tmp_str = str_replace('@source', $row['source'], $tmp_str);

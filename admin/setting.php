@@ -440,8 +440,10 @@
                                 <div id="sct_twt_layout_var" style="display:none;">		
                                     <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
                                     <ul>
-                                        <li><small><b>@name</b>: <?php echo __('display the username who posts the tweet (Link Mode)', 'xmt'); ?></small></li>
-                                        <li><small><b>@name_plain</b>: <?php echo __('display the username who posts the tweet', 'xmt'); ?></small></li>
+                                        <li><small><b>@screen_name</b>: <?php echo __('display the screen name who posts the tweet (Link Mode)', 'xmt'); ?></small></li>
+                                        <li><small><b>@screen_name_plain</b>: <?php echo __('display the screen name who posts the tweet', 'xmt'); ?></small></li>
+                                        <li><small><b>@name</b>: <?php echo __('display the full name who posts the tweet (Link Mode)', 'xmt'); ?></small></li>
+                                        <li><small><b>@name_plain</b>: <?php echo __('display the full name who posts the tweet', 'xmt'); ?></small></li>
                                         <li><small><b>@tweet</b>: <?php echo __('content of the tweet', 'xmt'); ?></small></li>
                                         <li><small><b>@date</b>: <?php echo __('formatted publish date time of a tweet', 'xmt'); ?></small></li>
                                         <li><small><b>@source</b>: <?php echo __('display how/where the tweet is posted', 'xmt'); ?></small></li>

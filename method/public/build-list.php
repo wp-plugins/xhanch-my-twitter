@@ -48,7 +48,7 @@
 			$arr[$sts_id] = array(
 				'type' => 'public_reply',
 				'timestamp' => $timestamp,
-				'tweet' => (string)$xml->entry[$i]->content,
+				'tweet' => convert_smilies((string)$xml->entry[$i]->content),
 				'author' => $author_uid,
 				'author_name' => $author_name,
 				'author_url' => (string)$xml->entry[$i]->author->uri,
