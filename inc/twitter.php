@@ -6,7 +6,8 @@
 		$clickable_user_tag = intval($cfg['tweet']['make_clickable']['user_tag']);	
 		$clickable_hash_tag = intval($cfg['tweet']['make_clickable']['hash_tag']);	
 		$clickable_url = intval($cfg['tweet']['make_clickable']['url']);	
-		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);	
+		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);
+		$convert_similies = intval($cfg['other']['convert_similies']);	
 
 		if($type == 'direct_message') {
 			$req = str_replace('direct-messages', 'statuses', $req);
@@ -52,7 +53,8 @@
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
-			$output = convert_smilies($output);
+			if($convert_similies)
+				$output = convert_smilies($output);
 			$author_name = (string)$res->user->name;
 			$author_uid = (string)$res->user->screen_name;
 			$author_img = (string)$res->user->profile_image_url;

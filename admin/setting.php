@@ -185,6 +185,7 @@
 				),
 				'other' => array(
 					'show_credit' => xmt_form_post('chk_xmt_other_show_credit'),
+					'convert_similies' => xmt_form_post('chk_xmt_other_convert_similies'),
 					'open_link_on_new_window' => xmt_form_post('chk_xmt_open_link_on_new_window')
 				),
 			);
@@ -579,11 +580,18 @@
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px"><?php echo __('Show credit?', 'xmt'); ?></td>
-							<td width="200px"><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
+							<td width="150px"><?php echo __('Convert Smilies?', 'xmt'); ?></td>
+							<td width="200px"><input type="checkbox" id="chk_xmt_other_convert_similies" name="chk_xmt_other_convert_similies" value="1" <?php echo ($set['other']['convert_similies']?'checked="checked"':''); ?>/></td>
 							<td width="10px"></td>
 							<td width="150px"><?php echo __('Open link in new tab?', 'xmt'); ?></td>
 							<td width="200px"><input type="checkbox" id="chk_xmt_open_link_on_new_window" name="chk_xmt_open_link_on_new_window" value="1" <?php echo ($set['other']['open_link_on_new_window']?'checked="checked"':''); ?>/></td>
+						</tr>
+						<tr>
+							<td><?php echo __('Show credit?', 'xmt'); ?></td>
+							<td><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</table><br/>
 										

@@ -3,6 +3,8 @@
 	$arr = xmt_split_xml($profile, $arr, xmt_get_file($api_url), 'tweet');
 	if(count($arr) == 0)
 		$use_cache = true;
+	
+	$convert_similies = intval($cfg['other']['convert_similies']);	
 		
 	if(intval($cfg['tweet']['include']['replies'])){
 		$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($uid);
@@ -44,11 +46,16 @@
 
 			$author_img = $xml->entry[$i]->link[1]->attributes();
 			$author_img = (string)$author_img['href'];
+			
+			$tweet = (string)$xml->entry[$i]->content;			
+			
+			if($convert_similies)
+				$tweet = convert_smilies($tweet);
 
 			$arr[$sts_id] = array(
 				'type' => 'public_reply',
 				'timestamp' => $timestamp,
-				'tweet' => convert_smilies((string)$xml->entry[$i]->content),
+				'tweet' => $tweet,
 				'author' => $author_uid,
 				'author_name' => $author_name,
 				'author_url' => (string)$xml->entry[$i]->author->uri,
