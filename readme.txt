@@ -11,7 +11,7 @@ The best plugin to display your latest tweets, replies, direct messages, retweet
 
 == Description ==
 
-Xhanch - My Twitter (developed by [Xhanch Studio](http://xhanch.com/ "Xhanch Studio")) is the best WordPress plugin to show/hide your latest tweets, replies from other members to you, replies from you to other members, retweets, and direct messages from your Twitter account(s). 
+Xhanch - My Twitter (developed by [Xhanch Studio](http://xhanch.com/ "Xhanch Studio")) is the best WordPress plugin to show/hide or include/exclude your latest tweets, replies from other members to you, replies from you to other members, retweets, and direct messages from your Twitter account(s). 
 
 You can customize it with our predefined customizations settings/options easily and it can be displayed via sidebar, post or page.
 
