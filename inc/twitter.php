@@ -102,10 +102,38 @@
 				$method = 'oauth';
 				
 			include xmt_base_dir.'/method/'.$method.'/build-list.php';
+				
+			if(!intval($cfg['tweet']['include']['replies_from_you'])){
+				foreach($arr as $sts_id=>$val){
+					if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] == $uid)
+						unset($arr[$sts_id]);					
+				}
+				
+				$limit = intval($cfg['tweet']['count']);			
+				if($limit <= 0)
+					$limit = 5;
+					
+				if(count($arr) < $limit){
+					$tmp_limit = $limit;
+					$limit = $limit * 2;
+					
+					include xmt_base_dir.'/method/'.$method.'/build-list.php';
+										
+					foreach($arr as $sts_id=>$val){
+						if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] == $uid)
+							unset($arr[$sts_id]);					
+					}
+					
+					$limit = $tmp_limit;
+				}
+			}
 			
 			krsort($arr);
 	
-			$limit = intval($cfg['tweet']['count']);
+			$limit = intval($cfg['tweet']['count']);			
+			if($limit <= 0)
+				$limit = 5;
+				
 			if(count($arr) > $limit){
 				do{
 					array_pop($arr);

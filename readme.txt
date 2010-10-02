@@ -6,12 +6,12 @@ Donate link: http://xhanch.com/wp-plugin-my-twitter/
 Tags: twitter, tweet, status, sidebar, post, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll, oauth, mention, hash, automated, admin
 Requires at least: 2.3
 Tested up to: 3.0.1
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 The best plugin to display your latest tweets, replies, direct messages, retweets, post a tweet and lots more. Support multiple accounts
 
 == Description ==
 
-Xhanch - My Twitter (developed by [Xhanch Studio](http://xhanch.com/ "Xhanch Studio")) is the best WordPress plugin to show your latest tweets, replies, retweets, and direct messages from your Twitter account(s). 
+Xhanch - My Twitter (developed by [Xhanch Studio](http://xhanch.com/ "Xhanch Studio")) is the best WordPress plugin to show/hide your latest tweets, replies from other members to you, replies from you to other members, retweets, and direct messages from your Twitter account(s). 
 
 You can customize it with our predefined customizations settings/options easily and it can be displayed via sidebar, post or page.
 
