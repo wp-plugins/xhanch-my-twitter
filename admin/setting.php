@@ -137,7 +137,7 @@
 						'replies_from_you' => xmt_form_post('chk_xmt_tweet_include_replies_from_you'),
 						'direct_message' => xmt_form_post('chk_xmt_tweet_include_direct_message')
 					),
-					'date_format' => xmt_form_post('cbo_xmt_tweet_date_format'),
+					'date_format' => xmt_form_post('txt_xmt_tweet_date_format'),
 					'time_add' => xmt_form_post('int_xmt_tweet_time_add'),
 					'layout' => xmt_form_post('txa_xmt_tweet_layout'),
 					'show_hr' => xmt_form_post('chk_xmt_tweet_show_hr'),
@@ -423,18 +423,22 @@
 							<td><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/></td>
 						</tr>-->
 						<tr>
-							<td><?php echo __('Date format', 'xmt'); ?></td>
-							<td>
-								<select id="cbo_xmt_tweet_date_format" name="cbo_xmt_tweet_date_format" style="width:100%">
-									<?php foreach($arr_date_format as $fmt_val=>$fmt_ex){ ?>
-										<option value="<?php echo $fmt_val; ?>" <?php echo ($fmt_val==htmlspecialchars($set['tweet']['date_format']))?'selected="selected"':''; ?>><?php echo __($fmt_ex, 'xmt'); ?></option>
-									<?php } ?>
-								</select>
-							</td>
+							<td><?php echo __('Date format', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_dt_fmt')"><?php echo __('more', 'xmt'); ?></a>)</td>
+							<td><input type="text" value="<?php echo htmlspecialchars($set['tweet']['date_format']); ?>" id="txt_xmt_tweet_date_format" name="txt_xmt_tweet_date_format" style="width:100%"/></td>
 							<td></td>
 							<td><?php echo __('GMT add (in minutes)', 'xmt'); ?></td>
 							<td><input type="text" id="int_xmt_tweet_time_add" name="int_xmt_tweet_time_add" value="<?php echo intval($set['tweet']['time_add']); ?>" size="5"  maxlength="4"/></td>
 						</tr>
+						<tr id="sct_twt_dt_fmt" style="display:none;">
+							<td colspan="5">  
+                                <small><i><?php echo __('Commonly used date formats', 'xmt'); ?></i></small>
+                                <ul>
+                                    <?php foreach($arr_date_format as $fmt_val=>$fmt_ex){ ?>
+                                        <li><small><b><?php echo $fmt_val; ?></b>: <?php echo __($fmt_ex, 'xmt'); ?></small></li>
+                                    <?php } ?>
+                                </ul>
+                         	</td>
+                      	</tr>
 						<tr>
 							<td colspan="5">
                             	<?php echo __('Tweet layout', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
