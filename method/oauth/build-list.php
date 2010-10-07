@@ -12,6 +12,6 @@
 	}
 	
 	// Get Tweet
-	$req = xmt_req('get-tweet', $profile, array('limit' => $limit), false);
+	$req = xmt_req('get-tweet', $profile, array('limit' => $limit, 'inc_rts' => intval($cfg['tweet']['include']['retweet'])), false);
 	$arr = xmt_split_xml($profile, $arr, $req, 'tweet');	
 ?>

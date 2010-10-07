@@ -135,6 +135,7 @@
 					'include' => array(
 						'replies' => xmt_form_post('chk_xmt_tweet_include_replies'),
 						'replies_from_you' => xmt_form_post('chk_xmt_tweet_include_replies_from_you'),
+						'retweet' => xmt_form_post('chk_xmt_tweet_include_retweet'),
 						'direct_message' => xmt_form_post('chk_xmt_tweet_include_direct_message')
 					),
 					'date_format' => xmt_form_post('txt_xmt_tweet_date_format'),
@@ -417,6 +418,13 @@
 							<td></td>
 							<td><?php echo __('Inc. replies from you?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_include_replies_from_you" name="chk_xmt_tweet_include_replies_from_you" value="1" <?php echo ($set['tweet']['include']['replies_from_you']?'checked="checked"':''); ?>/></td>
+						</tr>
+						<tr>
+							<td><?php echo __('Inc. retweet?', 'xmt'); ?></td>
+							<td><input type="checkbox" id="chk_xmt_tweet_include_retweet" name="chk_xmt_tweet_include_retweet" value="1" <?php echo ($set['tweet']['include']['retweet']?'checked="checked"':''); ?>/></td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<!--<tr>
 							<td>Inc. direct messages?</td>

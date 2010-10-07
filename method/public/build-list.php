@@ -1,5 +1,5 @@
 <?php
-	$api_url = sprintf('http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=%s&count=%s&include_rts=true',urlencode($uid),$limit);			
+	$api_url = sprintf('http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=%s&count=%s'.(intval($cfg['tweet']['include']['retweet'])?'&include_rts=true':''),urlencode($uid),$limit);			
 	$arr = xmt_split_xml($profile, $arr, xmt_get_file($api_url), 'tweet');
 	if(count($arr) == 0)
 		$use_cache = true;
