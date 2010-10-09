@@ -42,7 +42,7 @@
 				$output = (string)$res->text;
 
 			if($clickable_hash_tag){
-				$pattern = '/(\#([_a-z0-9\-]+))/i';
+				$pattern = '/(\W\#([_a-z0-9\-]+))/i';
 				$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($new_tab_link?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}

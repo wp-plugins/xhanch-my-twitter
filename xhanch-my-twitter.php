@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.2.3
+		Version: 2.2.4
 	*/
 	
 	define('xmt', true);
@@ -296,6 +296,8 @@
 				if($show_avatar){					
 					echo '<a href="'.$row['author_url'].'" '.($new_tab_link?'target="_blank"':'').'><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
 				}
+				
+				$row['tweet'] = str_replace('&', '&amp;', $row['tweet']);
 				
 				$status_link = 'http://twitter.com/'.$row['author'].'/status/'.$sts_id;
 				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author'].' '.strip_tags($row['tweet']));
