@@ -26,9 +26,10 @@
 		$items_count= count($xml->entry);
 		$limit = $items_count;
 		foreach($xml->status as $res){
-			//if($res->retweeted_status){
-			//	$res = $res->retweeted_status;
-			//}
+			if($res->retweeted_status){
+				if($cfg['tweet']['show_origin_retweet'])
+					$res = $res->retweeted_status;
+			}
 
 			$sts_id = (string)$res->id;
 			$rpl = (string)$res->in_reply_to_status_id;

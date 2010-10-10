@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.2.4
+		Version: 2.2.5
 	*/
 	
 	define('xmt', true);
@@ -40,6 +40,7 @@
 			'layout' => '@tweet - posted on @date',
 			'show_hr' => 0,
 			'show_post_form' => 1,
+			'show_origin_retweet' => 0,
 			'make_clickable' => array(
 				'user_tag' => 1,
 				'hash_tag' => 1,

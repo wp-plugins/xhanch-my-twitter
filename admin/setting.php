@@ -143,6 +143,7 @@
 					'layout' => xmt_form_post('txa_xmt_tweet_layout'),
 					'show_hr' => xmt_form_post('chk_xmt_tweet_show_hr'),
 					'show_post_form' => xmt_form_post('chk_xmt_tweet_show_post_form'),
+					'show_origin_retweet' => xmt_form_post('chk_xmt_tweet_show_origin_retweet'),
 					'make_clickable' => array(
 						'user_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_user_tag'),
 						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
@@ -423,8 +424,8 @@
 							<td><?php echo __('Inc. retweet?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_include_retweet" name="chk_xmt_tweet_include_retweet" value="1" <?php echo ($set['tweet']['include']['retweet']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td></td>
-							<td></td>
+							<td><?php echo __('Show origin retweet?', 'xmt'); ?></td>
+							<td><input type="checkbox" id="chk_xmt_tweet_show_origin_retweet" name="chk_xmt_tweet_show_origin_retweet" value="1" <?php echo ($set['tweet']['show_origin_retweet']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<!--<tr>
 							<td>Inc. direct messages?</td>
