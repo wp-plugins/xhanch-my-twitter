@@ -271,7 +271,7 @@
 					<tr>
 						<td width="150px"><?php echo __('Profile', 'xmt'); ?></td>
 						<td>
-							<select name="cbo_xmt_account_name" onchange="location.href='admin.php?page=xhanch-my-twitter&profile=' + this.value" style="width:200px">
+							<select name="cbo_xmt_account_name" onchange="location.href='admin.php?page=xhanch-my-twitter/admin/setting.php&profile=' + this.value" style="width:200px">
 								<option value=""><?php echo __('- Choose a profile -', 'xmt'); ?></option>
 								<?php foreach($xmt_accounts as $acc=>$val){ ?>
 									<option value="<?php echo urlencode($acc); ?>" <?php echo ($acc==$sel_account)?'selected="selected"':''; ?>><?php echo ucwords(htmlspecialchars($acc)); ?></option>									
@@ -322,7 +322,7 @@
 					$blog_url = get_option('siteurl');
 					if(substr($blog_url,-1) != '/')
 						$blog_url .= '/';
-					$url_cb = $blog_url.'wp-admin/admin.php?page=xhanch-my-twitter&profile='.$sel_account;
+					$url_cb = $blog_url.'wp-admin/admin.php?page=xhanch-my-twitter/admin/setting.php&profile='.$sel_account;
 					
 					if(!$conn){
 						$res = xmt_req('reg', $sel_account, array('cb' => $url_cb));	
@@ -672,4 +672,6 @@
 		</div>
 <?php
 	}
+	
+	xmt_setting();
 ?>
