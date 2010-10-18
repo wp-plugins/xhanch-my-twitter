@@ -36,11 +36,13 @@
 			$date_time = (string)$res->created_at;
 			
 			$timestamp = xmt_parse_time($date_time, $cfg['tweet']['date_format'], $cfg['tweet']['time_add']);
+						
+			$output = (string)$res->text;
+			$output = htmlentities($output);
 			
 			if($clickable_url)
-				$output = xmt_make_clickable($res->text);
-			else
-				$output = (string)$res->text;
+				$output = xmt_make_clickable($output);
+							
 
 			if($clickable_hash_tag){
 				$pattern = '/(\W\#([_a-z0-9\-]+))/i';
