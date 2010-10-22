@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.2.8
+		Version: 2.2.9
 	*/
 	
 	define('xmt', true);
@@ -366,7 +366,7 @@
 
 	function widget_xmt_control($id){	
 ?>
-		<a href="admin.php?page=xhanch-my-twitter&profile=<?php echo $id; ?>"><?php echo __('Click here to configure this plugin', 'xmt'); ?></a>
+		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo $id; ?>"><?php echo __('Click here to configure this plugin', 'xmt'); ?></a>
 <?php		
 	}
 

@@ -445,6 +445,7 @@
                                     <?php foreach($arr_date_format as $fmt_val=>$fmt_ex){ ?>
                                         <li><small><b><?php echo $fmt_val; ?></b>: <?php echo __($fmt_ex, 'xmt'); ?></small></li>
                                     <?php } ?>
+                                  	<li><small><a href="http://xhanch.com/php-script-formatting-date-and-time/" target="_blank"><?php echo __('Click Here to see more explainations about date and time formatting', 'xmt'); ?></a></small></li>
                                 </ul>
                          	</td>
                       	</tr>
