@@ -59,6 +59,11 @@
 			'lto' => 'Latest to oldest',
 			'otl' => 'Oldest to latest',
 		);
+		
+		$arr_scroll_direction = array(
+			'up' => 'Up',
+			'down' => 'Down',
+		);
 				
 		if(isset($_POST['cmd_xmt_create_profile'])){
 			$acc_name = strtolower(xmt_form_post('txt_xmt_account_name'));
@@ -178,6 +183,7 @@
 						'height' => xmt_form_post('int_xmt_display_mode_scrolling_height'),
 						'animate' => array(
 							'enable' => xmt_form_post('chk_xmt_display_mode_scrolling_animate_enable'),
+							'direction' => xmt_form_post('cbo_xmt_display_mode_scrolling_animate_direction'),
 							'amount' => xmt_form_post('int_xmt_display_mode_scrolling_animate_amount'),
 							'delay' => xmt_form_post('int_xmt_display_mode_scrolling_animate_delay')
 						),
@@ -568,6 +574,19 @@
                                             <td width="10px"></td>
                                             <td><?php echo __('Scroll Delay', 'xmt'); ?></td>
                                             <td><input type="text" id="int_xmt_display_mode_scrolling_animate_delay" name="int_xmt_display_mode_scrolling_animate_delay" value="<?php echo $set['display_mode']['scrolling']['animate']['delay']; ?>" size="5"  maxlength="5"/> ms</td>
+                                        </tr>
+                                        <tr>
+                                            <td><?php echo __('Direction', 'xmt'); ?></td>
+                                            <td>
+                                            	<select id="cbo_xmt_display_mode_scrolling_animate_direction" name="cbo_xmt_display_mode_scrolling_animate_direction" style="width:100%" onchange="show_mode_opt()">															
+												<?php foreach($arr_scroll_direction as $key=>$val){ ?>
+                                                    <option value="<?php echo $key; ?>" <?php echo ($set['display_mode']['scrolling']['animate']['direction']==$key)?'selected="selected"':''; ?>><?php echo __(ucwords($val), 'xmt'); ?></option>									
+                                                <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td width="10px"></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                    	</table>
                                 </div>

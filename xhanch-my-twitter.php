@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.2.9
+		Version: 2.3.0
 	*/
 	
 	define('xmt', true);
@@ -81,6 +81,7 @@
 				'height' => 200,
 				'animate' => array(
 					'enable' => 0,
+					'direction' => 'up',
 					'amount' => 1,
 					'delay' => 50
 				),
@@ -245,7 +246,8 @@
 		$scroll_h = intval($scroll_cfg['height']);
         $scroll_ani = intval($scroll_cfg['animate']['enable']);
 		$scroll_ani_amount = intval($scroll_cfg['animate']['amount']);
-		$scroll_ani_delay = intval($scroll_cfg['animate']['delay']);	
+		$scroll_ani_delay = intval($scroll_cfg['animate']['delay']);
+        $scroll_ani_dir = $scroll_cfg['animate']['direction'];	
 		
 		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);	
 		
@@ -282,7 +284,7 @@
 
 		if($scroll_mode){
 			if($scroll_ani){
-				echo '<div onmouseover="xmt_'.$profile.'_scroll_stop()" onmouseout="xmt_'.$profile.'_scroll()"  style="'.(xmt_is_ie6()?'':'max-').'height:'.$scroll_h.'px;overflow:hidden"><div id="xmt_'.$profile.'_tweet_area" style="margin-bottom:'.$scroll_h.'px">';
+				echo '<div id="xmt_'.$profile.'_tweet_area_cont" style="height:'.$scroll_h.'px;overflow:hidden;position:relative"><div id="xmt_'.$profile.'_tweet_area">';
 			}else{
 				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
 			}
@@ -323,29 +325,24 @@
 			echo '<hr />';
 		if($scroll_mode){
 			if($scroll_ani){
+				$pos_str = '';
+				if($scroll_ani_dir == 'down')
+					$pos_str = 'xmt_'.$profile.'_ta.style.top = xmt_'.$profile.'_ta_limit + "px";';
+				else
+					$pos_str = 'xmt_'.$profile.'_ta.style.top = '.$scroll_h.' + "px";';
+					
 				echo '</div></div>';							
 				echo '
+					<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
+					<script src="'.xmt_get_dir('url').'/js/marquee.js" type="text/javascript"></script>
 					<script language="javascript" type="text/javascript">
 						//<![CDATA[
-							var xmt_'.$profile.'_pos = '.$scroll_h.';
-							var xmt_'.$profile.'_ti;
 							var xmt_'.$profile.'_ta = document.getElementById("xmt_'.$profile.'_tweet_area");
 							var xmt_'.$profile.'_ta_limit = xmt_'.$profile.'_ta.offsetHeight * -1;
-
-							function xmt_'.$profile.'_scroll(){
-								xmt_'.$profile.'_scroll_stop();
-								xmt_'.$profile.'_pos = xmt_'.$profile.'_pos - '.$scroll_ani_amount.';
-								if(xmt_'.$profile.'_pos < xmt_'.$profile.'_ta_limit)
-									xmt_'.$profile.'_pos = '.$scroll_h.';
-								xmt_'.$profile.'_ta.style.marginTop = xmt_'.$profile.'_pos.toString() + "px";
-								xmt_'.$profile.'_ti = setTimeout("xmt_'.$profile.'_scroll()", '.$scroll_ani_delay.');
-							}
-							function xmt_'.$profile.'_scroll_stop(){
-								if(xmt_'.$profile.'_ti)
-									clearTimeout(xmt_'.$profile.'_ti);
-							}
-							xmt_'.$profile.'_ta.style.marginTop = xmt_'.$profile.'_pos.toString() + "px";
-							xmt_'.$profile.'_scroll();
+							$xmt_marquee.config.refresh = '.$scroll_ani_delay.';
+							$xmt_marquee.add("#xmt_'.$profile.'_tweet_area_cont","#xmt_'.$profile.'_tweet_area","'.$scroll_ani_dir.'",'.$scroll_ani_amount.',true);
+							'.$pos_str.'
+							$xmt_marquee.start();
 						//]]>
 					</script>
 				';
