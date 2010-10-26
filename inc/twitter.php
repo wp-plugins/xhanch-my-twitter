@@ -38,6 +38,8 @@
 			$timestamp = xmt_parse_time($date_time, $cfg['tweet']['date_format'], $cfg['tweet']['time_add']);
 						
 			$output = (string)$res->text;
+			$output = html_entity_decode($output, ENT_COMPAT, 'UTF-8');
+			//echo $output.'<br/>';
 			$output = htmlentities($output, ENT_COMPAT, 'UTF-8');
 			
 			if($clickable_url)
