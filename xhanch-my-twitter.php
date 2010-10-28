@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.3.1
+		Version: 2.3.2
 	*/
 	
 	define('xmt', true);
@@ -116,13 +116,23 @@
 			}
 		';
 		eval($php_wid_function);
+		
+		if($acc_set['display_mode']['scrolling']['enable'] && $acc_set['display_mode']['scrolling']['animate']['enable']){
+			add_action('init', 'xmt_init');}
 	}
-
+	
 	function xmt_install () {
 		require_once(xmt_base_dir.'/installer.php');
 	}
 	register_activation_hook(__FILE__,'xmt_install');
-
+	
+	function xmt_init() {
+		if (!is_admin()) {
+			wp_enqueue_script('jquery');
+			wp_enqueue_script('xmt_marquee', xmt_get_dir('url').'/js/marquee.js');
+		}
+	}
+	
 	xmt_inc('inc');
 	
 	define('xmt_base_url', xmt_get_dir('url'));
@@ -333,16 +343,16 @@
 					
 				echo '</div></div>';							
 				echo '
-					<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
-					<script src="'.xmt_get_dir('url').'/js/marquee.js" type="text/javascript"></script>
 					<script language="javascript" type="text/javascript">
 						//<![CDATA[
-							var xmt_'.$profile.'_ta = document.getElementById("xmt_'.$profile.'_tweet_area");
-							var xmt_'.$profile.'_ta_limit = xmt_'.$profile.'_ta.offsetHeight * -1;
-							$xmt_marquee.config.refresh = '.$scroll_ani_delay.';
-							$xmt_marquee.add("#xmt_'.$profile.'_tweet_area_cont","#xmt_'.$profile.'_tweet_area","'.$scroll_ani_dir.'",'.$scroll_ani_amount.',true);
-							'.$pos_str.'
-							$xmt_marquee.start();
+							jQuery(document).ready(function(){
+								var xmt_'.$profile.'_ta = document.getElementById("xmt_'.$profile.'_tweet_area");
+								var xmt_'.$profile.'_ta_limit = xmt_'.$profile.'_ta.offsetHeight * -1;							
+								$xmt_marquee.config.refresh = '.$scroll_ani_delay.';
+								$xmt_marquee.add("#xmt_'.$profile.'_tweet_area_cont","#xmt_'.$profile.'_tweet_area","'.$scroll_ani_dir.'",'.$scroll_ani_amount.',true);
+								'.$pos_str.'
+								$xmt_marquee.start();
+							})
 						//]]>
 					</script>
 				';
