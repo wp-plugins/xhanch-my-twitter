@@ -163,10 +163,9 @@
 		global $xmt_accounts;
 		$set = $xmt_accounts[$profile];
 		$url = 'http://xhanch.com/api/xmt.php?gz&a='.$act.'&ot='.$set['tweet']['oauth_token'].'&os='.$set['tweet']['oauth_secret'];
-		foreach($add as $aK=>$aV){
-			$url .= '&'.$aK.'='.urlencode($aV);
-		}
-		$res = gzinflate(xmt_get_file($url));		
+		foreach($add as $aK=>$aV)
+			$url .= '&'.urlencode($aK).'='.urlencode($aV);		
+		$res = gzinflate(xmt_get_file($url));
 		if($decode)
 			return unserialize($res);
 		else
