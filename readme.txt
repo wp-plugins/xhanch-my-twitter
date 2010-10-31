@@ -3,7 +3,7 @@ Contributors: xhanch_studio
 Plugin URI: http://xhanch.com/wp-plugin-my-twitter/
 Author URI: http://xhanch.com
 Donate link: http://xhanch.com/wp-plugin-my-twitter/
-Tags: twitter, tweet, status, sidebar, post, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll, oauth, mention, hash, automated, admin
+Tags: twitter, tweet, status, sidebar, post, posts, page, feed,  rss, seo, xhanch, widget, plugin, code, avatar, content, list, social, plugins, simple, css, custom, wordpress, text, scroll, oauth, mention, hash, automated, admin, google, images, comments, links, image
 Requires at least: 2.3
 Tested up to: 3.0.1
 Stable tag: 2.3.3
