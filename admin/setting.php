@@ -65,7 +65,7 @@
 			'down' => 'Down',
 		);
 				
-		if(isset($_POST['cmd_xmt_create_profile'])){
+		if(isset($_POST['cmd_xmt_create_profile']) || isset($_POST['cmd_xmt_duplicate_profile'])){
 			$acc_name = strtolower(xmt_form_post('txt_xmt_account_name'));
 			$valid_chars = array(
 				'a','b','c','d','e','f','g','h','i','j',
@@ -89,9 +89,15 @@
 					}
 				}
 				if($valid){
-					$xmt_accounts[$acc_name] = $xmt_default;
-					update_option('xmt_accounts', $xmt_accounts);			
-					echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
+					if(isset($_POST['cmd_xmt_duplicate_profile'])){
+						$xmt_accounts[$acc_name] = $xmt_accounts[$sel_account];
+						update_option('xmt_accounts', $xmt_accounts);		
+						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$sel_account.'</b> has been duplicated as <b>'.$acc_name.'</b>', 'xmt').'</p></div>';	
+					}else{
+						$xmt_accounts[$acc_name] = $xmt_default;
+						update_option('xmt_accounts', $xmt_accounts);			
+						echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
+					}
 				}
 			}
 		}elseif(isset($_POST['cmd_xmt_delete_profile'])){
@@ -342,7 +348,7 @@
 					}					
 					
 			?>		
-				<form action="" method="post">
+				<form action="" method="post" id="frm_config">
 					<i><small>Note: <a href="#guide"><?php echo __('Click here for a complete explaination about these configurations fields', 'xmt'); ?></a></small></i><br/>
 					<br/>				
                    	
@@ -662,6 +668,20 @@
 						<input type="submit" name="cmd_xmt_update_profile" value="<?php echo __('Update Profile', 'xmt'); ?>"/>
 						<input type="submit" name="cmd_xmt_clear_cache" value="<?php echo __('Clear Cache', 'xmt'); ?>"/>
 						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>"/>
+					</p>
+                    
+                    <br/>
+                    <b>Duplicate this profile</b><br/><br/>
+                    
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="150px"><?php echo __('New Profile Name', 'xmt'); ?></td>
+                            <td><input type="text" id="txt_xmt_account_name" name="txt_xmt_account_name" value="" style="width:200px"/></td>
+                        </tr>
+                  	</table>
+					
+					<p class="submit">
+						<input type="submit" name="cmd_xmt_duplicate_profile" value="<?php echo __('Duplicate Profile', 'xmt'); ?>"/>
 					</p>
 				</form>
 			<?php } ?>		
