@@ -8,6 +8,13 @@
 		global $xmt_default;
 				
 		$sel_account = urldecode(xmt_form_get('profile'));
+		
+		if($sel_account == '' || !isset($xmt_accounts[$sel_account])){
+			foreach($xmt_accounts as $acc=>$val){
+				$sel_account = $acc;		
+				break;
+			}
+		}
 			
 		$arr_header_style = array(
 			'' => 'No Header',
@@ -211,7 +218,13 @@
 		}
 				
 		ksort($xmt_accounts);
-			
+		
+		if($sel_account == '' || !isset($xmt_accounts[$sel_account])){
+			foreach($xmt_accounts as $acc=>$val){
+				$sel_account = $acc;		
+				break;
+			}
+		}	
 ?>
 		<style type="text/css">
 			table, td{font-family:Arial;font-size:12px}
@@ -279,19 +292,13 @@
 			<?php if(count($xmt_accounts) > 0){ ?>	
 				<b><big><?php echo __('Profile Configuration', 'xmt'); ?></big></b><br/>
 				<br/>
-				<table cellpadding="0" cellspacing="0" width="100%">
-					<tr>
-						<td width="150px"><?php echo __('Profile', 'xmt'); ?></td>
-						<td>
-							<select name="cbo_xmt_account_name" onchange="location.href='admin.php?page=xhanch-my-twitter/admin/setting.php&profile=' + this.value" style="width:200px">
-								<option value=""><?php echo __('- Choose a profile -', 'xmt'); ?></option>
-								<?php foreach($xmt_accounts as $acc=>$val){ ?>
-									<option value="<?php echo urlencode($acc); ?>" <?php echo ($acc==$sel_account)?'selected="selected"':''; ?>><?php echo ucwords(htmlspecialchars($acc)); ?></option>									
-								<?php } ?>
-							</select>
-						</td>
-					</tr>
-				</table>					
+				<div id="icon-themes" class="icon32"><br /></div>
+				<h2>
+					<?php foreach($xmt_accounts as $acc=>$val){ ?>
+                		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$sel_account?'  nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
+					<?php } ?>
+				</h2>
+                <div class="clear" style="border-top:1px solid #CCC;margin-top:-3px;"/><br/>		
 			<?php } ?>
 					
 			<?php 
