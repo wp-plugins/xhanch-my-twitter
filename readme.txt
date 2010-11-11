@@ -22,6 +22,6 @@ Xhanch My Twitter is going to provide complete integration between your wordpres
 We will keep improving this plugin in order to make this plugin to be the best Twitter plugin for WordPress
 
 
-[For complete features list, installation and setup, screen shots, FAQs, update logs/changelog, and support. Click Here](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
+[For complete features list, installation and setup, screen shots, FAQs, update logs/changelog, and support, CLICK HERE](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 
 [Click here to see All free plugins from Xhanch Studio](http://wordpress.org/extend/plugins/profile/xhanch_studio "Click here to see All free plugins from Xhanch Studio")
