@@ -26,3 +26,10 @@ We will keep improving this plugin in order to make this plugin to be the best T
 
 [Click here to see All free plugins from Xhanch Studio](http://wordpress.org/extend/plugins/profile/xhanch_studio "Click here to see All free plugins from Xhanch Studio")
 
+== Installation ==
+
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
+
+== Changelog ==
+
+[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
