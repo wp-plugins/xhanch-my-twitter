@@ -26,9 +26,10 @@
 	$css = css_minify(file_get_contents("css.css"));
 	
 	$xmt_accounts = get_option('xmt_accounts');
-	if($xmt_accounts === false){
+	if($xmt_accounts === false)
+		$xmt_accounts = array();	
+	if(!is_array($xmt_accounts))
 		$xmt_accounts = array();
-	}
 	
 	$profiles = array_keys($xmt_accounts);
 	foreach($profiles as $profile)
