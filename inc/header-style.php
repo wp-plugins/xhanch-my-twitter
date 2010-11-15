@@ -28,6 +28,9 @@
 			case 'logo_with_text':
 				echo '<div class="header_48"><a href="'.$twitter_url.'" '.($new_tab_link?'target="_blank"':'').'><img src="'.$img_url.'twitter-logo-'.$sty_var.'.png" class="img_left" alt="'.$username.'"/></a><a '.($new_tab_link?'target="_blank"':'').' class="header_48 text_18" href="'.$twitter_url.'">'.$name.'</a></div>';
 				break;
+			case 'header_image':
+				echo '<div class="header_48"><a href="'.$twitter_url.'" '.($new_tab_link?'target="_blank"':'').'><img src="'.$img_url.'header-image-'.$sty_var.'.png" class="img_left" alt="'.$username.'"/></a></div>';
+				break;
 			case 'avatar':
 				$det = xmt_get_detail($profile); 
 				if(!$det['avatar']){

@@ -34,8 +34,10 @@
 			'bird_with_text-13' => 'Silenced Twitter bird + display name',
 			'bird_with_text-14' => 'Twitter bird on a tree branch + display name',
 			'bird_with_text-15' => 'Winking Twitter bird  + display name',
-			'logo_with_text-1' => 'Twitter logo 1 + display name',
-			'logo_with_text-2' => 'Twitter logo 2 + display name',
+			'logo_with_text-1' => 'Twitter logo (old) 1 + display name',
+			'logo_with_text-2' => 'Twitter logo (old) 2 + display name',
+			'logo_with_text-3' => 'Twitter logo (old) 1 + display name',
+			'header_image-1' => 'Full Twitter logo (New) 1',
 		);
 		
 		$arr_dt_format = array(
