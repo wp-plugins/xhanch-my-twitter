@@ -11,6 +11,19 @@
 	vertical-align:middle
 }
 
+{xmt_id}.xmt .header_27{
+	height:27px;
+	line-height:27px;
+	vertical-align:middle;
+	padding-bottom:3px
+}
+
+{xmt_id}.xmt .header_36{
+	height:36px;
+	line-height:36px;
+	vertical-align:middle
+}
+
 {xmt_id}.xmt .text_18{	
 	font-size:18px
 }

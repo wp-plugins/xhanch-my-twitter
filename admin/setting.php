@@ -34,10 +34,16 @@
 			'bird_with_text-13' => 'Silenced Twitter bird + display name',
 			'bird_with_text-14' => 'Twitter bird on a tree branch + display name',
 			'bird_with_text-15' => 'Winking Twitter bird  + display name',
-			'logo_with_text-1' => 'Twitter logo (old) 1 + display name',
-			'logo_with_text-2' => 'Twitter logo (old) 2 + display name',
-			'logo_with_text-3' => 'Twitter logo (old) 1 + display name',
+			'logo_with_text-1' => 'Twitter logo (Old) 1 + display name',
+			'logo_with_text-2' => 'Twitter logo (Old) 2 + display name',
+			'logo_with_text-3' => 'Twitter logo (New) 1 + display name',
+			'logo_with_text_36-1' => 'Twitter logo - med (New) 1 + display name',
+			'logo_with_text_36-2' => 'Twitter logo - med (New) 2 + display name',
+			'logo_with_text_36-3' => 'Twitter logo - med (New) 3 + display name',
 			'header_image-1' => 'Full Twitter logo (New) 1',
+			'header_image_27-1' => 'Follow Me Button 1',
+			'header_image_27-2' => 'Follow Me Button 2',
+			'header_image_27-3' => 'Follow Me Button 3',
 		);
 		
 		$arr_dt_format = array(
