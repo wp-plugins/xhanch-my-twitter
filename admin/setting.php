@@ -681,8 +681,8 @@
 					
 					<p class="submit">
 						<input type="submit" name="cmd_xmt_update_profile" value="<?php echo __('Update Profile', 'xmt'); ?>"/>
-						<input type="submit" name="cmd_xmt_clear_cache" value="<?php echo __('Clear Cache', 'xmt'); ?>"/>
-						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>"/>
+						<input type="submit" name="cmd_xmt_clear_cache" value="<?php echo __('Clear Cache', 'xmt'); ?>" onclick="return confirm('Are you sure to clear the cached data for this profile?')"/>
+						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>" onclick="return confirm('Are you sure to delete this profile?')"/>
 					</p>
                     
                     <br/>
