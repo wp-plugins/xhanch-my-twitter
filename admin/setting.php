@@ -170,6 +170,7 @@
 					'show_hr' => xmt_form_post('chk_xmt_tweet_show_hr'),
 					'show_post_form' => xmt_form_post('chk_xmt_tweet_show_post_form'),
 					'show_origin_retweet' => xmt_form_post('chk_xmt_tweet_show_origin_retweet'),
+					'tweet_new_post' => xmt_form_post('chk_xmt_tweet_tweet_new_post'),
 					'make_clickable' => array(
 						'user_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_user_tag'),
 						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
@@ -545,10 +546,13 @@
                     	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
                         <table cellpadding="0" cellspacing="0">
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_show_post_form" value="1" <?php echo ($set['tweet']['show_post_form']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin?', 'xmt'); ?></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_show_post_form" value="1" <?php echo ($set['tweet']['show_post_form']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin', 'xmt'); ?></td>
                             </tr>
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/> <?php echo __('Show direct messages?', 'xmt'); ?></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/> <?php echo __('Show/include direct messages', 'xmt'); ?></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_tweet_new_post" name="chk_xmt_tweet_tweet_new_post" value="1" <?php echo ($set['tweet']['tweet_new_post']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new page/post', 'xmt'); ?></td>
                             </tr>
                             <tr>
                                 <td width="150px"></td>

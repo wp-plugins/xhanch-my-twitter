@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.4.0
+		Version: 2.4.1
 	*/
 	
 	define('xmt', true);
@@ -41,6 +41,7 @@
 			'show_hr' => 0,
 			'show_post_form' => 1,
 			'show_origin_retweet' => 0,
+			'tweet_new_post' => 0,
 			'make_clickable' => array(
 				'user_tag' => 1,
 				'hash_tag' => 1,
@@ -387,6 +388,24 @@
 		}
 	}
 	add_action("plugins_loaded", "widget_xmt_init");
+		
+	function xmt_tweet_post($post_id){
+		global $xmt_accounts;
+		$info = get_post($post_id);
+		$url = get_permalink($post_id);
+		
+		$t_tweet = $info->post_title.' - '.$url;
+		
+		foreach($xmt_accounts as $profile=>$cfg){				
+			if($cfg['tweet']['oauth_use'] && $cfg['tweet']['tweet_new_post']){
+				xmt_req('post-tweet', $profile, array('tweet' => $t_tweet), false);				
+				$cfg['tweet']['cache']['tweet_cache']['date'] = 0;
+				$xmt_accounts[$profile] = $cfg;
+				update_option('xmt_accounts', $xmt_accounts);
+			}
+		}
+	}
+	add_action('publish_post', 'xmt_tweet_post');
 
 	if(is_admin()){
 		function xmt_admin_menu() {	
