@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.4.1
+		Version: 2.4.2
 	*/
 	
 	define('xmt', true);
@@ -406,6 +406,7 @@
 		}
 	}
 	add_action('publish_post', 'xmt_tweet_post');
+	add_action('publish_page', 'xmt_tweet_post');
 
 	if(is_admin()){
 		function xmt_admin_menu() {	
@@ -416,7 +417,7 @@
 					8, 
 					'xhanch-my-twitter/admin/xhanch.php', 
 					'',
-					'http://xhanch.com/icon-16x16.jpg'
+					xmt_get_dir('url').'/img/icon.jpg'
 				);
 				define('xhanch_root', 'xhanch-my-twitter/admin/xhanch.php');
 			}
