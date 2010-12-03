@@ -171,6 +171,7 @@
 					'show_post_form' => xmt_form_post('chk_xmt_tweet_show_post_form'),
 					'show_origin_retweet' => xmt_form_post('chk_xmt_tweet_show_origin_retweet'),
 					'tweet_new_post' => xmt_form_post('chk_xmt_tweet_tweet_new_post'),
+					'tweet_new_post_layout' => xmt_form_post('txa_xmt_tweet_tweet_new_post_layout'),
 					'make_clickable' => array(
 						'user_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_user_tag'),
 						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
@@ -553,6 +554,20 @@
                             </tr>
                             <tr>
                                 <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_tweet_new_post" name="chk_xmt_tweet_tweet_new_post" value="1" <?php echo ($set['tweet']['tweet_new_post']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new page/post', 'xmt'); ?></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <?php echo __('Auto tweet layout', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_auto_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
+                                    <textarea id="txa_xmt_tweet_tweet_new_post_layout" name="txa_xmt_tweet_tweet_new_post_layout" style="width:100%;height:40px"><?php echo htmlspecialchars($set['tweet']['tweet_new_post_layout']); ?></textarea><br/>
+                                    <div id="sct_twt_auto_layout_var" style="display:none;">		
+                                        <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
+                                        <ul>
+                                            <li><small><b>@title</b>: <?php echo __('posy/page title', 'xmt'); ?></small></li>
+                                            <li><small><b>@url</b>: <?php echo __('URL to your post/page', 'xmt'); ?></small></li>
+                                        </ul>
+                                    </div>
+                                    
+                                </td>
                             </tr>
                             <tr>
                                 <td width="150px"></td>
