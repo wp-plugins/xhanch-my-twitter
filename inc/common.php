@@ -49,15 +49,21 @@
 			echo '<i>- XMT: '.str_replace('--', '-', __($str, 'xmt')).' -</i><br/>';
 	}
 
-	function xmt_make_url_clickable_cb($matches, $new_tab_link = true){
+	function xmt_make_url_clickable_cb($matches, $profile){
+		global $xmt_accounts;		
+		$cfg = $xmt_accounts[$profile];
+		
 		$url = $matches[2];
 		$url = esc_url($url);
-		if ( empty($url) )
+		if (empty($url))
 			return $matches[0];
-		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($new_tab_link?'target="_blank"':'').'>'.$url.'</a>';
+		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?'[link]':$url).'</a>';
 	}
 
-	function xmt_make_web_ftp_clickable_cb($matches, $new_tab_link = true) {
+	function xmt_make_web_ftp_clickable_cb($matches, $profile='') {
+		global $xmt_accounts;		
+		$cfg = $xmt_accounts[$profile];
+		
 		$ret = '';
 		$dest = $matches[2];
 		$dest = 'http://' . $dest;
@@ -68,7 +74,7 @@
 			$ret = substr($dest, -1);
 			$dest = substr($dest, 0, strlen($dest)-1);
 		}
-		return $matches[1].'<a href="'.$dest.'" rel="nofollow" '.($new_tab_link?'target="_blank"':'').'>'.$dest.'</a>'.$ret;
+		return $matches[1].'<a href="'.$dest.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?'[link]':$dest).'</a>'.$ret;
 	}
 
 	function xmt_make_email_clickable_cb($matches) {
@@ -76,10 +82,23 @@
 		return $matches[1] . "<a href=\"mailto:$email\" target=\"_blank\">$email</a>";
 	}
 
-	function xmt_make_clickable($ret, $new_tab_link = true) {
+	function xmt_make_clickable($ret, $profile) {
+		global $xmt_accounts;		
+		$cfg = $xmt_accounts[$profile];
+		
 		$ret = ' ' . $ret;
-		$ret = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', 'xmt_make_url_clickable_cb', $ret);
-		$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', 'xmt_make_web_ftp_clickable_cb', $ret);
+		//$ret = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', array('xmt_make_url_clickable_cb', $profile), $ret);
+		
+		$has_url = preg_match_all('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', $ret, $tmp);
+		if($has_url){
+			foreach($tmp[2] AS $aV){
+				$url = esc_url($aV);
+				$rpc = '<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?'[link]':$url).'</a>';
+				$ret = str_replace($aV, $rpc, $ret);
+			}
+		}		
+		
+		//$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', 'xmt_make_web_ftp_clickable_cb', $ret);
 		//$ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', 'xmt_make_email_clickable_cb', $ret);
 		// this one is not in an array because we need it to run last, for cleanup of accidental links within links
 		$ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);

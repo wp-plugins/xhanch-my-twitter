@@ -43,7 +43,7 @@
 			$output = htmlentities($output, ENT_COMPAT, 'UTF-8');
 			
 			if($clickable_url)
-				$output = xmt_make_clickable($output);
+				$output = xmt_make_clickable($output, $profile);
 							
 
 			if($clickable_hash_tag){
