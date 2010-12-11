@@ -57,7 +57,7 @@
 		$url = esc_url($url);
 		if (empty($url))
 			return $matches[0];
-		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?'[link]':$url).'</a>';
+		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?$cfg['tweet']['url_layout']:$url).'</a>';
 	}
 
 	function xmt_make_web_ftp_clickable_cb($matches, $profile='') {
@@ -93,7 +93,7 @@
 		if($has_url){
 			foreach($tmp[2] AS $aV){
 				$url = esc_url($aV);
-				$rpc = '<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?'[link]':$url).'</a>';
+				$rpc = '<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?$cfg['tweet']['url_layout']:$url).'</a>';
 				$ret = str_replace($aV, $rpc, $ret);
 			}
 		}		

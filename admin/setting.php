@@ -177,7 +177,7 @@
 						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
 						'url' => xmt_form_post('chk_xmt_tweet_make_clickable_url')
 					),
-					'url_layout' => xmt_form_post('chk_xmt_tweet_url_layout'),
+					'url_layout' => xmt_form_post('txt_xmt_tweet_url_layout'),
 					'avatar' => array(
 						'show' => xmt_form_post('chk_xmt_tweet_avatar_show'),
 						'size' => array(
@@ -507,8 +507,8 @@
 							<td><?php echo __('Clickable URL?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_url" name="chk_xmt_tweet_make_clickable_url" value="1" <?php echo ($set['tweet']['make_clickable']['url']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td><?php echo __('Show [link] for URL?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_url_layout" name="chk_xmt_tweet_url_layout" value="1" <?php echo ($set['tweet']['url_layout']?'checked="checked"':''); ?>/></td>
+							<td><?php echo __('Display URL as', 'xmt'); ?></td>
+							<td><input type="text" id="txt_xmt_tweet_url_layout" name="txt_xmt_tweet_url_layout" value="<?php echo $set['tweet']['url_layout']; ?>"/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Clickable user tag?', 'xmt'); ?></td>

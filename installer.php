@@ -2,14 +2,12 @@
 	global $wpdb;
 	global $xmt_accounts;
 	global $xmt_default;
-	
-	$wpdb->query("delete from ".$wpdb->prefix."options where option_name like='%xhanch_my_twitter%'");
-			
+				
 	$xmt_accounts = get_option('xmt_accounts');
 	if($xmt_accounts === false){
 		$xmt_accounts = array();	
 		add_option('xmt_accounts', $xmt_accounts);
-	}else{			
+	}else{
 		foreach($xmt_accounts as $acc=>$acc_set){
 			$acc_set['general']['show_credit'] = 1;
 			$xmt_res = array_merge($xmt_default, $acc_set);
