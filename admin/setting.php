@@ -267,6 +267,10 @@
 				if(obj.value == "scrolling")
 					md_scrolling.style.display = "";	
 			}
+			function set_dt_fmt(fmt){
+				var obj = document.getElementById("txt_xmt_tweet_date_format");				
+				obj.value = fmt;
+			}
     	</script>
 		<div class="wrap">
 			<h2><?php echo __('Xhanch - My Twitter - Configuration', 'xmt'); ?></h2>		
@@ -473,7 +477,7 @@
                                 <small><i><?php echo __('Commonly used date formats', 'xmt'); ?></i></small>
                                 <ul>
                                     <?php foreach($arr_date_format as $fmt_val=>$fmt_ex){ ?>
-                                        <li><small><b><?php echo $fmt_val; ?></b>: <?php echo __($fmt_ex, 'xmt'); ?></small></li>
+                                        <li><small><a href="javascript:set_dt_fmt('<?php echo $fmt_val; ?>')" style="text-decoration:none">[Use This]</a> <b><?php echo $fmt_val; ?></b>: <?php echo __($fmt_ex, 'xmt'); ?></small></li>
                                     <?php } ?>
                                   	<li><small><a href="http://xhanch.com/php-script-formatting-date-and-time/" target="_blank"><?php echo __('Click Here to see more explainations about date and time formatting', 'xmt'); ?></a></small></li>
                                 </ul>
