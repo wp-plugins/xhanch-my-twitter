@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.4.6
+		Version: 2.4.7
 	*/
 	
 	define('xmt', true);
@@ -404,6 +404,7 @@
 				
 				$t_tweet = str_replace('@title', $info->post_title, $t_tweet);
 				$t_tweet = str_replace('@url', $url, $t_tweet);
+				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content),0,100), $t_tweet);
 				
 				xmt_req('post-tweet', $profile, array('tweet' => $t_tweet), false);				
 				$cfg['tweet']['cache']['tweet_cache']['date'] = 0;

@@ -574,8 +574,9 @@
                                     <div id="sct_twt_auto_layout_var" style="display:none;">		
                                         <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
                                         <ul>
-                                            <li><small><b>@title</b>: <?php echo __('posy/page title', 'xmt'); ?></small></li>
+                                            <li><small><b>@title</b>: <?php echo __('post/page title', 'xmt'); ?></small></li>
                                             <li><small><b>@url</b>: <?php echo __('URL to your post/page', 'xmt'); ?></small></li>
+                                            <li><small><b>@summary</b>: <?php echo __('content summary', 'xmt'); ?></small></li>
                                         </ul>
                                     </div>
                                     
