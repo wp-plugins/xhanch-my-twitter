@@ -1,14 +1,5 @@
 <?php
-	function xmt_split_xml($profile, $arr, $req, $type = 'tweet') {
-		global $xmt_accounts;		
-		$cfg = $xmt_accounts[$profile];
-		
-		$clickable_user_tag = intval($cfg['tweet']['make_clickable']['user_tag']);	
-		$clickable_hash_tag = intval($cfg['tweet']['make_clickable']['hash_tag']);	
-		$clickable_url = intval($cfg['tweet']['make_clickable']['url']);	
-		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);
-		$convert_similies = intval($cfg['other']['convert_similies']);	
-
+	function xmt_split_xml($acc, $cfg, $arr, $req, $type = 'tweet') {
 		if($type == 'direct_message') {
 			$req = str_replace('direct-messages', 'statuses', $req);
 			$req = str_replace('direct_message', 'status', $req);
@@ -23,11 +14,11 @@
 		if($xml->error)
 			xmt_log($xml->error);	
 		
-		$items_count= count($xml->entry);
-		$limit = $items_count;
+		$items_count = count($xml->entry);
+		$lmt = $items_count;
 		foreach($xml->status as $res){
 			if($res->retweeted_status){
-				if($cfg['tweet']['show_origin_retweet'])
+				if($cfg['shw_org_rtw'])
 					$res = $res->retweeted_status;
 			}
 
@@ -35,42 +26,39 @@
 			$rpl = (string)$res->in_reply_to_status_id;
 			$date_time = (string)$res->created_at;
 			
-			$timestamp = xmt_parse_time($date_time, $cfg['tweet']['date_format'], $cfg['tweet']['time_add']);
+			$timestamp = xmt_parse_time($date_time, $cfg['dtm_fmt'], $cfg['gmt_add']);
 						
 			$output = (string)$res->text;
 			$output = html_entity_decode($output, ENT_COMPAT, 'UTF-8');
-			//echo $output.'<br/>';
 			$output = htmlentities($output, ENT_COMPAT, 'UTF-8');
 			
-			if($clickable_url)
-				$output = xmt_make_clickable($output, $profile);
-							
+			if($cfg['clc_url'])
+				$output = xmt_make_clickable($output, $acc, $cfg);							
 
-			if($clickable_hash_tag){
+			if($cfg['clc_hsh_tag']){
 				$pattern = '/(\s\#([_a-z0-9\-]+))/i';
-				$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($new_tab_link?'target="_blank"':'').'>$1</a>';
+				$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($cfg['lnk_new_tab']?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
-			if($clickable_user_tag){
+			if($cfg['clc_usr_tag']){
 				$pattern = '/(@([_a-z0-9\-]+))/i';
-				$replace = '<a href="http://twitter.com/$2" title="Follow $2" '.($new_tab_link?'target="_blank"':'').'>$1</a>';
+				$replace = '<a href="http://twitter.com/$2" title="Follow $2" '.($cfg['lnk_new_tab']?'target="_blank"':'').'>$1</a>';
 				$output = preg_replace($pattern,$replace,$output);
 			}
 
-			if($convert_similies)
+			if($cfg['cvr_sml'])
 				$output = convert_smilies($output);
-			$author_name = (string)$res->user->name;
+
 			$author_uid = (string)$res->user->screen_name;
-			$author_img = (string)$res->user->profile_image_url;
 			$arr[$sts_id] = array(
 				'type' => $type,
 				'timestamp' => $timestamp,
 				'tweet' => $output,
 				'author' => $author_uid,
-				'author_name' => $author_name,
+				'author_name' => (string)$res->user->name,
 				'author_url' => 'http://twitter.com/'.$author_uid,
-				'author_img' => $author_img,
+				'author_img' => (string)$res->user->profile_image_url,
 				'source' => (string)$res->source,
 			);
 		}
@@ -78,110 +66,100 @@
 		return $arr;
 	}
 
-	function xmt_get_tweets($profile){
-		global $xmt_accounts;		
-		$cfg = $xmt_accounts[$profile];
-		
-		xmt_timed('Get Tweets - Start');
-		$cache_enable = intval($cfg['tweet']['cache']['enable']);	
-		$cache_expiry = intval($cfg['tweet']['cache']['expiry']) * 60;	
-		$cache_date = intval($cfg['tweet']['cache']['tweet_cache']['date']);
-		$tweet_order = $cfg['tweet']['order'];
+	function xmt_twt_get($acc, $cfg){
+		xmt_tmd('Get Tweets - Start');
 
-		$use_cache = false;
-		if($cache_enable && $cache_date > 0){
-			$cache_age = time() - $cache_date;
-			if($cache_age <= $cache_expiry)
-				$use_cache = true;
+		$cch_tmp = xmt_twt_cch_get($acc);
+						
+		$cch_exp = intval($cfg['cch_exp']) * 60;	
+		$cch_tmd = $cch_tmp['tmd'];
+
+		$cch_use = false;
+		if($cfg['cch_enb'] && $cch_tmd > 0){
+			$cch_age = time() - $cch_tmd;
+			if($cch_age <= $cch_exp)
+				$cch_use = true;
 		}
-		if(!$use_cache){
-			$uid = $cfg['tweet']['username'];
-			$limit = intval($cfg['tweet']['count']);			
-			if($limit <= 0)
-				$limit = 5;
+		if(!$cch_use){
+			$lmt = $cfg['cnt'];			
+			if($lmt <= 0)
+				$lmt = 5;
 			
 			$arr = array();
 			
 			$method = 'public';
-			if($cfg['tweet']['oauth_use'])
+			if($cfg['oah_use'])
 				$method = 'oauth';
 				
-			include xmt_base_dir.'/method/'.$method.'/build-list.php';
+			@include xmt_base_dir.'/method/'.$method.'/build-list.php';
 				
-			if(!intval($cfg['tweet']['include']['replies_from_you'])){
+			if(!intval($cfg['inc_rpl_fru'])){
 				foreach($arr as $sts_id=>$val){
 					if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] == $uid)
 						unset($arr[$sts_id]);					
 				}
 				
-				$limit = intval($cfg['tweet']['count']);			
-				if($limit <= 0)
-					$limit = 5;
+				$lmt = $cfg['cnt'];			
+				if($lmt <= 0)
+					$lmt = 5;
 					
-				if(count($arr) < $limit){
-					$tmp_limit = $limit;
-					$limit = $limit * 2;
+				if(count($arr) < $lmt){
+					$tmp_lmt = $lmt;
+					$lmt = $lmt * 2;
 					
 					include xmt_base_dir.'/method/'.$method.'/build-list.php';
 										
 					foreach($arr as $sts_id=>$val){
 						if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] == $uid)
-							unset($arr[$sts_id]);					
+							unset($arr[$sts_id]);
 					}
 					
-					$limit = $tmp_limit;
+					$lmt = $tmp_lmt;
 				}
 			}
 			
 			krsort($arr);
 	
-			$limit = intval($cfg['tweet']['count']);			
-			if($limit <= 0)
-				$limit = 5;
-				
-			if(count($arr) > $limit){
+			$lmt = $cfg['cnt'];
+			if($lmt <= 0)
+				$lmt = 5;
+
+			if(count($arr) > $lmt){
 				do{
 					array_pop($arr);
-				}while(count($arr) > $limit);
+				}while(count($arr) > $lmt);
 			}
-			
-			if(count($arr)){
-				$cfg['tweet']['cache']['tweet_cache']['date'] = time();
-				$cfg['tweet']['cache']['tweet_cache']['data'] = $arr;
-				
-				$xmt_accounts[$profile] = $cfg;
-				update_option('xmt_accounts', $xmt_accounts);					
-			}else
-				$use_cache = true;			
+
+			if(count($arr))
+				xmt_twt_cch_set($acc, $arr);				
+			else
+				$cch_use = true;			
 		}
 
-		if($use_cache)
-			$arr = $cfg['tweet']['cache']['tweet_cache']['data'];		
+		if($cch_use)
+			$arr = $cch_tmp['dat'];	
 		
-		if($tweet_order == 'otl')
+		if($cfg['ord'] == 'otl')
 			$arr = array_reverse($arr);
-		xmt_timed('Get Tweets - Finished');
+		xmt_tmd('Get Tweets - Finished');
 		return $arr;
 	}
 
-	function xmt_get_detail($profile){
-		global $xmt_accounts;
-		
-		$cfg = $xmt_accounts[$profile];
-				
-		$cache_enable = intval($cfg['tweet']['cache']['enable']);	
-		$cache_expiry = intval($cfg['tweet']['cache']['expiry']) * 60;	
-		$cache_date = intval($cfg['tweet']['cache']['profile_cache']['date']);
+	function xmt_prf_get($acc, $cfg){
+		$cch_tmp = xmt_prf_cch_get($acc);
+						
+		$cch_exp = intval($cfg['cch_exp']) * 60;	
+		$cch_tmd = $cch_tmp['tmd'];
 
-		$use_cache = false;
-		if($cache_enable && $cache_date > 0){
-			$cache_age = time() - $cache_date;
-			if($cache_age <= $cache_expiry)
-				$use_cache = true;			
+		$cch_use = false;
+		if($cfg['cch_enb'] && $cch_tmd > 0){
+			$cch_age = time() - $cch_tmd;
+			if($cch_age <= $cch_exp)
+				$cch_use = true;			
 		}
 
-		if(!$use_cache){
-			$api_url_reply = 'http://twitter.com/users/'.urlencode($cfg['tweet']['username']).'.xml';
+		if(!$cch_use){
+			$api_url_reply = 'http://twitter.com/users/'.urlencode($cfg['twt_usr_nme']).'.xml';
 			$req = xmt_get_file($api_url_reply);
 			$xml = @simplexml_load_string($req);
 
@@ -194,18 +172,14 @@
 				'name' => (string)$xml->name,
 				'screen_name' => (string)$xml->screen_name,
 			);
-			if($req){			
-				$cfg['tweet']['cache']['profile_cache']['date'] = time();
-				$cfg['tweet']['cache']['profile_cache']['data'] = $arr;
-				
-				$xmt_accounts[$profile] = $cfg;
-				update_option('xmt_accounts', $xmt_accounts);	
-			}else
-				$use_cache = true;
+			if($req)
+				xmt_prf_cch_set($acc, $arr);
+			else
+				$cch_use = true;
 		}
 
-		if($use_cache)
-			$arr = $cfg['tweet']['cache']['profile_cache']['data'];
+		if($cch_use)
+			$arr = $cch_tmp['dat'];	
 		return $arr;
 	}
 ?>

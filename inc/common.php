@@ -17,7 +17,7 @@
 			echo '<div id="message" class="updated fade"><p><b>'.__('Plugin requirements issue(s)', 'xmt').'</b>:<br/><br/>'.implode('<br/><br/>', $issues).'</p></div>';
 	}
 
-	function xmt_replace_vars($str, $profile){		
+	function xmt_replace_vars($str, $acc, $cfg){		
 		if(trim($str) == '')
 			return $str;
 
@@ -25,7 +25,7 @@
 		if(strpos($str, '@') === false)
 			return $str;
 		
-		$det = xmt_get_detail($profile); 	
+		$det = xmt_prf_get($acc, $cfg); 	
 		$str = str_replace('@followers_count', intval($det['followers_count']), $str);
 		$str = str_replace('@friends_count', intval($det['friends_count']), $str);
 		$str = str_replace('@favourites_count', intval($det['favourites_count']), $str);
@@ -36,9 +36,9 @@
 		return $str; 
 	}
 
-	function xmt_timed($str = ''){
-		global $xmt_timed;	
-		$span = time() - $xmt_timed;
+	function xmt_tmd($str = ''){
+		global $xmt_tmd;	
+		$span = time() - $xmt_tmd;
 		xmt_log(($str?__($str, 'xmt').' - ':'').__('Exec time', 'xmt').' - '.$span.' s');
 	}
 
@@ -49,58 +49,17 @@
 			echo '<i>- XMT: '.str_replace('--', '-', __($str, 'xmt')).' -</i><br/>';
 	}
 
-	function xmt_make_url_clickable_cb($matches, $profile){
-		global $xmt_accounts;		
-		$cfg = $xmt_accounts[$profile];
-		
-		$url = $matches[2];
-		$url = esc_url($url);
-		if (empty($url))
-			return $matches[0];
-		return $matches[1].'<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?$cfg['tweet']['url_layout']:$url).'</a>';
-	}
-
-	function xmt_make_web_ftp_clickable_cb($matches, $profile='') {
-		global $xmt_accounts;		
-		$cfg = $xmt_accounts[$profile];
-		
-		$ret = '';
-		$dest = $matches[2];
-		$dest = 'http://' . $dest;
-		$dest = esc_url($dest);
-		if ( empty($dest) )
-			return $matches[0];
-		if ( in_array(substr($dest, -1), array('.', ',', ';', ':')) === true ) {
-			$ret = substr($dest, -1);
-			$dest = substr($dest, 0, strlen($dest)-1);
-		}
-		return $matches[1].'<a href="'.$dest.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?'[link]':$dest).'</a>'.$ret;
-	}
-
-	function xmt_make_email_clickable_cb($matches) {
-		$email = $matches[2] . '@'.$matches[3];
-		return $matches[1] . "<a href=\"mailto:$email\" target=\"_blank\">$email</a>";
-	}
-
-	function xmt_make_clickable($ret, $profile) {
-		global $xmt_accounts;		
-		$cfg = $xmt_accounts[$profile];
-		
+	function xmt_make_clickable($ret, $acc, $cfg) {		
 		$ret = ' ' . $ret;
-		//$ret = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', array('xmt_make_url_clickable_cb', $profile), $ret);
 		
 		$has_url = preg_match_all('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', $ret, $tmp);
 		if($has_url){
 			foreach($tmp[2] AS $aV){
 				$url = esc_url($aV);
-				$rpc = '<a href="'.$url.'" rel="nofollow" '.($cfg['other']['open_link_on_new_window']?'target="_blank"':'').'>'.($cfg['tweet']['url_layout']?$cfg['tweet']['url_layout']:$url).'</a>';
+				$rpc = '<a href="'.$url.'" rel="nofollow" '.($cfg['lnk_new_tab']?'target="_blank"':'').'>'.($cfg['url_lyt']?$cfg['url_lyt']:$url).'</a>';
 				$ret = str_replace($aV, $rpc, $ret);
 			}
-		}		
-		
-		//$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', 'xmt_make_web_ftp_clickable_cb', $ret);
-		//$ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', 'xmt_make_email_clickable_cb', $ret);
-		// this one is not in an array because we need it to run last, for cleanup of accidental links within links
+		}
 		$ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
 		$ret = trim($ret);
 		return $ret;
@@ -178,12 +137,10 @@
 		else { return WP_CONTENT_URL.'/plugins/'.plugin_basename(xmt_base_dir); }
 	}
 	
-	function xmt_req($act, $profile,$add=array(),$decode=true){		
-		global $xmt_accounts;
-		$set = $xmt_accounts[$profile];
-		$url = 'http://xhanch.com/api/xmt.php?gz&a='.$act.'&ot='.$set['tweet']['oauth_token'].'&os='.$set['tweet']['oauth_secret'];
+	function xmt_req($act, $acc, $cfg, $add=array(),$decode=true){		
+		$url = 'http://xhanch.com/api/xmt.php?gz&a='.$act.'&ot='.$cfg['oah_tkn'].'&os='.$cfg['oah_sct'];
 		foreach($add as $aK=>$aV)
-			$url .= '&'.urlencode($aK).'='.urlencode($aV);		
+			$url .= '&'.urlencode($aK).'='.urlencode($aV);
 		$res = gzinflate(xmt_get_file($url));
 		if($decode)
 			return unserialize($res);
@@ -244,4 +201,15 @@
 		}
 		return $timestamp;
 	}	
+
+	function xmt_sql_str($str){
+		global $wpdb;
+		return '\''.$wpdb->escape($str).'\'';
+	}
+
+	function xmt_sql_int($val){
+		if($val == '')
+			$val = 0;
+		return intval($val);
+	}
 ?>

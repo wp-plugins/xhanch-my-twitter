@@ -4,14 +4,14 @@
 	
 	function xmt_setting(){
 		global $wpdb;
-		global $xmt_accounts;
-		global $xmt_default;
+		global $xmt_cfg_def;
 				
-		$sel_account = urldecode(xmt_form_get('profile'));
+		$acc_sel = urldecode(xmt_form_get('profile'));
 		
-		if($sel_account == '' || !isset($xmt_accounts[$sel_account])){
-			foreach($xmt_accounts as $acc=>$val){
-				$sel_account = $acc;		
+		$acc_lst = xmt_acc_lst();
+		if($acc_sel == '' || !in_array($acc_sel, $acc_lst)){
+			foreach($acc_lst as $acc){
+				$acc_sel = $acc;		
 				break;
 			}
 		}
@@ -70,18 +70,13 @@
 		}
 		$arr_date_format['span'] = '? period ago';		
 
-		$arr_tweet_order = array(
+		$arr_ord = array(
 			'lto' => 'Latest to oldest',
 			'otl' => 'Oldest to latest',
 		);
-		
-		$arr_scroll_direction = array(
-			'up' => 'Up',
-			'down' => 'Down',
-		);
 				
-		if(isset($_POST['cmd_xmt_create_profile']) || isset($_POST['cmd_xmt_duplicate_profile'])){
-			$acc_name = strtolower(xmt_form_post('txt_xmt_account_name'));
+		if(isset($_POST['cmd_xmt_crt_prf']) || isset($_POST['cmd_xmt_dpl_prf'])){
+			$acc_name = strtolower(xmt_form_post('txt_xmt_acc_nme'));
 			$valid_chars = array(
 				'a','b','c','d','e','f','g','h','i','j',
 				'k','l','m','n','o','p','q','r','s','t',
@@ -90,149 +85,114 @@
 			);
 		
 			if(empty($acc_name))
-				echo '<div id="message" class="updated fade"><p>'.__('Profile name is empty', 'xmt').'</p></div>';			
-			elseif(array_key_exists($acc_name, $xmt_accounts))
+				echo '<div id="message" class="updated fade"><p>'.__('Profile name is empty', 'xmt').'</p></div>';
+			elseif(in_array($acc_name, $acc_lst))
 				echo '<div id="message" class="updated fade"><p>'.__('Profile already exists', 'xmt').'</p></div>';
 			else{
 				$chars = str_split($acc_name);
 				$valid = true;
 				foreach($chars as $key){
 					if(!in_array($key, $valid_chars)){		
-						$valid = false;		
+						$valid = false;
 						echo '<div id="message" class="updated fade"><p>'.__('Profile name must contain A to Z and 0 to 9', 'xmt').'</p></div>';
 						break;
 					}
 				}
 				if($valid){
-					if(isset($_POST['cmd_xmt_duplicate_profile'])){
-						$xmt_accounts[$acc_name] = $xmt_accounts[$sel_account];
-						update_option('xmt_accounts', $xmt_accounts);		
-						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$sel_account.'</b> has been duplicated as <b>'.$acc_name.'</b>', 'xmt').'</p></div>';	
+					if(isset($_POST['cmd_xmt_dpl_prf'])){
+						xmt_acc_add($acc_name, xmt_acc_cfg_get($acc_name));		
+						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$acc_sel.'</b> has been duplicated as <b>'.$acc_name.'</b>', 'xmt').'</p></div>';	
 					}else{
-						$xmt_accounts[$acc_name] = $xmt_default;
-						update_option('xmt_accounts', $xmt_accounts);			
+						xmt_acc_add($acc_name, $xmt_cfg_def);
+						update_option('xmt_accounts', $acc_lst);			
 						echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
 					}
 				}
 			}
 		}elseif(isset($_POST['cmd_xmt_delete_profile'])){
-			unset($xmt_accounts[$sel_account]);
-			update_option('xmt_accounts', $xmt_accounts);	
-			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($sel_account).'</b> has been deleted</p></div>';				
+			xmt_acc_del($acc_sel);
+			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';				
 		}elseif(isset($_POST['cmd_xmt_disconnect'])){
-			$set = $xmt_accounts[$sel_account];				
-			$set['tweet']['oauth_use'] = 0;						
-			$set['tweet']['oauth_token'] = $res['ot'];
-			$set['tweet']['oauth_secret'] = $res['os'];						
-			$set['temp']['oauth_req_token'] = '';
-			$set['temp']['oauth_req_secret'] = '';						
-			$xmt_accounts[$sel_account] = $set;
-			update_option('xmt_accounts', $xmt_accounts);
+			$cfg = xmt_acc_cfg_get($acc_name);
+			$cfg['oah_use'] = 0;						
+			$cfg['oah_tkn'] = $res['ot'];
+			$cfg['oah_sct'] = $res['os'];						
+			$cfg['tmp_oah_tkn'] = '';
+			$cfg['tmp_oah_sct'] = '';			
+			xmt_acc_cfg_upd($acc_sel, $cfg);
 			echo '<div id="message" class="updated fade"><p>'.__('This profile has been disconnected with Twitter', 'xmt').'</p></div>';				
 		}elseif(isset($_POST['cmd_xmt_clear_cache'])){
-			$set = $xmt_accounts[$sel_account];		
-			$set['tweet']['cache']['tweet_cache']['date'] = 0;
-			$set['tweet']['cache']['tweet_cache']['data'] = array();
-			$set['tweet']['cache']['profile_cache']['date'] = 0;
-			$set['tweet']['cache']['profile_cache']['data'] = array();				
-			$xmt_accounts[$sel_account] = $set;
-			update_option('xmt_accounts', $xmt_accounts);
+			xmt_twt_cch_rst($acc_sel);
+			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Cache has been cleared', 'xmt').'</p></div>';				
 		}elseif($_POST['cmd_xmt_update_profile']){
-			$set = $xmt_accounts[$sel_account];
-			$xmt_config = array(
-				'widget' => array(
-					'title' => xmt_form_post('txt_xmt_widget_title'),
-					'name' => xmt_form_post('txt_xmt_widget_name'),
-					'link_title' => intval(xmt_form_post('chk_xmt_widget_link_title')),
-					'header_style' => xmt_form_post('cbo_xmt_widget_header_style'),
-					'custom_text' => array(
-						'header' => xmt_form_post('txa_xmt_widget_custom_text_header'),
-						'footer' => xmt_form_post('txa_xmt_widget_custom_text_footer')
-					)
-				),
-				'tweet' => array(
-					'username' => xmt_form_post('txt_xmt_tweet_username'),
-					'oauth_use' => $set['tweet']['oauth_use'],
-					'oauth_token' => $set['tweet']['oauth_token'],
-					'oauth_secret' => $set['tweet']['oauth_secret'],
-					'order' => xmt_form_post('cbo_xmt_tweet_order'),	
-					'count' => xmt_form_post('int_xmt_tweet_count'),
-					'include' => array(
-						'replies' => xmt_form_post('chk_xmt_tweet_include_replies'),
-						'replies_from_you' => xmt_form_post('chk_xmt_tweet_include_replies_from_you'),
-						'retweet' => xmt_form_post('chk_xmt_tweet_include_retweet'),
-						'direct_message' => xmt_form_post('chk_xmt_tweet_include_direct_message')
-					),
-					'date_format' => xmt_form_post('txt_xmt_tweet_date_format'),
-					'time_add' => xmt_form_post('int_xmt_tweet_time_add'),
-					'layout' => xmt_form_post('txa_xmt_tweet_layout'),
-					'show_hr' => xmt_form_post('chk_xmt_tweet_show_hr'),
-					'show_post_form' => xmt_form_post('chk_xmt_tweet_show_post_form'),
-					'show_origin_retweet' => xmt_form_post('chk_xmt_tweet_show_origin_retweet'),
-					'tweet_new_post' => xmt_form_post('chk_xmt_tweet_tweet_new_post'),
-					'tweet_new_post_layout' => xmt_form_post('txa_xmt_tweet_tweet_new_post_layout'),
-					'make_clickable' => array(
-						'user_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_user_tag'),
-						'hash_tag' => xmt_form_post('chk_xmt_tweet_make_clickable_hash_tag'),
-						'url' => xmt_form_post('chk_xmt_tweet_make_clickable_url')
-					),
-					'url_layout' => xmt_form_post('txt_xmt_tweet_url_layout'),
-					'avatar' => array(
-						'show' => xmt_form_post('chk_xmt_tweet_avatar_show'),
-						'size' => array(
-							'w' => xmt_form_post('int_xmt_tweet_avatar_size_w'),
-							'h' => xmt_form_post('int_xmt_tweet_avatar_size_h')
-						)
-					),
-					'cache' => array(
-						'enable' => xmt_form_post('chk_xmt_tweet_cache_enable'),
-						'expiry' => xmt_form_post('int_xmt_tweet_cache_expire'),
-						'tweet_cache' => array(
-							'date' => 0,
-							'data' => array()
-						),
-						'profile_cache' => array(
-							'date' => 0,
-							'data' => array()
-						)								
-					)
-				),
-				'display_mode' => array(
-					'default' => array(
-						'enable' => (xmt_form_post('cbo_xmt_display_mode') == 'default')?1:0
-					),
-					'scrolling' => array(
-						'enable' => (xmt_form_post('cbo_xmt_display_mode') == 'scrolling')?1:0,
-						'height' => xmt_form_post('int_xmt_display_mode_scrolling_height'),
-						'animate' => array(
-							'enable' => xmt_form_post('chk_xmt_display_mode_scrolling_animate_enable'),
-							'direction' => xmt_form_post('cbo_xmt_display_mode_scrolling_animate_direction'),
-							'amount' => xmt_form_post('int_xmt_display_mode_scrolling_animate_amount'),
-							'delay' => xmt_form_post('int_xmt_display_mode_scrolling_animate_delay')
-						),
-					)
-				),
-				'css' => array(
-					'custom_css' => xmt_form_post('txa_xmt_css_custom_css'),
-				),
-				'other' => array(
-					'show_credit' => xmt_form_post('chk_xmt_other_show_credit'),
-					'convert_similies' => xmt_form_post('chk_xmt_other_convert_similies'),
-					'open_link_on_new_window' => xmt_form_post('chk_xmt_open_link_on_new_window')
-				),
+			$cfg = xmt_acc_cfg_get($acc_sel);
+			$tmp_cfg = array(
+				'ttl' => xmt_form_post('txt_xmt_ttl'),
+				'nme' => xmt_form_post('txt_xmt_nme'),
+				'lnk_ttl' => intval(xmt_form_post('chk_xmt_lnk_ttl')),
+				'hdr_sty' => xmt_form_post('cbo_xmt_hdr_sty'),
+				'cst_hdr_txt' => xmt_form_post('txa_xmt_hdr_txt'),
+				'cst_ftr_txt' => xmt_form_post('txa_xmt_ftr_txt'),
+				'twt_usr_nme' => xmt_form_post('txt_xmt_twt_usr_nme'),
+				'oah_use' => $cfg['oah_use'],
+				'oah_tkn' => $cfg['oah_tkn'],
+				'oah_sct' => $cfg['oah_sct'],
+				'ord' => xmt_form_post('cbo_xmt_ord'),	
+				'cnt' => intval(xmt_form_post('int_xmt_cnt')),
+				'gmt_add' => floatval(xmt_form_post('int_xmt_gmt_add')),
+				'dtm_fmt' => xmt_form_post('txt_xmt_dtm_fmt'),
+				'twt_lyt' => xmt_form_post('txa_xmt_twt_lyt'),
+				'shw_hrl' => intval(xmt_form_post('chk_xmt_shw_hrl')),
+				'shw_pst_frm' => intval(xmt_form_post('chk_xmt_shw_pst_frm')),
+				'shw_org_rtw' => intval(xmt_form_post('chk_xmt_shw_org_rtw')),
+				'twt_new_pst' => intval(xmt_form_post('chk_xmt_twt_new_pst')),
+				'twt_new_pst_lyt' => xmt_form_post('txa_xmt_twt_new_pst_lyt'),
+				'clc_usr_tag' => intval(xmt_form_post('chk_xmt_clc_usr_tag')),
+				'clc_hsh_tag' => intval(xmt_form_post('chk_xmt_clc_hsh_tag')),
+				'clc_url' => intval(xmt_form_post('chk_xmt_clc_url')),
+				'url_lyt' => xmt_form_post('txt_xmt_url_lyt'),
+				'avt_shw' => intval(xmt_form_post('chk_xmt_avt_shw')),
+				'avt_szw' => intval(xmt_form_post('int_xmt_avt_szw')),
+				'avt_szh' => intval(xmt_form_post('int_xmt_avt_szh')),
+				'inc_rpl_fru' => intval(xmt_form_post('chk_xmt_inc_rpl_fru')),
+				'inc_rpl_tou' => intval(xmt_form_post('chk_xmt_inc_rpl_tou')),
+				'inc_rtw' => intval(xmt_form_post('chk_xmt_inc_rtw')),
+				'inc_drc_msg' => intval(xmt_form_post('chk_xmt_inc_drc_msg')),
+				'cch_enb' => intval(xmt_form_post('chk_xmt_cch_enb')),
+				'cch_exp' => intval(xmt_form_post('int_xmt_cch_exp')),	
+				'thm' => xmt_form_post('cbo_xmt_thm'),
+				'cst_css' => xmt_form_post('txa_xmt_cst_css'),
+				'shw_crd' => intval(xmt_form_post('chk_xmt_shw_crd')),
+				'cvr_sml' => intval(xmt_form_post('chk_xmt_cvr_sml')),
+				'lnk_new_tab' => intval(xmt_form_post('chk_xmt_lnk_new_tab')),
+				'tmp_oah_tkn' => '',
+				'tmp_oah_sct' => ''
 			);
-						
-			$xmt_accounts[$sel_account] = $xmt_config;
-			update_option('xmt_accounts', $xmt_accounts);	
+
+			$path = xmt_base_dir.'/theme';		
+			$dir = dir($path);	
+			while($thm = $dir->read()){
+				if($thm == '.' || $thm == '..')
+					continue;
+				$target = $path.'/'.$thm.'/conf-set.php';
+				$tpl_cfg = array();
+				if(file_exists($target))
+					include $target;
+				$tmp_cfg = array_merge($tmp_cfg, $tpl_cfg);
+			}
+			$dir->close();
+
+			xmt_acc_cfg_upd($acc_sel, $tmp_cfg);
 			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
 		}
 				
-		ksort($xmt_accounts);
+		$acc_lst = xmt_acc_lst();
+		ksort($acc_lst);
 		
-		if($sel_account == '' || !isset($xmt_accounts[$sel_account])){
-			foreach($xmt_accounts as $acc=>$val){
-				$sel_account = $acc;		
+		if($acc_sel == '' || !isset($acc_lst[$acc_sel])){
+			foreach($acc_lst as $acc){
+				$acc_sel = $acc;		
 				break;
 			}
 		}	
@@ -259,7 +219,7 @@
 					obj.style.display = "none";
 			}
 			function show_mode_opt(){
-				var obj = document.getElementById("cbo_xmt_display_mode");				
+				var obj = document.getElementById("cbo_xmt_thm");				
 				var md_scrolling = document.getElementById("sct_md_scrolling");
 				
 				md_scrolling.style.display = "none";	
@@ -268,7 +228,7 @@
 					md_scrolling.style.display = "";	
 			}
 			function set_dt_fmt(fmt){
-				var obj = document.getElementById("txt_xmt_tweet_date_format");				
+				var obj = document.getElementById("txt_xmt_dtm_fmt");				
 				obj.value = fmt;
 			}
     	</script>
@@ -285,7 +245,7 @@
 			<br/>
             <?php xmt_check(); ?>
 			<form action="" method="post">
-				<?php if(count($xmt_accounts) == 0){ ?>
+				<?php if(count($acc_lst) == 0){ ?>
 					<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
 				<?php } ?>
 				
@@ -296,59 +256,55 @@
 				<table cellpadding="0" cellspacing="0">
 					<tr>
 						<td width="150px"><?php echo __('Name', 'xmt'); ?></td>
-						<td><input type="text" id="txt_xmt_account_name" name="txt_xmt_account_name" value="" style="width:200px"/></td>
+						<td><input type="text" id="txt_xmt_acc_nme" name="txt_xmt_acc_nme" value="" style="width:200px"/></td>
 					</tr>
 				</table>
 				<i><small><?php echo __('Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)', 'xmt'); ?></small></i><br/>
 				<i><small><?php echo __('Each profile will create a new widget to be placed to your sidebar/post/template code', 'xmt'); ?></small></i><br/>
-				<p class="submit"><input type="submit" name="cmd_xmt_create_profile" value="<?php echo __('Create Profile', 'xmt'); ?>"/></p>
+				<p class="submit"><input type="submit" name="cmd_xmt_crt_prf" value="<?php echo __('Create Profile', 'xmt'); ?>"/></p>
 			</form>
 			<br/>
-			<?php if(count($xmt_accounts) > 0){ ?>	
+			<?php if(count($acc_lst) > 0){ ?>	
 				<b><big><?php echo __('Profile Configuration', 'xmt'); ?></big></b><br/>
 				<br/>
 				<div id="icon-themes" class="icon32"><br /></div>
 				<h2>
-					<?php foreach($xmt_accounts as $acc=>$val){ ?>
-                		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$sel_account?'  nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
+					<?php foreach($acc_lst as $acc){ ?>
+                		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$acc_sel?'  nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
 					<?php } ?>
 				</h2>
                 <div class="clear" style="border-top:1px solid #CCC;margin-top:-3px;"/><br/>		
 			<?php } ?>
 					
 			<?php 
-				if(array_key_exists($sel_account, $xmt_accounts)){ 
+				if(in_array($acc_sel, $acc_lst)){ 
 					$conn = false;
-					$set = $xmt_accounts[$sel_account];
+					$cfg = xmt_acc_cfg_get($acc_sel);
 					
-					if($set['temp']['oauth_req_token'] != '' || $set['temp']['oauth_req_secret'] != ''){
-						$set['tweet']['oauth_use'] = 0;
+					if($cfg['tmp_oah_tkn'] != '' || $cfg['tmp_oah_sct'] != ''){
+						$cfg['oah_use'] = 0;
 							
-						$res = xmt_req('get-auth-token', $sel_account, array(
-							'ort' => $set['temp']['oauth_req_token'],
-							'ors' => $set['temp']['oauth_req_secret'],
+						$res = xmt_req('get-auth-token', $acc_sel, $cfg, array(
+							'ort' => $cfg['tmp_oah_tkn'],
+							'ors' => $cfg['tmp_oah_sct'],
 							'ov' => $_GET['oauth_verifier'],							
 						));
 						
-						$set['tweet']['oauth_token'] = $res['ot'];
-						$set['tweet']['oauth_secret'] = $res['os'];
+						$cfg['oah_tkn'] = $res['ot'];
+						$cfg['oah_sct'] = $res['os'];
 						
-						$set['temp']['oauth_req_token'] = '';
-						$set['temp']['oauth_req_secret'] = '';
-						
-						$xmt_accounts[$sel_account] = $set;
-						update_option('xmt_accounts', $xmt_accounts);	
-						
-						unset($_SESSION['xmt']);
+						$cfg['tmp_oah_tkn'] = '';
+						$cfg['tmp_oah_sct'] = '';
+												
+						xmt_acc_cfg_upd($acc_sel, $cfg);
 					}
 					
-					if($set['tweet']['oauth_token'] != '' && $set['tweet']['oauth_secret'] != ''){
-						$res_prof = xmt_req('get-profile', $sel_account);
+					if($cfg['oah_tkn'] != '' && $cfg['oah_sct'] != ''){
+						$res_prof = xmt_req('get-profile', $acc_sel, $cfg);
 						if(!count($res_prof['err'])){
-							$set['tweet']['username'] = $res_prof['scr_name'];
-							$set['tweet']['oauth_use'] = 1;
-							$xmt_accounts[$sel_account] = $set;
-							update_option('xmt_accounts', $xmt_accounts);
+							$cfg['twt_usr_nme'] = $res_prof['scr_name'];
+							$cfg['oah_use'] = 1;
+							xmt_acc_cfg_upd($acc_sel, $cfg);
 							$conn = true;			
 						}
 					}
@@ -356,17 +312,13 @@
 					$blog_url = get_option('siteurl');
 					if(substr($blog_url,-1) != '/')
 						$blog_url .= '/';
-					$url_cb = $blog_url.'wp-admin/admin.php?page=xhanch-my-twitter/admin/setting.php&profile='.$sel_account;
+					$url_cb = $blog_url.'wp-admin/admin.php?page=xhanch-my-twitter/admin/setting.php&profile='.$acc_sel;
 					
 					if(!$conn){
-						$res = xmt_req('reg', $sel_account, array('cb' => $url_cb));	
-						
-						
-						$set['temp']['oauth_req_token'] = $res['ort'];
-						$set['temp']['oauth_req_secret'] = $res['ors'];
-						
-						$xmt_accounts[$sel_account] = $set;
-						update_option('xmt_accounts', $xmt_accounts);	
+						$res = xmt_req('reg', $acc_sel, $cfg, array('cb' => $url_cb));							
+						$cfg['tmp_oah_tkn'] = $res['ort'];
+						$cfg['tmp_oah_sct'] = $res['ors'];		
+						xmt_acc_cfg_upd($acc_sel, $cfg);	
 					}					
 					
 			?>		
@@ -379,32 +331,32 @@
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td width="150px"><?php echo __('Title', 'xmt'); ?></td>
-							<td width="200px"><input type="text" id="txt_xmt_widget_title" name="txt_xmt_widget_title" value="<?php echo htmlspecialchars($set['widget']['title']); ?>" style="width:100%"/></td>
+							<td width="200px"><input type="text" id="txt_xmt_ttl" name="txt_xmt_ttl" value="<?php echo htmlspecialchars($cfg['ttl']); ?>" style="width:100%"/></td>
 							<td width="10px"></td>
 							<td width="150px"><?php echo __('Name', 'xmt'); ?></td>
-							<td width="200px"><input type="text" id="txt_xmt_widget_name" name="txt_xmt_widget_name" value="<?php echo htmlspecialchars($set['widget']['name']); ?>" style="width:100%"/></td>
+							<td width="200px"><input type="text" id="txt_xmt_nme" name="txt_xmt_nme" value="<?php echo htmlspecialchars($cfg['nme']); ?>" style="width:100%"/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Header style', 'xmt'); ?></td>
 							<td>
-								<select id="cbo_xmt_widget_header_style" name="cbo_xmt_widget_header_style" style="width:100%">
+								<select id="cbo_xmt_hdr_sty" name="cbo_xmt_hdr_sty" style="width:100%">
 									<?php foreach($arr_header_style as $key=>$row){ ?>
-										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($set['widget']['header_style']))?'selected="selected"':''; ?>><?php echo __($row, 'xmt'); ?></option>
+										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($cfg['hdr_sty']))?'selected="selected"':''; ?>><?php echo __($row, 'xmt'); ?></option>
 									<?php } ?>
 								</select>
 							</td>
 							<td></td>
 							<td><?php echo __('Turn title to link?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_widget_link_title" name="chk_xmt_widget_link_title" value="1" <?php echo ($set['widget']['link_title']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_lnk_ttl" name="chk_xmt_lnk_ttl" value="1" <?php echo ($cfg['lnk_ttl']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
 							<td colspan="5">
 								<?php echo __('Header text', 'xmt'); ?> (<a href="javascript:show_more('sct_text_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)
-								<textarea id="txa_xmt_widget_custom_text_header" name="txa_xmt_widget_custom_text_header" style="width:100%;height:40px"><?php echo htmlspecialchars($set['widget']['custom_text']['header']); ?></textarea>
+								<textarea id="txa_xmt_hdr_txt" name="txa_xmt_hdr_txt" style="width:100%;height:40px"><?php echo htmlspecialchars($cfg['cst_hdr_txt']); ?></textarea>
 								<br/>
 				
 								<?php echo __('', 'xmt'); ?>Footer text (<a href="javascript:show_more('sct_text_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)
-								<textarea id="txa_xmt_widget_custom_text_footer" name="txa_xmt_widget_custom_text_footer" style="width:100%;height:40px"><?php echo htmlspecialchars($set['widget']['custom_text']['footer']); ?></textarea>
+								<textarea id="txa_xmt_ftr_txt" name="txa_xmt_ftr_txt" style="width:100%;height:40px"><?php echo htmlspecialchars($cfg['cst_ftr_txt']); ?></textarea>
 								<br/>
                                 
                                 <div id="sct_text_var" style="display:none;">		
@@ -429,7 +381,7 @@
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td width="150px"><?php echo __('Username', 'xmt'); ?></td>
-							<td width="200px"><input type="text" <?php echo ($conn?'value="'.$res_prof['scr_name'].'" disabled="disabled"':'value="'.htmlspecialchars($set['tweet']['username']).'"'); ?> id="txt_xmt_tweet_username" name="txt_xmt_tweet_username" style="width:100%"/></td>
+							<td width="200px"><input type="text" <?php echo ($conn?'value="'.$res_prof['scr_name'].'" disabled="disabled"':'value="'.htmlspecialchars($cfg['twt_usr_nme']).'"'); ?> id="txt_xmt_twt_usr_nme" name="txt_xmt_twt_usr_nme" style="width:100%"/></td>
 							<td width="10px"></td>
 							<td width="150px"></td>
 							<td width="200px"></td>
@@ -437,40 +389,36 @@
 						<tr>
 							<td><?php echo __('Tweet order', 'xmt'); ?></td>
 							<td>
-								<select id="cbo_xmt_tweet_order" name="cbo_xmt_tweet_order" style="width:100%">
-									<?php foreach($arr_tweet_order as $key=>$row){ ?>
-										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($set['tweet']['order']))?'selected="selected"':''; ?>><?php echo __($row, 'xmt'); ?></option>
+								<select id="cbo_xmt_ord" name="cbo_xmt_ord" style="width:100%">
+									<?php foreach($arr_ord as $key=>$row){ ?>
+										<option value="<?php echo $key; ?>" <?php echo ($key==htmlspecialchars($cfg['ord']))?'selected="selected"':''; ?>><?php echo __($row, 'xmt'); ?></option>
 									<?php } ?>
 								</select>
 							</td>
 							<td></td>
 							<td><?php echo __('# Latest tweets', 'xmt'); ?></td>
-							<td><input type="text" id="int_xmt_tweet_count" name="int_xmt_tweet_count" value="<?php echo htmlspecialchars($set['tweet']['count']); ?>" size="5"  maxlength="3"/></td>
+							<td><input type="text" id="int_xmt_cnt" name="int_xmt_cnt" value="<?php echo htmlspecialchars($cfg['cnt']); ?>" size="5"  maxlength="3"/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Inc. replies to you?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_include_replies" name="chk_xmt_tweet_include_replies" value="1" <?php echo ($set['tweet']['include']['replies']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_inc_rpl_tou" name="chk_xmt_inc_rpl_tou" value="1" <?php echo ($cfg['inc_rpl_tou']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td><?php echo __('Inc. replies from you?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_include_replies_from_you" name="chk_xmt_tweet_include_replies_from_you" value="1" <?php echo ($set['tweet']['include']['replies_from_you']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_inc_rpl_fru" name="chk_xmt_inc_rpl_fru" value="1" <?php echo ($cfg['inc_rpl_fru']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Inc. retweet?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_include_retweet" name="chk_xmt_tweet_include_retweet" value="1" <?php echo ($set['tweet']['include']['retweet']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_inc_rtw" name="chk_xmt_inc_rtw" value="1" <?php echo ($cfg['inc_rtw']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td><?php echo __('Show origin retweet?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_show_origin_retweet" name="chk_xmt_tweet_show_origin_retweet" value="1" <?php echo ($set['tweet']['show_origin_retweet']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_shw_org_rtw" name="chk_xmt_shw_org_rtw" value="1" <?php echo ($cfg['shw_org_rtw']?'checked="checked"':''); ?>/></td>
 						</tr>
-						<!--<tr>
-							<td>Inc. direct messages?</td>
-							<td><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/></td>
-						</tr>-->
 						<tr>
 							<td><?php echo __('Date format', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_dt_fmt')"><?php echo __('more', 'xmt'); ?></a>)</td>
-							<td><input type="text" value="<?php echo htmlspecialchars($set['tweet']['date_format']); ?>" id="txt_xmt_tweet_date_format" name="txt_xmt_tweet_date_format" style="width:100%"/></td>
+							<td><input type="text" value="<?php echo htmlspecialchars($cfg['dtm_fmt']); ?>" id="txt_xmt_dtm_fmt" name="txt_xmt_dtm_fmt" style="width:100%"/></td>
 							<td></td>
 							<td><?php echo __('GMT add (in minutes)', 'xmt'); ?></td>
-							<td><input type="text" id="int_xmt_tweet_time_add" name="int_xmt_tweet_time_add" value="<?php echo intval($set['tweet']['time_add']); ?>" size="5"  maxlength="4"/></td>
+							<td><input type="text" id="int_xmt_gmt_add" name="int_xmt_gmt_add" value="<?php echo $cfg['gmt_add']; ?>" size="5"  maxlength="4"/></td>
 						</tr>
 						<tr id="sct_twt_dt_fmt" style="display:none;">
 							<td colspan="5">  
@@ -486,7 +434,7 @@
 						<tr>
 							<td colspan="5">
                             	<?php echo __('Tweet layout', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
-								<textarea id="txa_xmt_tweet_layout" name="txa_xmt_tweet_layout" style="width:100%;height:40px"><?php echo htmlspecialchars($set['tweet']['layout']); ?></textarea><br/>
+								<textarea id="txa_xmt_twt_lyt" name="txa_xmt_twt_lyt" style="width:100%;height:40px"><?php echo htmlspecialchars($cfg['twt_lyt']); ?></textarea><br/>
                                 <div id="sct_twt_layout_var" style="display:none;">		
                                     <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
                                     <ul>
@@ -509,41 +457,41 @@
 						</tr>
 						<tr>
 							<td><?php echo __('Clickable URL?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_url" name="chk_xmt_tweet_make_clickable_url" value="1" <?php echo ($set['tweet']['make_clickable']['url']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_clc_url" name="chk_xmt_clc_url" value="1" <?php echo ($cfg['clc_url']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td><?php echo __('Display URL as', 'xmt'); ?></td>
-							<td><input type="text" id="txt_xmt_tweet_url_layout" name="txt_xmt_tweet_url_layout" value="<?php echo $set['tweet']['url_layout']; ?>"/></td>
+							<td><input type="text" id="txt_xmt_url_lyt" name="txt_xmt_url_lyt" value="<?php echo $cfg['url_lyt']; ?>"/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Clickable user tag?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_user_tag" name="chk_xmt_tweet_make_clickable_user_tag" value="1" <?php echo ($set['tweet']['make_clickable']['user_tag']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_clc_usr_tag" name="chk_xmt_clc_usr_tag" value="1" <?php echo ($cfg['clc_usr_tag']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td><?php echo __('Clickable hash tag?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_make_clickable_hash_tag" name="chk_xmt_tweet_make_clickable_hash_tag" value="1" <?php echo ($set['tweet']['make_clickable']['hash_tag']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_clc_hsh_tag" name="chk_xmt_clc_hsh_tag" value="1" <?php echo ($cfg['clc_hsh_tag']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Show divider line?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_show_hr" name="chk_xmt_tweet_show_hr" value="1" <?php echo ($set['tweet']['show_hr']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_shw_hrl" name="chk_xmt_shw_hrl" value="1" <?php echo ($cfg['shw_hrl']?'checked="checked"':''); ?>/></td>
                             <td></td>
                             <td></td>
                             <td></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Show avatar?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_avatar_show" name="chk_xmt_tweet_avatar_show" value="1" <?php echo ($set['tweet']['avatar']['show']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_avt_shw" name="chk_xmt_avt_shw" value="1" <?php echo ($cfg['avt_shw']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td><?php echo __('Avatar size', 'xmt'); ?></td>
 							<td>
-								W: <input type="text" id="int_xmt_tweet_avatar_size_w" name="int_xmt_tweet_avatar_size_w" value="<?php echo $set['tweet']['avatar']['size']['w']; ?>" size="5"  maxlength="3"/> px; 
-								H:	<input type="text" id="int_xmt_tweet_avatar_size_h" name="int_xmt_tweet_avatar_size_h" value="<?php echo $set['tweet']['avatar']['size']['h']; ?>" size="5"  maxlength="3"/> px
+								W: <input type="text" id="int_xmt_avt_szw" name="int_xmt_avt_szw" value="<?php echo $cfg['avt_szw']; ?>" size="5" maxlength="3"/> px; 
+								H:	<input type="text" id="int_xmt_avt_szh" name="int_xmt_avt_szh" value="<?php echo $cfg['avt_szh']; ?>" size="5" maxlength="3"/> px
 							</td>
 						</tr>			
 						<tr>
 							<td><?php echo __('Enable Cache?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_tweet_cache_enable" name="chk_xmt_tweet_cache_enable" value="1" <?php echo ($set['tweet']['cache']['enable']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_cch_enb" name="chk_xmt_cch_enb" value="1" <?php echo ($cfg['cch_enb']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td><?php echo __('Cache Expiry (in minutes)', 'xmt'); ?></td>
-							<td><input type="text" id="int_xmt_tweet_cache_expire" name="int_xmt_tweet_cache_expire" value="<?php echo $set['tweet']['cache']['expiry']; ?>" size="5"  maxlength="3"/></td>
+							<td><input type="text" id="int_xmt_cch_exp" name="int_xmt_cch_exp" value="<?php echo $cfg['cch_exp']; ?>" size="5"  maxlength="3"/></td>
 						</tr>	
                         <tr><td colspan="5"><small><i><?php echo __('It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue', 'xmt'); ?></i></small></td></tr>
 					</table>
@@ -559,18 +507,18 @@
                     	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
                         <table cellpadding="0" cellspacing="0">
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_show_post_form" value="1" <?php echo ($set['tweet']['show_post_form']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin', 'xmt'); ?></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_inc_drc_msg" name="chk_xmt_shw_pst_frm" value="1" <?php echo ($cfg['shw_pst_frm']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin', 'xmt'); ?></td>
                             </tr>
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_include_direct_message" name="chk_xmt_tweet_include_direct_message" value="1" <?php echo ($set['tweet']['include']['direct_message']?'checked="checked"':''); ?>/> <?php echo __('Show/include direct messages', 'xmt'); ?></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_inc_drc_msg" name="chk_xmt_inc_drc_msg" value="1" <?php echo ($cfg['inc_drc_msg']?'checked="checked"':''); ?>/> <?php echo __('Show/include direct messages', 'xmt'); ?></td>
                             </tr>
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_tweet_tweet_new_post" name="chk_xmt_tweet_tweet_new_post" value="1" <?php echo ($set['tweet']['tweet_new_post']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new page/post', 'xmt'); ?></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_twt_new_pst" name="chk_xmt_twt_new_pst" value="1" <?php echo ($cfg['twt_new_pst']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new page/post', 'xmt'); ?></td>
                             </tr>
                             <tr>
                                 <td colspan="5">
                                     <?php echo __('Auto tweet layout', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_auto_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
-                                    <textarea id="txa_xmt_tweet_tweet_new_post_layout" name="txa_xmt_tweet_tweet_new_post_layout" style="width:100%;height:40px"><?php echo htmlspecialchars($set['tweet']['tweet_new_post_layout']); ?></textarea><br/>
+                                    <textarea id="txa_xmt_twt_new_pst_lyt" name="txa_xmt_twt_new_pst_lyt" style="width:100%;height:40px"><?php echo htmlspecialchars($cfg['twt_new_pst_lyt']); ?></textarea><br/>
                                     <div id="sct_twt_auto_layout_var" style="display:none;">		
                                         <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
                                         <ul>
@@ -594,16 +542,25 @@
                     <?php } ?>
                     <br/><br/>                    
 	
-					<b><?php echo __('Display Mode', 'xmt'); ?></b><br/>					
+					<b><?php echo __('Theme', 'xmt'); ?></b><br/>					
 					<br/>
 					<table cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="150px"><?php echo __('Selected mode', 'xmt'); ?></td>
-							<td width="200px">	
-								<select id="cbo_xmt_display_mode" name="cbo_xmt_display_mode" style="width:100%" onchange="show_mode_opt()">															
-								<?php foreach($set['display_mode'] as $key=>$val){ ?>
-									<option value="<?php echo $key; ?>" <?php echo ($val['enable'])?'selected="selected"':''; ?>><?php echo __(ucwords($key), 'xmt'); ?></option>									
-								<?php } ?>
+							<td width="150px"><?php echo __('Selected Theme', 'xmt'); ?></td>
+							<td width="200px">
+								<select id="cbo_xmt_thm" name="cbo_xmt_thm" style="width:100%" onchange="show_mode_opt()">															
+								<?php 
+									$path = xmt_base_dir.'/theme';		
+									$dir = dir($path);	
+									while($thm = $dir->read()){
+										if($thm == '.' || $thm == '..')
+											continue;
+								?>
+										<option value="<?php echo $thm; ?>" <?php echo ($thm==$cfg['thm'])?'selected="selected"':''; ?>><?php echo __(ucwords($thm), 'xmt'); ?></option>	
+								<?php
+									}
+									$dir->close();
+								?>
 								</select>
 							</td>
                             <td width="10px"></td>
@@ -612,37 +569,22 @@
 						</tr>
 						<tr>
 							<td colspan="5">
-                            	<div id="sct_md_scrolling" style="display:none;">	
-                                	<table cellpadding="0" cellspacing="0">
-                                		<tr>
-                                            <td width="150px"><?php echo __('Area Height', 'xmt'); ?></td>
-                                            <td width="200px"><input type="text" id="int_xmt_display_mode_scrolling_height" name="int_xmt_display_mode_scrolling_height" value="<?php echo $set['display_mode']['scrolling']['height']; ?>" size="5"  maxlength="5"/> px</td>
-                                            <td width="10px"></td>
-                                            <td width="150px"><?php echo __('Animate Scrolling?', 'xmt'); ?></td>
-                                            <td width="200px"><input type="checkbox" id="chk_xmt_display_mode_scrolling_animate_enable" name="chk_xmt_display_mode_scrolling_animate_enable" value="1" <?php echo ($set['display_mode']['scrolling']['animate']['enable']?'checked="checked"':''); ?>/></td>
-                                        </tr>
-                                        <tr>
-                                            <td><?php echo __('Scroll Amount', 'xmt'); ?></td>
-                                            <td><input type="text" id="int_xmt_display_mode_scrolling_animate_amount" name="int_xmt_display_mode_scrolling_animate_amount" value="<?php echo $set['display_mode']['scrolling']['animate']['amount']; ?>" size="5"  maxlength="5"/> px</td>
-                                            <td width="10px"></td>
-                                            <td><?php echo __('Scroll Delay', 'xmt'); ?></td>
-                                            <td><input type="text" id="int_xmt_display_mode_scrolling_animate_delay" name="int_xmt_display_mode_scrolling_animate_delay" value="<?php echo $set['display_mode']['scrolling']['animate']['delay']; ?>" size="5"  maxlength="5"/> ms</td>
-                                        </tr>
-                                        <tr>
-                                            <td><?php echo __('Direction', 'xmt'); ?></td>
-                                            <td>
-                                            	<select id="cbo_xmt_display_mode_scrolling_animate_direction" name="cbo_xmt_display_mode_scrolling_animate_direction" style="width:100%" onchange="show_mode_opt()">															
-												<?php foreach($arr_scroll_direction as $key=>$val){ ?>
-                                                    <option value="<?php echo $key; ?>" <?php echo ($set['display_mode']['scrolling']['animate']['direction']==$key)?'selected="selected"':''; ?>><?php echo __(ucwords($val), 'xmt'); ?></option>									
-                                                <?php } ?>
-                                                </select>
-                                            </td>
-                                            <td width="10px"></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                   	</table>
-                                </div>
+								<?php 
+									$path = xmt_base_dir.'/theme';		
+									$dir = dir($path);	
+									while($thm = $dir->read()){
+										if($thm == '.' || $thm == '..')
+											continue;
+										echo '<div id="sct_md_'.$thm.'" style="display:none;">';
+
+										$target = $path.'/'.$thm.'/conf-frm.php';										
+										if(file_exists($target))
+											require_once $target;
+										echo '</div>';										
+									}
+									$dir->close();
+								?>
+                            	
                                 <script type="text/javascript">show_mode_opt();</script>
                             </td>
 						</tr>						
@@ -654,7 +596,7 @@
 					<table cellpadding="0" cellspacing="0" width="710px">
 						<tr>
 							<td>
-                            	<textarea style="width:710px" rows="5" id="txa_xmt_css_custom_css" name="txa_xmt_css_custom_css"><?php echo $set['css']['custom_css']; ?></textarea><br/>
+                            	<textarea style="width:710px" rows="5" id="txa_xmt_cst_css" name="txa_xmt_cst_css"><?php echo $cfg['cst_css']; ?></textarea><br/>
                                 <i>
                                 	<?php echo __('{xmt_id} will be replaced with the DIV id for Xhanch - My Twitter Widget for this profile', 'xmt'); ?><br/>
                                     <a href="http://xhanch.com/wp-content/plugins/xhanch-my-twitter/css/css.css" target="_blank"><?php echo __('Need reference to set your custom CSS? Click here to view the default CSS codes', 'xmt'); ?></a>
@@ -668,14 +610,14 @@
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td width="150px"><?php echo __('Convert Smilies?', 'xmt'); ?></td>
-							<td width="200px"><input type="checkbox" id="chk_xmt_other_convert_similies" name="chk_xmt_other_convert_similies" value="1" <?php echo ($set['other']['convert_similies']?'checked="checked"':''); ?>/></td>
+							<td width="200px"><input type="checkbox" id="chk_xmt_cvr_sml" name="chk_xmt_cvr_sml" value="1" <?php echo ($cfg['cvr_sml']?'checked="checked"':''); ?>/></td>
 							<td width="10px"></td>
 							<td width="150px"><?php echo __('Open link in new tab?', 'xmt'); ?></td>
-							<td width="200px"><input type="checkbox" id="chk_xmt_open_link_on_new_window" name="chk_xmt_open_link_on_new_window" value="1" <?php echo ($set['other']['open_link_on_new_window']?'checked="checked"':''); ?>/></td>
+							<td width="200px"><input type="checkbox" id="chk_xmt_lnk_new_tab" name="chk_xmt_lnk_new_tab" value="1" <?php echo ($cfg['lnk_new_tab']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Show credit?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_other_show_credit" name="chk_xmt_other_show_credit" value="1" <?php echo ($set['other']['show_credit']?'checked="checked"':''); ?>/></td>
+							<td><input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'checked="checked"':''); ?>/></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -701,11 +643,11 @@
 		'before_title' => '',
 		'after_title' => '',
     );
-    xmt($args, '<?php echo $sel_account; ?>');
+    xmt($args, '<?php echo $acc_sel; ?>');
 ?&gt;</textarea><br/></div><br/>
                             	<a href="javascript:show_more('sct_scc_code')"><?php echo __('Show/hide paste-able code code (WordPress short code version)', 'xmt'); ?></a>                                
                                 <div id="sct_scc_code" style="display:none;">	
-                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xmt profile=<?php echo $sel_account; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/></div>
+                            	<textarea style="width:710px" onfocus="this.select()" onclick="this.select()" rows="2" readonly="readonly">[xmt profile=<?php echo $acc_sel; ?> before_widget="" after_widget="" before_title="" after_title=""]</textarea><br/><br/></div>
                                 
                             </td>
 						</tr>
@@ -723,12 +665,12 @@
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <td width="150px"><?php echo __('New Profile Name', 'xmt'); ?></td>
-                            <td><input type="text" id="txt_xmt_account_name" name="txt_xmt_account_name" value="" style="width:200px"/></td>
+                            <td><input type="text" id="txt_xmt_acc_nme" name="txt_xmt_acc_nme" value="" style="width:200px"/></td>
                         </tr>
                   	</table>
 					
 					<p class="submit">
-						<input type="submit" name="cmd_xmt_duplicate_profile" value="<?php echo __('Duplicate Profile', 'xmt'); ?>"/>
+						<input type="submit" name="cmd_xmt_dpl_prf" value="<?php echo __('Duplicate Profile', 'xmt'); ?>"/>
 					</p>
 				</form>
 			<?php } ?>		

@@ -1,17 +1,17 @@
 <?php
 	// Get Reply
-	if(intval($cfg['tweet']['include']['replies'])) {
-		$rep_req = xmt_req('get-reply', $profile, array('limit' => $limit), false);
-		$arr = xmt_split_xml($profile, $arr, $rep_req, 'reply');
+	if($cfg['inc_rpl_tou']) {
+		$req = xmt_req('get-reply', $acc, $cfg, array('limit' => $lmt), false);
+		$arr = xmt_split_xml($acc, $cfg, $arr, $req, 'reply');
 	}
 	
 	// Get Direct Message
-	if(intval($cfg['tweet']['include']['direct_message'])) {
-		$rep_req = xmt_req('get-direct-message', $profile, array('limit' => $limit), false);
-		$arr = xmt_split_xml($profile, $arr, $rep_req, 'direct_message');
+	if($cfg['inc_drc_msg']) {
+		$req = xmt_req('get-direct-message', $acc, $cfg, array('limit' => $lmt), false);
+		$arr = xmt_split_xml($acc, $cfg, $arr, $req, 'direct_message');
 	}
 	
 	// Get Tweet
-	$req = xmt_req('get-tweet', $profile, array('limit' => $limit, 'inc_rts' => intval($cfg['tweet']['include']['retweet'])), false);
-	$arr = xmt_split_xml($profile, $arr, $req, 'tweet');	
+	$req = xmt_req('get-tweet', $acc, $cfg, array('limit' => $lmt, 'inc_rts' => $cfg['inc_rtw']), false);
+	$arr = xmt_split_xml($acc, $cfg, $arr, $req, 'tweet');	
 ?>

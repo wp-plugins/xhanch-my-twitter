@@ -5,113 +5,78 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.4.7
+		Version: 2.4.8
 	*/
 	
 	define('xmt', true);
 	define('xmt_base_dir', dirname(__FILE__));
 		
-	global $xmt_timed;
-	global $xmt_accounts;
-	global $xmt_default;
+	global $xmt_tmd;
+	global $xmt_cfg_def;
 		
 	load_plugin_textdomain('xmt', WP_PLUGIN_URL.'/xhanch-my-twitter/lang/', 'xhanch-my-twitter/lang/');
-		
-	$xmt_default = array(
-		'widget' => array(
-			'title' => 'Latest Tweets',
-			'name' => '',
-			'link_title' => 0,
-			'header_style' => 'default',
-			'custom_text' => array(
-				'header' => '',
-				'footer' => ''
-			)
-		),
-		'tweet' => array(
-			'username' => '',
-			'oauth_use' => 0,
-			'oauth_token' => '',
-			'oauth_secret' => '',
-			'order' => 'lto',	
-			'count' => '5',
-			'time_add' => '0',
-			'date_format' => 'd/m/Y H:i:s',
-			'layout' => '@tweet - posted on @date',
-			'show_hr' => 0,
-			'show_post_form' => 1,
-			'show_origin_retweet' => 0,
-			'tweet_new_post' => 0,
-			'tweet_new_post_layout' => '@title - @url',
-			'make_clickable' => array(
-				'user_tag' => 1,
-				'hash_tag' => 1,
-				'url' => 1
-			),
-			'url_layout' => '',
-			'avatar' => array(
-				'show' => 1,
-				'size' => array(
-					'w' => 0,
-					'h' => 0
-				)
-			),
-			'include' => array(
-				'replies' => 0,
-				'replies_from_you' => 0,
-				'retweet' => 0,
-				'direct_message' => 0
-			),
-			'cache' => array(
-				'enable' => 1,
-				'expiry' => 60,
-				'tweet_cache' => array(
-					'date' => 0,
-					'data' => array()
-				),
-				'profile_cache' => array(
-					'date' => 0,
-					'data' => array()
-				)								
-			)
-		),
-		'display_mode' => array(
-			'default' => array(
-				'enable' => 1
-			),
-			'scrolling' => array(
-				'enable' => 0,
-				'height' => 200,
-				'animate' => array(
-					'enable' => 0,
-					'direction' => 'up',
-					'amount' => 1,
-					'delay' => 50
-				),
-			)
-		),
-		'css' => array(
-			'custom_css' => ''
-		),
-		'other' => array(
-			'show_credit' => 1,
-			'convert_similies' => 1,
-			'open_link_on_new_window' => 1,
-		),
-		'temp' => array(
-			'oauth_req_token' => '',
-			'oauth_req_secret' => '',			
-		)
-	);
-		
-	$xmt_accounts = get_option('xmt_accounts');
-	if($xmt_accounts === false)
-		$xmt_accounts = array();	
-		
-	if(!is_array($xmt_accounts))
-		$xmt_accounts = array();	
 	
-	foreach($xmt_accounts as $acc=>$acc_set){
+	xmt_inc('inc');
+		
+	$xmt_cfg_def = array(
+		'ttl' => 'Latest Tweets',
+		'nme' => '',
+		'lnk_ttl' => 0,
+		'hdr_sty' => 'default',
+		'cst_hdr_txt' => '',
+		'cst_ftr_txt' => '',
+		'twt_usr_nme' => '',
+		'oah_use' => 0,
+		'oah_tkn' => '',
+		'oah_sct' => '',
+		'ord' => 'lto',	
+		'cnt' => '5',
+		'gmt_add' => '0',
+		'dtm_fmt' => 'd/m/Y H:i:s',
+		'twt_lyt' => '@tweet - posted on @date',
+		'shw_hrl' => 0,
+		'shw_pst_frm' => 1,
+		'shw_org_rtw' => 0,
+		'twt_new_pst' => 0,
+		'twt_new_pst_lyt' => '@title - @url',
+		'clc_usr_tag' => 1,
+		'clc_hsh_tag' => 1,
+		'clc_url' => 1,
+		'url_lyt' => '',
+		'avt_shw' => 1,
+		'avt_szw' => 0,
+		'avt_szh' => 0,
+		'inc_rpl_fru' => 0,
+		'inc_rpl_tou' => 0,
+		'inc_rtw' => 0,
+		'inc_drc_msg' => 0,
+		'cch_enb' => 1,
+		'cch_exp' => 60,	
+		'thm' => 'default',
+		'cst_css' => '',
+		'shw_crd' => 1,
+		'cvr_sml' => 1,
+		'lnk_new_tab' => 1,
+		'tmp_oah_tkn' => '',
+		'tmp_oah_sct' => ''
+	);
+	$path = xmt_base_dir.'/theme';		
+	$dir = dir($path);	
+	while($thm = $dir->read()){
+		if($thm == '.' || $thm == '..')
+			continue;
+		$target = $path.'/'.$thm.'/conf.php';
+		$tpl_cfg = array();
+		if(file_exists($target))
+			require_once $target;
+		$xmt_cfg_def = array_merge($xmt_cfg_def, $tpl_cfg);
+	}
+	$dir->close();
+
+	define('xmt_base_url', xmt_get_dir('url'));
+
+	$acc_lst = xmt_acc_lst();	
+	foreach($acc_lst as $acc){
 		$php_wid_function = '
 			function widget_xmt_'.$acc.'($args){
 				widget_xmt($args, \''.$acc.'\');
@@ -120,71 +85,54 @@
 				widget_xmt_control(\''.$acc.'\');
 			}
 		';
-		eval($php_wid_function);
+		eval($php_wid_function);	
 		
-		if($acc_set['display_mode']['scrolling']['enable'] && $acc_set['display_mode']['scrolling']['animate']['enable']){
-			add_action('init', 'xmt_init');}
+		wp_register_sidebar_widget('xmt_'.$acc, __('Xhanch - My Twitter', 'xmt').' : '.$acc, 'widget_xmt_'.$acc);
+		register_widget_control('xmt_'.$acc, 'widget_xmt_control_'.$acc, 300, 200 );
 	}
 	
 	function xmt_install () {
 		require_once(xmt_base_dir.'/installer.php');
 	}
 	register_activation_hook(__FILE__,'xmt_install');
-	
-	function xmt_init() {
-		if (!is_admin()) {
-			wp_enqueue_script('jquery');
-			wp_enqueue_script('xmt_marquee', xmt_get_dir('url').'/js/marquee.js');
-		}
-	}
-	
-	xmt_inc('inc');
-	
-	define('xmt_base_url', xmt_get_dir('url'));
-	
-	function xmt_css_cst($profile){
-		global $xmt_accounts;
-		$cfg = $xmt_accounts[$profile];
-						
-		$avatar_width = intval($cfg['tweet']['avatar']['size']['w']);
-		$avatar_height = intval($cfg['tweet']['avatar']['size']['h']);
-		$show_avatar = intval($cfg['tweet']['avatar']['show']);
-		$custom_css = $cfg['css']['custom_css'];
-				
-		if($avatar_width && $avatar_height){
-			$css .= '#xmt_'.$profile.'_wid.xmt .tweet_avatar{width:'.$avatar_width.'px;height:'.$avatar_height.'px} ';
-			if($show_avatar)
-				$css .= '#xmt_'.$profile.'_wid.xmt ul li.tweet_list{min-height:'.($avatar_height+7).'px} ';
-		}else{
-			if($show_avatar)
-				$css .= '#xmt_'.$profile.'_wid.xmt ul li.tweet_list{min-height:57px} ';
-		}
-		
-		if($custom_css){
-			$custom_css = str_replace('{xmt_id}', '#xmt_'.$profile.'_wid', $custom_css);
-			$css .= $custom_css.' ';
-		}
-		
-		if($css)
-			echo '<style type="text/css">/*<![CDATA[*/ '.$css.' /*]]>*/</style>';	
-	}
-	
-	function xmt_css(){	
-		global $xmt_accounts;
-		
-		$profiles = array_keys($xmt_accounts);
+			
+	function xmt_css(){			
 		echo '<link rel="stylesheet" href="'.xmt_get_dir('url').'/css/css.php" type="text/css" media="screen" />';
 		
-		foreach($xmt_accounts as $acc=>$acc_set)
-			xmt_css_cst($acc);		
+		$acc_lst = xmt_acc_lst();
+		foreach($acc_lst as $acc){
+			$cfg = xmt_acc_cfg_get($acc);
+
+			$avt_szw = intval($cfg['avt_szw']);
+			$avt_szh = intval($cfg['avt_szh']);
+			$avt_shw = intval($cfg['avt_shw']);
+			$cst_css = $cfg['cst_css'];
+					
+			if($avt_szw && $avt_szh){
+				$css .= '#xmt_'.$acc.'_wid.xmt .tweet_avatar{width:'.$avt_szw.'px;height:'.$avt_szh.'px} ';
+				if($avt_shw)
+					$css .= '#xmt_'.$acc.'_wid.xmt ul li.tweet_list{min-height:'.($avt_szh+7).'px} ';
+			}else{
+				if($avt_shw)
+					$css .= '#xmt_'.$acc.'_wid.xmt ul li.tweet_list{min-height:57px} ';
+			}
+			
+			if($cst_css){
+				$cst_css = str_replace('{xmt_id}', '#xmt_'.$acc.'_wid', $cst_css);
+				$css .= $cst_css.' ';
+			}
+			
+			if($css)
+				echo '<style type="text/css">/*<![CDATA[*/ '.$css.' /*]]>*/</style>';
+		}		
 	}
 	add_action('wp_print_styles', 'xmt_css');
 
-	function xmt($args = array(), $profile){	
-		widget_xmt($args, $profile);
+	function xmt($args = array(), $acc){	
+		widget_xmt($args, $acc);
 	}
 
-	function xmt_short_code($atts) {
+	function xmt_short_code($atts){
 		extract(shortcode_atts(array(
 			'before_widget' => '',
 			'after_widget' => '',
@@ -201,215 +149,80 @@
 		);
 		
 		ob_start();
-		xmt($args, $profile);
+		xmt($args, $acc);
 		$res = ob_get_contents();
 		ob_end_clean();
 		
 		return $res;
 	}
-	
+
 	if(function_exists('add_shortcode'))
 		add_shortcode('xmt', 'xmt_short_code');
 	
-	function widget_xmt($args, $profile){		
-		global $xmt_timed;
-		global $xmt_accounts;
+	function widget_xmt($args, $acc){
+		global $xmt_tmd;
 				
-		$xmt_timed = time();
-		
+		$xmt_tmd = time();		
 		xmt_log('Starting to generate output');		
 
-		if(!array_key_exists($profile, $xmt_accounts))
-			return;
-		$cfg = $xmt_accounts[$profile];
+		$cfg = xmt_acc_cfg_get($acc);
 		
 		extract($args);
 		
 		$cur_role = xmt_get_role();
-		$allow_tweet = false;
+		$alw_twt = false;
 		$msg = '';
 		
-		if($cur_role == 'administrator' && $cfg['tweet']['oauth_use'] && $cfg['tweet']['show_post_form'])
-			$allow_tweet = true;
+		if($cur_role == 'administrator' && $cfg['oah_use'] && $cfg['shw_pst_frm'])
+			$alw_twt = true;
 		
-		if($allow_tweet && isset($_POST['cmd_xmt_'.$profile.'_post'])){
-			$t_tweet = trim(xmt_form_post('txa_xmt_'.$profile.'_tweet'));
+		if($alw_twt && isset($_POST['cmd_xmt_'.$acc.'_post'])){
+			$t_tweet = trim(xmt_form_post('txa_xmt_'.$acc.'_tweet'));
 			if($t_tweet == '')
 				$msg = 'Your tweet is empty!';
 			if(strlen($t_tweet) > 140)
 				$msg = 'Your tweet exceeds 140 characters!';
 			if($msg == ''){			
-				xmt_req('post-tweet', $profile,array('tweet' => $t_tweet), false);
+				xmt_req('post-tweet', $acc, $cfg, array('tweet' => $t_tweet), false);
 				$msg = 'Your tweet has been posted';
-				
-				$cfg['tweet']['cache']['tweet_cache']['date'] = 0;
-				$xmt_accounts[$profile] = $cfg;
-				update_option('xmt_accounts', $xmt_accounts);
+				xmt_twt_cch_rst($acc);
 			}
 		}
 		
-		$res = xmt_get_tweets($profile);
+		$res = xmt_twt_get($acc, $cfg);		
 		
-		$tweet_string = $cfg['tweet']['layout'];
-		$show_avatar = intval($cfg['tweet']['avatar']['show']);
-		
-		$link_on_title = intval($cfg['widget']['link_title']);
-		$show_hr = intval($cfg['tweet']['show_hr']);	
-		
-		$scroll_cfg = $cfg['display_mode']['scrolling'];
-		$scroll_mode = intval($scroll_cfg['enable']);
-		$scroll_h = intval($scroll_cfg['height']);
-        $scroll_ani = intval($scroll_cfg['animate']['enable']);
-		$scroll_ani_amount = intval($scroll_cfg['animate']['amount']);
-		$scroll_ani_delay = intval($scroll_cfg['animate']['delay']);
-        $scroll_ani_dir = $scroll_cfg['animate']['direction'];	
-		
-		$new_tab_link = intval($cfg['other']['open_link_on_new_window']);	
-		
-		$username = $cfg['tweet']['username'];
-				
-		xmt_timed('Build Body - Start');
-		if(count($res) == 0) 
-			return;		
-		echo $before_widget;
-		if ($cfg['widget']['title'] != ''){
-			echo $before_title;
-			
-			if($link_on_title)
-				echo '<a href="http://twitter.com/'.$username.'" rel="external nofollow" '.($new_tab_link?'target="_blank"':'').'>';
-			echo $cfg['widget']['title'];
+		$tpl = xmt_base_dir.'/theme/'.$cfg['thm'].'/widget.php';
+		if(!file_exists($tpl))
+			$tpl = xmt_base_dir.'/theme/default/widget.php';
 
-			if($link_on_title)
-				echo '</a>';
-			
-			echo $after_title;		
-		}
-
-		echo '<div id="xmt_'.$profile.'_wid" class="xmt xmt_'.$profile.'">';
-		xmt_header_style($profile);
-
-		echo xmt_replace_vars($cfg['widget']['custom_text']['header'], $profile);
+		include $tpl;
 		
-		if($allow_tweet){
-			echo '<a name="xmt_'.$profile.'"></a>';
-			if($msg)
-				echo '<div>'.__($msg, 'xmt').'</div>';
-			echo '<form action="#xmt_'.$profile.'" method="post">'.__('What\'s happening?', 'xmt').'<br/><textarea name="txa_xmt_'.$profile.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$profile.'_post" value="'.__('Tweet', 'xmt').'"/><div class="clear"></div></form>';
-		}
-
-		if($scroll_mode){
-			if($scroll_ani){
-				echo '<div id="xmt_'.$profile.'_tweet_area_cont" style="height:'.$scroll_h.'px;overflow:hidden;position:relative"><div id="xmt_'.$profile.'_tweet_area">';
-			}else{
-				echo '<div style="max-height:'.$scroll_h.'px;overflow:auto">';		
-			}
-		} 
-		echo '<ul class="tweet_area">';
-		$tweet_string = convert_smilies(html_entity_decode($tweet_string));
-		foreach($res as $sts_id=>$row){			
-			echo '<li class="tweet_list">';
-				if($show_hr) 
-					echo '<hr />';
-				
-				if($show_avatar){					
-					echo '<a href="'.$row['author_url'].'" '.($new_tab_link?'target="_blank"':'').'><img '.$avatar_style.' class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
-				}
-							
-				$status_link = 'http://twitter.com/'.$row['author'].'/status/'.$sts_id;
-				$retweet_link = 'http://twitter.com/home?status='.urlencode('RT @'.$row['author'].' '.strip_tags($row['tweet']));
-				$reply_link = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&amp;in_reply_to_status_id='.$sts_id.'&amp;in_reply_to='.urlencode($row['author']);
-				
-				$tmp_str = str_replace('@screen_name_plain', $row['author'], $tweet_string);
-				$tmp_str = str_replace('@screen_name', '<a href="'.$row['author_url'].'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.$row['author'].'</a>', $tmp_str);
-				$tmp_str = str_replace('@name_plain', $row['author_name'], $tmp_str);
-				$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
-				$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
-				$tmp_str = str_replace('@source', $row['source'], $tmp_str);
-				$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
-				$tmp_str = str_replace('@reply_url', $reply_link, $tmp_str);
-				$tmp_str = str_replace('@reply_link', '<a href="'.$reply_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.__('reply', 'xmt').'</a>', $tmp_str);
-				$tmp_str = str_replace('@retweet_url', $retweet_link, $tmp_str);
-				$tmp_str = str_replace('@retweet_link', '<a href="'.$retweet_link.'"  '.($new_tab_link?'target="_blank"':'').' rel="external nofollow">'.__('retweet', 'xmt').'</a>', $tmp_str);
-				$tmp_str = str_replace('@status_url', $status_link, $tmp_str);
-				
-				echo $tmp_str;
-			echo '</li>';
-		}
-		echo '</ul>';
-		if($show_hr) 
-			echo '<hr />';
-		if($scroll_mode){
-			if($scroll_ani){
-				$pos_str = '';
-				if($scroll_ani_dir == 'down')
-					$pos_str = 'xmt_'.$profile.'_ta.style.top = xmt_'.$profile.'_ta_limit + "px";';
-				else
-					$pos_str = 'xmt_'.$profile.'_ta.style.top = '.$scroll_h.' + "px";';
-					
-				echo '</div></div>';							
-				echo '
-					<script language="javascript" type="text/javascript">
-						//<![CDATA[
-							jQuery(document).ready(function(){
-								var xmt_'.$profile.'_ta = document.getElementById("xmt_'.$profile.'_tweet_area");
-								var xmt_'.$profile.'_ta_limit = xmt_'.$profile.'_ta.offsetHeight * -1;							
-								$xmt_marquee.config.refresh = '.$scroll_ani_delay.';
-								$xmt_marquee.add("#xmt_'.$profile.'_tweet_area_cont","#xmt_'.$profile.'_tweet_area","'.$scroll_ani_dir.'",'.$scroll_ani_amount.',true);
-								'.$pos_str.'
-								$xmt_marquee.start();
-							})
-						//]]>
-					</script>
-				';
-			}else
-				echo '</div>';			
-		} 
-					
-		echo xmt_replace_vars($cfg['widget']['custom_text']['footer'], $profile); 
-
-		if ($cfg['other']['show_credit']){
-			echo '<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="'.__('Xhanch My Twitter - The best WordPress plugin to integrate your WordPress website with your Twitter accounts', 'xmt').'">'.__('My Twitter', 'xmt').'</a>, <a href="http://xhanch.com/" rel="section" title="'.__('Developed by Xhanch Studio', 'xmt').'">'.__('by Xhanch', 'xmt').'</a></div>';
-		}
-		echo '</div>';
-		echo $after_widget;
-		xmt_timed('Build Body - Finished');
-		xmt_timed('Finished');
+		xmt_tmd('Finished');
 	}
 
-	function widget_xmt_control($id){	
+	function widget_xmt_control($acc){	
 ?>
-		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo $id; ?>"><?php echo __('Click here to configure this plugin', 'xmt'); ?></a>
+		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo $acc; ?>"><?php echo __('Click here to configure this plugin', 'xmt'); ?></a>
 <?php		
 	}
-
-	function widget_xmt_init(){
-		global $xmt_accounts;
-		foreach($xmt_accounts as $acc=>$acc_set){
-			wp_register_sidebar_widget('xmt_'.$acc, __('Xhanch - My Twitter', 'xmt').' : '.$acc, 'widget_xmt_'.$acc);
-			register_widget_control('xmt_'.$acc, 'widget_xmt_control_'.$acc, 300, 200 );
-		}
-	}
-	add_action("plugins_loaded", "widget_xmt_init");
 		
 	function xmt_tweet_post($post_id){
-		global $xmt_accounts;
 		$info = get_post($post_id);
 		$url = get_permalink($post_id);		
-			
-		//$t_tweet = $info->post_title.' - '.$url;
-		
-		foreach($xmt_accounts as $profile=>$cfg){				
-			if($cfg['tweet']['oauth_use'] && $cfg['tweet']['tweet_new_post']){
-				$t_tweet = $cfg['tweet']['tweet_new_post_layout'];
+
+		$acc_lst = xmt_acc_lst();
+		foreach($acc_lst as $acc){	
+			$cfg = xmt_acc_cfg_get($acc);
+			if($cfg['oah_use'] && $cfg['twt_new_pst']){
+				$t_tweet = $cfg['twt_new_pst_lyt'];
 				
 				$t_tweet = str_replace('@title', $info->post_title, $t_tweet);
 				$t_tweet = str_replace('@url', $url, $t_tweet);
 				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content),0,100), $t_tweet);
 				
-				xmt_req('post-tweet', $profile, array('tweet' => $t_tweet), false);				
-				$cfg['tweet']['cache']['tweet_cache']['date'] = 0;
-				$xmt_accounts[$profile] = $cfg;
-				update_option('xmt_accounts', $xmt_accounts);
+				xmt_req('post-tweet', $acc, array('tweet' => $t_tweet), false);		
+				
+				xmt_twt_cch_rst($acc);
 			}
 		}
 	}
