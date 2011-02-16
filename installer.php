@@ -5,7 +5,7 @@
 	global $wpdb;
 	global $xmt_cfg_def;
 				
-	$ver = get_option('xmt_ver');
+	$ver = get_option('xmt_vsn');
 	if(!$ver){
 		$sql = '
 			create table if not exists '.$wpdb->prefix.'xmt(
@@ -71,7 +71,7 @@
 		}
 		
 		$ver = '1.0.0';
-		update_option('xmt_ver', $ver);
+		update_option('xmt_vsn', $ver);
 	}
 
 	$acc_lst = xmt_acc_lst();	

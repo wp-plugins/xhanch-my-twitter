@@ -42,7 +42,7 @@
 	$twt_lyt = $cfg['twt_lyt'];
 	$twt_lyt = convert_smilies(html_entity_decode($twt_lyt));
 
-	foreach($res as $sts_id=>$row){			
+	foreach($res as $sts_id=>$row){
 		echo '<li class="tweet_list">';
 			if($show_hr) 
 				echo '<hr />';
