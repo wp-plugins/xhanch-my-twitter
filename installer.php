@@ -22,6 +22,8 @@
 		';
 		$wpdb->query($sql);
 
+		//This part is to import old settings/profiles but seem like it cause problems to some people
+/*
 		$xmt_acc_old = get_option('xmt_accounts');
 		if($xmt_acc_old !== false){
 			foreach($xmt_acc_old as $acc_nme=>$acc_cfg){
@@ -69,7 +71,7 @@
 				xmt_acc_add($acc_nme, $tmp_cfg);
 			}
 		}
-		
+*/	
 		$ver = '1.0.0';
 		update_option('xmt_vsn', $ver);
 	}
