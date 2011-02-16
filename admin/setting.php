@@ -190,7 +190,7 @@
 		$acc_lst = xmt_acc_lst();
 		ksort($acc_lst);
 		
-		if($acc_sel == '' || !isset($acc_lst[$acc_sel])){
+		if($acc_sel == '' || !in_array($acc_sel, $acc_lst)){
 			foreach($acc_lst as $acc){
 				$acc_sel = $acc;		
 				break;
@@ -270,7 +270,7 @@
 				<div id="icon-themes" class="icon32"><br /></div>
 				<h2>
 					<?php foreach($acc_lst as $acc){ ?>
-                		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$acc_sel?'  nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
+                		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$acc_sel?' nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
 					<?php } ?>
 				</h2>
                 <div class="clear" style="border-top:1px solid #CCC;margin-top:-3px;"/><br/>		
