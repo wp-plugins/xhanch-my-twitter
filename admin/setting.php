@@ -103,8 +103,7 @@
 						xmt_acc_add($acc_name, xmt_acc_cfg_get($acc_name));		
 						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$acc_sel.'</b> has been duplicated as <b>'.$acc_name.'</b>', 'xmt').'</p></div>';	
 					}else{
-						xmt_acc_add($acc_name, $xmt_cfg_def);
-						update_option('xmt_accounts', $acc_lst);			
+						xmt_acc_add($acc_name, $xmt_cfg_def);		
 						echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
 					}
 				}
