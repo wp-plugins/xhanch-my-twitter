@@ -93,9 +93,9 @@
 				
 			@include xmt_base_dir.'/method/'.$method.'/build-list.php';
 				
-			if(!intval($cfg['inc_rpl_fru'])){
+			if(!$cfg['inc_rpl_fru']){
 				foreach($arr as $sts_id=>$val){
-					if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] == $uid)
+					if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] != $cfg['tweet']['username'])
 						unset($arr[$sts_id]);					
 				}
 				
@@ -110,7 +110,7 @@
 					include xmt_base_dir.'/method/'.$method.'/build-list.php';
 										
 					foreach($arr as $sts_id=>$val){
-						if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] == $uid)
+						if(substr(strip_tags($val['tweet']),0,1) == '@' && $val['author'] != $cfg['tweet']['username'])
 							unset($arr[$sts_id]);
 					}
 					

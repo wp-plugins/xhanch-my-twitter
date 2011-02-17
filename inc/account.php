@@ -45,7 +45,7 @@
 	function xmt_acc_del($acc){
 		global $wpdb;
 		$sql = '
-			delete from '.$wpdb->prefix.'xmt(
+			delete from '.$wpdb->prefix.'xmt
 			where nme = '.xmt_sql_str($acc).'
 		';
 		 $wpdb->query($sql);

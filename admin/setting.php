@@ -184,7 +184,61 @@
 			$dir->close();
 
 			xmt_acc_cfg_upd($acc_sel, $tmp_cfg);
+			xmt_twt_cch_rst($acc_sel);
+			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
+		}elseif(isset($_POST['cmd_xmt_migrate_profile'])){
+			$acc_lst = xmt_acc_lst();
+			$xmt_acc_old = get_option('xmt_accounts');var_dump($xmt_acc_old);
+			if($xmt_acc_old !== false){
+				foreach($xmt_acc_old as $acc_nme=>$acc_cfg){
+					$tmp_cfg = $xmt_cfg_def;
+					
+					$tmp_cfg['ttl'] = $acc_cfg['widget']['title'];
+					$tmp_cfg['nme'] = $acc_cfg['widget']['name'];
+					$tmp_cfg['lnk_ttl'] = $acc_cfg['widget']['link_title'];
+					$tmp_cfg['hdr_sty'] = $acc_cfg['widget']['header_style'];
+					$tmp_cfg['cst_hdr_txt'] = $acc_cfg['widget']['custom_text']['header'];
+					$tmp_cfg['cst_ftr_txt'] = $acc_cfg['widget']['custom_text']['footer'];
+					$tmp_cfg['twt_usr_nme'] = $acc_cfg['tweet']['username'];
+					$tmp_cfg['oah_use'] = $acc_cfg['tweet']['oauth_use'];
+					$tmp_cfg['oah_tkn'] = $acc_cfg['tweet']['oauth_token'];
+					$tmp_cfg['oah_sct'] = $acc_cfg['tweet']['oauth_secret'];
+					$tmp_cfg['ord'] = $acc_cfg['tweet']['order'];	
+					$tmp_cfg['cnt'] = $acc_cfg['tweet']['count'];
+					$tmp_cfg['gmt_add'] = $acc_cfg['tweet']['time_add'];
+					$tmp_cfg['dtm_fmt'] = $acc_cfg['tweet']['date_format'];
+					$tmp_cfg['twt_lyt'] = $acc_cfg['tweet']['layout'];
+					$tmp_cfg['shw_hrl'] = $acc_cfg['tweet']['show_hr'];
+					$tmp_cfg['shw_pst_frm'] = $acc_cfg['tweet']['show_post_form'];
+					$tmp_cfg['shw_org_rtw'] = $acc_cfg['tweet']['show_origin_retweet'];
+					$tmp_cfg['twt_new_pst'] = $acc_cfg['tweet']['tweet_new_post'];
+					$tmp_cfg['twt_new_pst_lyt'] = $acc_cfg['tweet']['tweet_new_post_layout'];
+					$tmp_cfg['clc_usr_tag'] = $acc_cfg['tweet']['make_clickable']['user_tag'];
+					$tmp_cfg['clc_hsh_tag'] = $acc_cfg['tweet']['make_clickable']['hash_tag'];
+					$tmp_cfg['clc_url'] = $acc_cfg['tweet']['make_clickable']['url'];
+					$tmp_cfg['url_lyt'] = $acc_cfg['tweet']['url_layout'];
+					$tmp_cfg['avt_shw'] = $acc_cfg['tweet']['avatar']['show'];
+					$tmp_cfg['avt_szw'] = $acc_cfg['tweet']['avatar']['size']['w'];
+					$tmp_cfg['avt_szh'] = $acc_cfg['tweet']['avatar']['size']['h'];
+					$tmp_cfg['inc_rpl_fru'] = $acc_cfg['tweet']['include']['replies_from_you'];
+					$tmp_cfg['inc_rpl_tou'] = $acc_cfg['tweet']['include']['replies'];
+					$tmp_cfg['inc_rtw'] = $acc_cfg['tweet']['include']['retweet'];
+					$tmp_cfg['inc_drc_msg'] = $acc_cfg['tweet']['include']['direct_message'];
+					$tmp_cfg['cch_enb'] = $acc_cfg['tweet']['cache']['enable'];
+					$tmp_cfg['cch_exp'] = $acc_cfg['tweet']['cache']['expiry'];	
+					$tmp_cfg['cst_css'] = $acc_cfg['css']['custom_css'];
+					$tmp_cfg['cvr_sml'] = $acc_cfg['other']['convert_similies'];
+					$tmp_cfg['lnk_new_tab'] = $acc_cfg['other']['open_link_on_new_window'];
+					$tmp_cfg['tmp_oah_tkn'] = '';
+					$tmp_cfg['tmp_oah_sct'] = '';
+
+					xmt_acc_del($acc_nme);
+					xmt_acc_add($acc_nme, $tmp_cfg);
+
+					echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_nme).'</b> has been added</p></div>';	
+				}
+			}
 		}
 				
 		$acc_lst = xmt_acc_lst();
@@ -673,7 +727,20 @@
 						<input type="submit" name="cmd_xmt_dpl_prf" value="<?php echo __('Duplicate Profile', 'xmt'); ?>"/>
 					</p>
 				</form>
-			<?php } ?>		
+			<?php } ?>	
+			<br/><br/>	
+
+			
+			<form action="" method="post">
+				<?php if(count($acc_lst) == 0){ ?>
+					<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
+				<?php } ?>
+				
+				<b><big><?php echo __('Import Old Profiles', 'xmt'); ?></big></b><br/>
+				<br/>
+				<?php echo __('Are you just upgrading from version older than v 2.5.1. The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
+				<p class="submit"><input type="submit" name="cmd_xmt_migrate_profile" value="<?php echo __('Process', 'xmt'); ?>"/></p>
+			</form>
 				
 			<br/><br/>
 			<a name="guide"></a>
