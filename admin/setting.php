@@ -188,7 +188,7 @@
 			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
 		}elseif(isset($_POST['cmd_xmt_migrate_profile'])){
 			$acc_lst = xmt_acc_lst();
-			$xmt_acc_old = get_option('xmt_accounts');var_dump($xmt_acc_old);
+			$xmt_acc_old = get_option('xmt_accounts');
 			if($xmt_acc_old !== false){
 				foreach($xmt_acc_old as $acc_nme=>$acc_cfg){
 					$tmp_cfg = $xmt_cfg_def;
