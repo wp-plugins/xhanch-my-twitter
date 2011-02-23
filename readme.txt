@@ -43,11 +43,11 @@ We will keep improving this plugin in order to make this plugin to be the best T
 
 == Upgrade Notice ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
+[Click here for complete change/update log the plugin](http://xhanch.com/forum/index.php/board,13.0.html "Xhanch - My Twitter")
 
 == Support ==
 
-[Click here for more detailed information about Xhanch - My Twitter and If you're having a problem with the plugin](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
+[Click here to visit the forum for this plugin](http://xhanch.com/forum/index.php/board,3.0.html")
 
 == Changelog ==
 
