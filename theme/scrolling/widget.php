@@ -44,7 +44,7 @@
 
 	foreach($res as $sts_id=>$row){
 		echo '<li class="tweet_list">';
-			if($show_hr) 
+			if($cfg['shw_hrl'])
 				echo '<hr />';
 			
 			if($cfg['avt_shw']){					

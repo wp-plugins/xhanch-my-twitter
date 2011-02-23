@@ -25,13 +25,7 @@
 	
 	$css = css_minify(file_get_contents("css.css"));
 	
-	$xmt_accounts = get_option('xmt_accounts');
-	if($xmt_accounts === false)
-		$xmt_accounts = array();	
-	if(!is_array($xmt_accounts))
-		$xmt_accounts = array();
-	
-	$profiles = array_keys($xmt_accounts);
-	foreach($profiles as $profile)
-		echo str_replace('{xmt_id}', '#xmt_'.$profile.'_wid', $css);
+	$acc_lst = xmt_acc_lst();
+	foreach($acc_lst as $acc)
+		echo str_replace('{xmt_id}', '#xmt_'.$acc.'_wid', $css);
 ?>
