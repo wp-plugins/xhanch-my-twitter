@@ -186,6 +186,25 @@
 			xmt_twt_cch_rst($acc_sel);
 			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
+		}elseif(isset($_POST['cmd_xmt_fix_issue'])){			
+			$sql = '
+				create table if not exists '.$wpdb->prefix.'xmt(
+					id int(11) not null auto_increment,
+					nme varchar(100) not null,
+					cfg longblob not null,
+					twt_cch longblob not null,
+					twt_cch_dtp bigint(20) not null default \'0\',
+					prf_cch longblob not null,
+					prf_cch_dtp bigint(20) not null default \'0\',
+					primary key (id),
+					unique key nme_unique (nme)
+				)
+			';
+			$wpdb->show_errors();
+			if($wpdb->query($sql) !== false)
+				echo '<div id="message" class="updated fade"><p>Your issues should be resolved/fixed. You may try to import your old profiles</p></div>';
+			else
+				echo '<div id="message" class="updated fade"><p>Failed to fix your issue (<a href="http://xhanch.com/forum/index.php/board,10.0.html" target="_blank">You may post the appeared error message above to our Forum</a>).</p></div>';			
 		}elseif(isset($_POST['cmd_xmt_migrate_profile'])){
 			$acc_lst = xmt_acc_lst();
 			$xmt_acc_old = get_option('xmt_accounts');
@@ -730,15 +749,19 @@
 			<br/><br/>	
 
 			
-			<form action="" method="post">
-				<?php if(count($acc_lst) == 0){ ?>
-					<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
-				<?php } ?>
-				
+			<form action="" method="post">				
 				<b><big><?php echo __('Import Old Profiles', 'xmt'); ?></big></b><br/>
 				<br/>
-				<?php echo __('Are you just upgrading from version older than v 2.5.1. The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
+				<?php echo __('Are you just upgrading from version older than v 2.5.1? The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
 				<p class="submit"><input type="submit" name="cmd_xmt_migrate_profile" value="<?php echo __('Process', 'xmt'); ?>"/></p>
+			</form>	
+			<br/><br/>
+			
+			<form action="" method="post">				
+				<b><big><?php echo __('Fix Issues', 'xmt'); ?></big></b><br/>
+				<br/>
+				<?php echo __('Are you just upgrading from version older than v 2.5.3 and things are not working as it should be? Hopefully, the following button will help you fix the issue.', 'xmt'); ?><br/>	
+				<p class="submit"><input type="submit" name="cmd_xmt_fix_issue" value="<?php echo __('Try to Fix', 'xmt'); ?>"/></p>
 			</form>
 				
 			<br/><br/>
