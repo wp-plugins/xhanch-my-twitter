@@ -292,12 +292,20 @@
 			}
 			function show_mode_opt(){
 				var obj = document.getElementById("cbo_xmt_thm");				
-				var md_scrolling = document.getElementById("sct_md_scrolling");
+				var md_sel = document.getElementById("sct_md_" + obj.value);
 				
-				md_scrolling.style.display = "none";	
+				<?php 
+					$path = xmt_base_dir.'/theme';		
+					$dir = dir($path);	
+					while($thm = $dir->read()){
+						if($thm == '.' || $thm == '..')
+							continue;
+						echo 'document.getElementById("sct_md_'.$thm.'").style.display = "none";';										
+					}
+					$dir->close();
+				?>				
 				
-				if(obj.value == "scrolling")
-					md_scrolling.style.display = "";	
+				md_sel.style.display = "";	
 			}
 			function set_dt_fmt(fmt){
 				var obj = document.getElementById("txt_xmt_dtm_fmt");				
