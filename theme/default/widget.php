@@ -37,10 +37,10 @@
 	$twt_lyt = $cfg['twt_lyt'];
 	$twt_lyt = convert_smilies(html_entity_decode($twt_lyt));
 
-	foreach($res as $sts_id=>$row){			
+	foreach($res as $sts_id=>$row){
 		echo '<li class="tweet_list">';
 			if($cfg['shw_hrl'])
-				echo '<hr />';
+				echo '<hr/>';
 			
 			if($cfg['avt_shw']){					
 				echo '<a href="'.$row['author_url'].'" '.($cfg['lnk_new_tab']?'target="_blank"':'').'><img class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				

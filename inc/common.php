@@ -137,15 +137,25 @@
 		else { return WP_CONTENT_URL.'/plugins/'.plugin_basename(xmt_base_dir); }
 	}
 	
-	function xmt_req($act, $acc, $cfg, $add=array(),$decode=true){		
-		$url = 'http://xhanch.com/api/xmt.php?gz&a='.$act.'&ot='.$cfg['oah_tkn'].'&os='.$cfg['oah_sct'];
-		foreach($add as $aK=>$aV)
-			$url .= '&'.urlencode($aK).'='.urlencode($aV);
-		$res = gzinflate(xmt_get_file($url));
-		if($decode)
-			return unserialize($res);
-		else
-			return $res;
+	function xmt_req($act, $acc, $cfg, $add=array(),$decode=true){	
+		$server_list = array(
+			'xhanch.com/api'
+		);
+
+		foreach($server_list as $server){			
+			$url = 'http://'.$server.'/xmt.php?gz&a='.$act.'&ot='.$cfg['oah_tkn'].'&os='.$cfg['oah_sct'];
+			foreach($add as $aK=>$aV)
+				$url .= '&'.urlencode($aK).'='.urlencode($aV);	
+			$res = gzinflate(xmt_get_file($url));
+		
+			if($res === false)
+				continue;
+			
+			if($decode)
+				return unserialize($res);
+			else
+				return $res;
+		}
 	}
 
 	function xmt_get_file($name){
@@ -160,9 +170,8 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 			$res = curl_exec($ch);
-			if($res === false){
-				xmt_log('Failed to read feeds from twitter because of ' . curl_error($ch));	
-			}
+			if($res === false)
+				xmt_log('Failed to read feeds from twitter because of ' . curl_error($ch));				
 			curl_close($ch);
 		}		
 		return $res;

@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.5.6
+		Version: 2.5.7
 	*/
 	
 	define('xmt', true);
@@ -31,6 +31,8 @@
 		'oah_sct' => '',
 		'ord' => 'lto',	
 		'cnt' => '5',
+		'trc_len' => '0',
+		'trc_chr' => '...',
 		'gmt_add' => '0',
 		'dtm_fmt' => 'd/m/Y H:i:s',
 		'twt_lyt' => '@tweet - posted on @date',

@@ -31,7 +31,12 @@
 			$output = (string)$res->text;
 			$output = html_entity_decode($output, ENT_COMPAT, 'UTF-8');
 			$output = htmlentities($output, ENT_COMPAT, 'UTF-8');
-			
+
+			if($cfg['trc_len'] > 0){
+				if(strlen($output) > $cfg['trc_len'])
+					$output = substr($output, 0, $cfg['trc_len']).' '.$cfg['trc_chr'];
+			}
+				
 			if($cfg['clc_url'])
 				$output = xmt_make_clickable($output, $acc, $cfg);							
 

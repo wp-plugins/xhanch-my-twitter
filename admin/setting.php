@@ -139,6 +139,8 @@
 				'oah_sct' => $cfg['oah_sct'],
 				'ord' => xmt_form_post('cbo_xmt_ord'),	
 				'cnt' => intval(xmt_form_post('int_xmt_cnt')),
+				'trc_len' => intval(xmt_form_post('int_xmt_trc_len')),
+				'trc_chr' => xmt_form_post('txt_xmt_trc_chr'),
 				'gmt_add' => floatval(xmt_form_post('int_xmt_gmt_add')),
 				'dtm_fmt' => xmt_form_post('txt_xmt_dtm_fmt'),
 				'twt_lyt' => xmt_form_post('txa_xmt_twt_lyt'),
@@ -573,7 +575,14 @@
 							<td><?php echo __('Cache Expiry (in minutes)', 'xmt'); ?></td>
 							<td><input type="text" id="int_xmt_cch_exp" name="int_xmt_cch_exp" value="<?php echo $cfg['cch_exp']; ?>" size="5"  maxlength="3"/></td>
 						</tr>	
-                        <tr><td colspan="5"><small><i><?php echo __('It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue', 'xmt'); ?></i></small></td></tr>
+                        <tr><td colspan="5"><small><i><?php echo __('It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue', 'xmt'); ?></i></small></td></tr>		
+						<tr>
+							<td><?php echo __('Truncate tweet after', 'xmt'); ?></td>
+							<td><input type="text" id="int_xmt_trc_len" name="int_xmt_trc_len" value="<?php echo $cfg['trc_len']; ?>" size="5" maxlength="3"/> character(s)</td>
+							<td></td>
+							<td><?php echo __('Ellipsis', 'xmt'); ?></td>
+							<td><input type="text" id="txt_xmt_trc_chr" name="txt_xmt_trc_chr" value="<?php echo $cfg['trc_chr']; ?>" style="width:100%"/></td>
+						</tr>	
 					</table>
 					<br/>
                         	
