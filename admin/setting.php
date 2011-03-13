@@ -804,11 +804,11 @@
 			</div>	
 			<br/>
 			<b>Useful links:</b><br/>
-			- <a href="http://xhanch.com/forum/index.php/board,13.0.html" target="_blank">Update/change logs of this plugin </a><br/>
-			- <a href="http://xhanch.com/forum/index.php/board,9.0.html" target="_blank">Ask and share about how to customize this plugin. You may also ask questions about plugin configurations</a><br/>
-			- <a href="http://xhanch.com/forum/index.php/board,12.0.html" target="_blank">Have a thought to improve this plugin? Suggest it here</a><br/>
-			- <a href="http://xhanch.com/forum/index.php/board,10.0.html" target="_blank">Found a bug/error? Kindly report it here</a><br/>
-			- <a href="http://xhanch.com/forum/index.php/board,11.0.html" target="_blank">Share your experience of using this plugin. You may show off your websites that use this plugin here by providing the URL of yor website</a><br/>
+			- <a href="http://forum.xhanch.com/index.php/board,13.0.html" target="_blank">Update/change logs of this plugin </a><br/>
+			- <a href="http://forum.xhanch.com/index.php/board,9.0.html" target="_blank">Ask and share about how to customize this plugin. You may also ask questions about plugin configurations</a><br/>
+			- <a href="http://forum.xhanch.com/index.php/board,12.0.html" target="_blank">Have a thought to improve this plugin? Suggest it here</a><br/>
+			- <a href="http://forum.xhanch.com/index.php/board,10.0.html" target="_blank">Found a bug/error? Kindly report it here</a><br/>
+			- <a href="http://forum.xhanch.com/index.php/board,11.0.html" target="_blank">Share your experience of using this plugin. You may show off your websites that use this plugin here by providing the URL of yor website</a><br/>
 			<br/>
 		</div>
 <?php
