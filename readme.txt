@@ -43,12 +43,12 @@ We will keep improving this plugin in order to make this plugin to be the best T
 
 == Upgrade Notice ==
 
-[Click here for complete change/update log the plugin](http://xhanch.com/forum/index.php/board,13.0.html "Xhanch - My Twitter")
+[Click here for complete change/update log the plugin](http://forum.xhanch.com/index.php/board,13.0.html "Xhanch - My Twitter")
 
 == Support ==
 
-[Click here to visit the forum for this plugin](http://xhanch.com/forum/index.php/board,3.0.html")
+[Click here to visit the forum for this plugin](http://forum.xhanch.com/index.php/board,3.0.html")
 
 == Changelog ==
 
-[Click here for complete change/update log the plugin](http://xhanch.com/forum/index.php/board,13.0.html "Xhanch - My Twitter")
+[Click here for complete change/update log the plugin](http://forum.xhanch.com/index.php/board,13.0.html "Xhanch - My Twitter")
