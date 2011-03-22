@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.5.7
+		Version: 2.5.8
 	*/
 	
 	define('xmt', true);
@@ -121,7 +121,7 @@
 			
 			if($cst_css){
 				$cst_css = str_replace('{xmt_id}', '#xmt_'.$acc.'_wid', $cst_css);
-				$css .= $cst_css.' ';
+				$css .= xmt_css_minify($cst_css).' ';
 			}
 			
 			if($css)
@@ -192,6 +192,8 @@
 		}
 		
 		$res = xmt_twt_get($acc, $cfg);		
+		if(!$res || !is_array($res))
+			$res = array();
 		
 		$tpl = xmt_base_dir.'/theme/'.$cfg['thm'].'/widget.php';
 		if(!file_exists($tpl))

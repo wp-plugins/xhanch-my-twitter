@@ -6,7 +6,7 @@ Donate link: http://xhanch.com/wp-plugin-my-twitter/
 Tags: twitter, tweet, status, sidebar, post, posts, page, seo, xhanch, widget, plugin, code, avatar, content, social, plugins, css, text, admin, google, comments, links, image
 Requires at least: 2.3
 Tested up to: 3.1
-Stable tag: 2.5.7
+Stable tag: 2.5.8
 
 The best plugin to display your latest tweets, replies, direct messages, retweets, auto and manual tweet and lots more. Support multiple accounts
 
@@ -26,6 +26,8 @@ We will keep improving this plugin in order to make this plugin to be the best T
 For complete features list, installation and setup, screen shots, FAQs, update logs/changelog, and support:
 - [Plugin details](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 - [Forum/community center](http://forum.xhanch.com "Forum/community center")
+- [Change/update logs](http://forum.xhanch.com/index.php/board,13.0.html "Change/update logs")
+
 
 [Click here to see All free plugins from Xhanch Studio](http://wordpress.org/extend/plugins/profile/xhanch_studio "Click here to see All free plugins from Xhanch Studio")
 
