@@ -52,7 +52,7 @@ For complete features list, installation and setup, screen shots, FAQs, update l
 
 == Support ==
 
-[Click here to visit the forum for this plugin](http://forum.xhanch.com/index.php/board,3.0.html")
+[Click here to visit the forum for this plugin](http://forum.xhanch.com/index.php/board,3.0.html "Xhanch - My Twitter")
 
 == Changelog ==
 
