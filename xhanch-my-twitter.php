@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.5.8
+		Version: 2.5.9
 	*/
 	
 	define('xmt', true);
@@ -17,7 +17,7 @@
 	load_plugin_textdomain('xmt', WP_PLUGIN_URL.'/xhanch-my-twitter/lang/', 'xhanch-my-twitter/lang/');
 	
 	xmt_inc('inc');
-		
+
 	$xmt_cfg_def = array(
 		'ttl' => 'Latest Tweets',
 		'nme' => '',
@@ -54,6 +54,7 @@
 		'inc_drc_msg' => 0,
 		'cch_enb' => 1,
 		'cch_exp' => 60,	
+		'imp_itv' => 60,	
 		'thm' => 'default',
 		'cst_css' => '',
 		'shw_crd' => 1,
@@ -162,13 +163,16 @@
 		add_shortcode('xmt', 'xmt_short_code');
 	
 	function widget_xmt($args, $acc){
+		global $wpdb;
 		global $xmt_tmd;
 				
 		$xmt_tmd = time();		
 		xmt_log('Starting to generate output');		
 
 		$cfg = xmt_acc_cfg_get($acc);
-		
+
+		xmt_twt_imp($acc, $cfg);
+
 		extract($args);
 		
 		$cur_role = xmt_get_role();
@@ -191,7 +195,7 @@
 			}
 		}
 		
-		$res = xmt_twt_get($acc, $cfg);		
+		$res = xmt_twt_get($acc, $cfg);	
 		if(!$res || !is_array($res))
 			$res = array();
 		

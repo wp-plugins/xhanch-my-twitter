@@ -162,6 +162,7 @@
 				'inc_drc_msg' => intval(xmt_form_post('chk_xmt_inc_drc_msg')),
 				'cch_enb' => intval(xmt_form_post('chk_xmt_cch_enb')),
 				'cch_exp' => intval(xmt_form_post('int_xmt_cch_exp')),	
+				'imp_itv' => intval(xmt_form_post('int_xmt_imp_itv')),	
 				'thm' => xmt_form_post('cbo_xmt_thm'),
 				'cst_css' => xmt_form_post('txa_xmt_cst_css'),
 				'shw_crd' => intval(xmt_form_post('chk_xmt_shw_crd')),
@@ -247,6 +248,7 @@
 					$tmp_cfg['inc_drc_msg'] = $acc_cfg['tweet']['include']['direct_message'];
 					$tmp_cfg['cch_enb'] = $acc_cfg['tweet']['cache']['enable'];
 					$tmp_cfg['cch_exp'] = $acc_cfg['tweet']['cache']['expiry'];	
+					$tmp_cfg['imp_itv'] = 60;	
 					$tmp_cfg['cst_css'] = $acc_cfg['css']['custom_css'];
 					$tmp_cfg['cvr_sml'] = $acc_cfg['other']['convert_similies'];
 					$tmp_cfg['lnk_new_tab'] = $acc_cfg['other']['open_link_on_new_window'];
@@ -315,14 +317,22 @@
 			}
     	</script>
 		<div class="wrap">
-			<h2><?php echo __('Xhanch - My Twitter - Configuration', 'xmt'); ?></h2>		
-            <div style="float:right;line-height:21px">
-            	<b><?php echo __('Do you like this plugin? If yes, click this button -&gt;', 'xmt'); ?></b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fxhanch.com%2Fwp-plugin-my-twitter%2F&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>           
-            </div>
-            <div class="clear"></div>	
-            <div style="float:right;line-height:21px">
-            	<b><?php echo __('Do you like our service and support? If yes, click this button -&gt;', 'xmt'); ?></b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FXhanch-Studio%2F146245898739871&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:1px solid #999; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right" allowTransparency="true"></iframe>          
-            </div>
+			<h2><?php echo __('Xhanch - My Twitter - Configuration', 'xmt'); ?></h2>
+			<br/>
+
+			<iframe src="http://xhanch.com/ads" style="width:468px;height:60px;
+			float:left;border:1px solid #cacaca" allowscrolling="no" allowTransparency="true"></iframe>	
+
+            <div style="float:right;width:400px">
+				<div style="float:right;line-height:21px">
+					<b><?php echo __('Do you like this Xhanch - My Twitter? ', 'xmt'); ?></b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fxhanch.com%2Fwp-plugin-my-twitter%2F&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right;padding:1px" allowTransparency="true"></iframe>           
+				</div>
+				<div class="clear"></div>
+				<div style="float:right;line-height:21px">
+					<b><?php echo __('Do you like our service and support? ', 'xmt'); ?></b> <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FXhanch-Studio%2F146245898739871&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin:0 0 0 10px; float:right;padding:1px" allowTransparency="true"></iframe>   
+				</div>
+				<div class="clear"></div>
+			</div>
             <div class="clear"></div>
 			<br/>
             <?php xmt_check(); ?>
@@ -569,13 +579,16 @@
 							</td>
 						</tr>			
 						<tr>
-							<td><?php echo __('Enable Cache?', 'xmt'); ?></td>
+							<td><?php echo __('Enable cache?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_cch_enb" name="chk_xmt_cch_enb" value="1" <?php echo ($cfg['cch_enb']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td><?php echo __('Cache Expiry (in minutes)', 'xmt'); ?></td>
-							<td><input type="text" id="int_xmt_cch_exp" name="int_xmt_cch_exp" value="<?php echo $cfg['cch_exp']; ?>" size="5"  maxlength="3"/></td>
-						</tr>	
-                        <tr><td colspan="5"><small><i><?php echo __('It is recommended to enable the cache since Twitter limit the number of API invokes per account and you may encounter Twitter API overuse issue', 'xmt'); ?></i></small></td></tr>		
+							<td><?php echo __('Cache expiry', 'xmt'); ?></td>
+							<td><input type="text" id="int_xmt_cch_exp" name="int_xmt_cch_exp" value="<?php echo $cfg['cch_exp']; ?>" size="5"  maxlength="3"/> minute(s)</td>
+						</tr>				
+						<tr>
+							<td><?php echo __('Import tweets every', 'xmt'); ?></td>
+							<td><input type="text" id="int_xmt_imp_itv" name="int_xmt_imp_itv" value="<?php echo $cfg['imp_itv']; ?>" size="5"  maxlength="5"/> minute(s)</td>
+						</tr>		
 						<tr>
 							<td><?php echo __('Truncate tweet after', 'xmt'); ?></td>
 							<td><input type="text" id="int_xmt_trc_len" name="int_xmt_trc_len" value="<?php echo $cfg['trc_len']; ?>" size="5" maxlength="3"/> character(s)</td>
@@ -587,7 +600,7 @@
 					<br/>
                         	
                     <b><?php echo __('Advanced Features', 'xmt'); ?></b><br/><br/>
-                    <small><?php echo __('<b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, please consider to "Enable Cache" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.', 'xmt'); ?></small><br/>
+                    <small><?php echo __('<b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, you should consider to set a higher "Tweet import interval" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.', 'xmt'); ?></small><br/>
                     <br/>
                     <?php if(!$conn){ ?>                 
                         <?php echo __('To enable advanced features, you need to grant read-write permission to Xhanch - My Twitter (Xhanch - MT) by clicking the following button.', 'xmt'); ?><br/>

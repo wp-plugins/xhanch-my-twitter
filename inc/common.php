@@ -196,8 +196,7 @@
 			case 'Nov':$tmp[1]=11;break;
 			case 'Dec':$tmp[1]=12;break;
 		}
-		$gmt_add = get_option('gmt_offset') * 60 * 60;
-		return @mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_add + $gmt_cst_add;
+		return @mktime($time[0], $time[1], $time[2], $tmp[1], $tmp[2], $tmp[5]) + $gmt_cst_add;
 	}
 
 	function xmt_parse_time($dt, $date_format, $gmt_cst_add = 0){		
