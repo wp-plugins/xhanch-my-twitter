@@ -66,7 +66,7 @@
 		';
 		$wpdb->query($sql);
 
-		$ver = '1.0.0';
+		$ver = '1.0.1';
 		update_option('xmt_vsn', $ver);
 	}
 
