@@ -55,6 +55,12 @@
 		$wpdb->query($sql);
 
 		$sql = '
+			alter table '.$wpdb->prefix.'xmt
+			add las_twt_imp_dtp bigint(20) not null after prf_cch_dtp 
+		';
+		$wpdb->query($sql);
+
+		$sql = '
 			rename table '.$wpdb->prefix.'xmt 
 			to '.$wpdb->prefix.'xmt_acc
 		';
