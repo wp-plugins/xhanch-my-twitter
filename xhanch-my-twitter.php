@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.5.9
+		Version: 2.6.0
 	*/
 	
 	define('xmt', true);
@@ -94,11 +94,27 @@
 		register_widget_control('xmt_'.$acc, 'widget_xmt_control_'.$acc, 300, 200 );
 	}
 	
-	function xmt_install(){
-		require_once(xmt_base_dir.'/installer.php');
+	function xmt_itl(){
+		$upd_res = false;
+		require_once(xmt_base_dir.'/installer.php');	
+		return $upd_res;
 	}
-	register_activation_hook(__FILE__,'xmt_install');
-			
+	$upd_res = xmt_itl();
+	if(!$upd_res){
+		define('xmt_itl_wrn_msg', $wpdb->last_query);
+		function xmt_itl_wrn(){
+			global $wpdb;
+			echo '
+				<div id="xmt-itl-wrn" class="updated fade"><p>					
+					Oops, there has been a problem when upgrading <b>Xhanch - My Twitter</b><br/>
+					Cannot execute this query:<br/>
+					'.xmt_itl_wrn_msg.'					
+				</p></div>
+			';
+		}
+		add_action('admin_notices', 'xmt_itl_wrn');		
+	}
+					
 	function xmt_css(){			
 		echo '<link rel="stylesheet" href="'.xmt_get_dir('url').'/css/css.php" type="text/css" media="screen" />';
 		

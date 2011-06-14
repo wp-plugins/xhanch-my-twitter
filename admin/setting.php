@@ -189,25 +189,6 @@
 			xmt_twt_cch_rst($acc_sel);
 			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
-		}elseif(isset($_POST['cmd_xmt_fix_issue'])){			
-			$sql = '
-				create table if not exists '.$wpdb->prefix.'xmt(
-					id int(11) not null auto_increment,
-					nme varchar(100) not null,
-					cfg longblob not null,
-					twt_cch longblob not null,
-					twt_cch_dtp bigint(20) not null default \'0\',
-					prf_cch longblob not null,
-					prf_cch_dtp bigint(20) not null default \'0\',
-					primary key (id),
-					unique key nme_unique (nme)
-				)
-			';
-			$wpdb->show_errors();
-			if($wpdb->query($sql) !== false)
-				echo '<div id="message" class="updated fade"><p>Your issues should be resolved/fixed. You may try to import your old profiles</p></div>';
-			else
-				echo '<div id="message" class="updated fade"><p>Failed to fix your issue (<a href="http://xhanch.com/forum/index.php/board,10.0.html" target="_blank">You may post the appeared error message above to our Forum</a>).</p></div>';			
 		}elseif(isset($_POST['cmd_xmt_migrate_profile'])){
 			$acc_lst = xmt_acc_lst();
 			$xmt_acc_old = get_option('xmt_accounts');
@@ -261,6 +242,9 @@
 					echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_nme).'</b> has been added</p></div>';	
 				}
 			}
+		}elseif(isset($_POST['cmd_xmt_dtb_ver_upd'])){
+			update_option('xmt_vsn', xmt_form_post('txt_xmt_dtb_ver'));
+			echo '<div id="message" class="updated fade"><p>Database version has been set to <b>'.htmlspecialchars(xmt_form_post('txt_xmt_dtb_ver')).'</b></p></div>';	
 		}
 				
 		$acc_lst = xmt_acc_lst();
@@ -271,7 +255,7 @@
 				$acc_sel = $acc;		
 				break;
 			}
-		}	
+		}
 ?>
 		<style type="text/css">
 			table, td{font-family:Arial;font-size:12px}
@@ -776,8 +760,7 @@
 					</p>
 				</form>
 			<?php } ?>	
-			<br/><br/>	
-
+			<br/><br/>
 			
 			<form action="" method="post">				
 				<b><big><?php echo __('Import Old Profiles', 'xmt'); ?></big></b><br/>
@@ -788,13 +771,18 @@
 			<br/><br/>
 			
 			<form action="" method="post">				
-				<b><big><?php echo __('Fix Issues', 'xmt'); ?></big></b><br/>
-				<br/>
-				<?php echo __('Are you just upgrading from version older than v 2.5.3 and things are not working as it should be? Hopefully, the following button will help you fix the issue.', 'xmt'); ?><br/>	
-				<p class="submit"><input type="submit" name="cmd_xmt_fix_issue" value="<?php echo __('Try to Fix', 'xmt'); ?>"/></p>
+				<b><big><?php echo __('Database Information', 'xmt'); ?></big></b><br/>
+				<br/>				
+				<table cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="150px"><?php echo __('Current version', 'xmt'); ?></td>
+						<td><input type="text" id="txt_xmt_dtb_ver" name="txt_xmt_dtb_ver" value="<?php echo get_option('xmt_vsn'); ?>" style="width:100px"/></td>
+					</tr>
+				</table>
+				<p class="submit"><input type="submit" name="cmd_xmt_dtb_ver_upd" value="<?php echo __('Change', 'xmt'); ?>"/></p>
 			</form>
-				
 			<br/><br/>
+				
 			<a name="guide"></a>
 			<b><big><?php echo __('Support This Plugin Development', 'xmt'); ?></big></b><br/>		
 			<br/>	
@@ -814,7 +802,7 @@
 					<br/>
 					<iframe src="http://xhanch.com/wp-plugin-my-twitter/" style="width:700px;height:500px"></iframe>
 				</div>
-			</div>	
+			</div>
 			<br/>
 			<b>Useful links:</b><br/>
 			- <a href="http://forum.xhanch.com/index.php/board,13.0.html" target="_blank">Update/change logs of this plugin </a><br/>
