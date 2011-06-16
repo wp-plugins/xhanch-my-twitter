@@ -54,12 +54,17 @@
 		if(time() - $las_imp < $imp_itv)
 			return;
 
+		xmt_tmd('Import Tweets - Start');
+
 		$sql = '
 			update '.$wpdb->prefix.'xmt_acc
 			set las_twt_imp_dtp = '.xmt_sql_int(time()).'
-			where acc_nme = '.xmt_sql_str($acc).'
+			where nme = '.xmt_sql_str($acc).'
 		';
 		$wpdb->query($sql);
+		
+		if($cfg['twt_usr_nme'] == '')
+			return;
 
 		$lmt = $cfg['cnt'];			
 		if($lmt <= 0)
