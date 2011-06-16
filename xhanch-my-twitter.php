@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.6.0
+		Version: 2.6.1
 	*/
 	
 	define('xmt', true);
@@ -209,6 +209,13 @@
 				$msg = 'Your tweet has been posted';
 				xmt_twt_cch_rst($acc);
 			}
+		}
+
+		if($cur_role == 'administrator' && isset($_GET['xmt_'.$acc.'_twt_id'])){
+			$twt_id = trim(xmt_form_get('xmt_'.$acc.'_twt_id'));
+			xmt_twt_del($acc, $twt_id);
+			xmt_twt_cch_rst($acc);
+			$msg = 'Your tweet has been deleted';
 		}
 		
 		$res = xmt_twt_get($acc, $cfg);	

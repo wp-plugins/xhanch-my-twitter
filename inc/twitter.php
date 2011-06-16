@@ -108,6 +108,17 @@
 		}
 	}
 
+	function xmt_twt_del($acc, $twt_id){
+		global $wpdb;
+		$sql = '
+			delete from '.$wpdb->prefix.'xmt_twt
+			where 
+				acc_nme = '.xmt_sql_str($acc).' and
+				twt_id = '.xmt_sql_str($twt_id).'
+		';
+		$wpdb->query($sql);
+	}
+
 	function xmt_ath_ins($prm){
 		global $wpdb;
 		$sql = '

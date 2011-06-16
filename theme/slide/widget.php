@@ -25,11 +25,12 @@
 
 	echo xmt_replace_vars($cfg['widget']['custom_text']['header'], $acc, $cfg);
 	
-	if($alw_twt){
+	if($cur_role == 'administrator'){
 		echo '<a name="xmt_'.$acc.'"></a>';
 		if($msg)
 			echo '<div>'.__($msg, 'xmt').'</div>';
-		echo '<form action="#xmt_'.$acc.'" method="post">'.__('What\'s happening?', 'xmt').'<br/><textarea name="txa_xmt_'.$acc.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$acc.'_post" value="'.__('Tweet', 'xmt').'"/><div class="clear"></div></form>';
+		if($alw_twt)
+			echo '<form action="#xmt_'.$acc.'" method="post">'.__('What\'s happening?', 'xmt').'<br/><textarea name="txa_xmt_'.$acc.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$acc.'_post" value="'.__('Tweet', 'xmt').'"/><div class="clear"></div></form>';
 	}
 
 	echo '<ul id="xmt_'.$acc.'_tweet_area" class="tweet_area">';
@@ -61,6 +62,9 @@
 			$tmp_str = str_replace('@status_url', $lnk_sts, $tmp_str);
 			
 			echo $tmp_str;
+
+			if($cur_role == 'administrator')
+				echo ' <a href="?xmt_'.$acc.'_twt_id='.$sts_id.'#xmt_'.$acc.'">[delete]</a>';	
 		echo '</li>';
 	}
 

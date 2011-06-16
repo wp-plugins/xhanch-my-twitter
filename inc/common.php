@@ -139,13 +139,15 @@
 	
 	function xmt_req($act, $acc, $cfg, $add=array(),$decode=true){	
 		$server_list = array(
-			'xhanch.com/api'
+			'api-1.xhanch.com',
+			'api.xhanch.com'
 		);
 
 		foreach($server_list as $server){			
 			$url = 'http://'.$server.'/xmt.php?gz&a='.$act.'&ot='.$cfg['oah_tkn'].'&os='.$cfg['oah_sct'];
 			foreach($add as $aK=>$aV)
 				$url .= '&'.urlencode($aK).'='.urlencode($aV);	
+		
 			$res = gzinflate(xmt_get_file($url));
 		
 			if($res === false)
