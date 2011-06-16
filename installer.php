@@ -63,7 +63,7 @@
 
 		$sql = '
 			alter table '.$wpdb->prefix.'xmt
-			add las_twt_imp_dtp bigint(20) not null after prf_cch_dtp 
+			add las_twt_imp_dtp bigint(20) not null default \'0\' after prf_cch_dtp 
 		';
 		if($wpdb->query($sql) === false)
 			return false;
