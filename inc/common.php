@@ -136,29 +136,6 @@
 		if ($type=='path') { return WP_CONTENT_DIR.'/plugins/'.plugin_basename(xmt_base_dir); }
 		else { return WP_CONTENT_URL.'/plugins/'.plugin_basename(xmt_base_dir); }
 	}
-	
-	function xmt_req($act, $acc, $cfg, $add=array(),$decode=true){	
-		$server_list = array(
-			'api-1.xhanch.com',
-			'api.xhanch.com'
-		);
-
-		foreach($server_list as $server){			
-			$url = 'http://'.$server.'/xmt.php?gz&a='.$act.'&ot='.$cfg['oah_tkn'].'&os='.$cfg['oah_sct'];
-			foreach($add as $aK=>$aV)
-				$url .= '&'.urlencode($aK).'='.urlencode($aV);	
-		
-			$res = gzinflate(xmt_get_file($url));
-		
-			if($res === false)
-				continue;
-			
-			if($decode)
-				return unserialize($res);
-			else
-				return $res;
-		}
-	}
 
 	function xmt_get_file($name){
 		$res = '';
@@ -170,6 +147,12 @@
 			curl_setopt($ch, CURLOPT_AUTOREFERER, 0);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_REFERER, $name);	
+			@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+			@curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+			@curl_setopt($ch, CURLOPT_TIMEVALUE, null); 
+			@curl_setopt($ch, CURLOPT_TIMECONDITION, 0); 
+			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.17) Gecko/20110121 Firefox/3.5.17');
 
 			$res = curl_exec($ch);
 			if($res === false)

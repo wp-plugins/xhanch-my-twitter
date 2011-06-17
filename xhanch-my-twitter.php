@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.6.1
+		Version: 2.6.2
 	*/
 	
 	define('xmt', true);
@@ -27,6 +27,10 @@
 		'cst_ftr_txt' => '',
 		'twt_usr_nme' => '',
 		'oah_use' => 0,
+		'csm_key' => '',
+		'csm_sct' => '',
+		'oah_tkn' => '',
+		'oah_sct' => '',
 		'oah_tkn' => '',
 		'oah_sct' => '',
 		'ord' => 'lto',	
@@ -185,9 +189,7 @@
 		$xmt_tmd = time();		
 		xmt_log('Starting to generate output');		
 
-		$cfg = xmt_acc_cfg_get($acc);
-
-		xmt_twt_imp($acc, $cfg);
+		$cfg = xmt_acc_cfg_get($acc);		
 
 		extract($args);
 		
@@ -197,7 +199,9 @@
 		
 		if($cur_role == 'administrator' && $cfg['oah_use'] && $cfg['shw_pst_frm'])
 			$alw_twt = true;
-		
+
+		xmt_twt_imp($acc, $cfg);
+
 		if($alw_twt && isset($_POST['cmd_xmt_'.$acc.'_post'])){
 			$t_tweet = trim(xmt_form_post('txa_xmt_'.$acc.'_tweet'));
 			if($t_tweet == '')
@@ -205,9 +209,10 @@
 			if(strlen($t_tweet) > 140)
 				$msg = 'Your tweet exceeds 140 characters!';
 			if($msg == ''){			
-				xmt_req('post-tweet', $acc, $cfg, array('tweet' => $t_tweet), false);
+				xmt_twt_oah_twt_pst($cfg, $t_tweet);
 				$msg = 'Your tweet has been posted';
 				xmt_twt_cch_rst($acc);
+				xmt_twt_imp($acc, $cfg);
 			}
 		}
 
@@ -251,8 +256,7 @@
 				$t_tweet = str_replace('@url', $url, $t_tweet);
 				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content),0,100), $t_tweet);
 				
-				xmt_req('post-tweet', $acc, $cfg, array('tweet' => $t_tweet), false);		
-				
+				xmt_twt_oah_twt_pst($cfg, $t_tweet);				
 				xmt_twt_cch_rst($acc);
 			}
 		}

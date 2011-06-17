@@ -112,10 +112,12 @@
 			xmt_acc_del($acc_sel);
 			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';				
 		}elseif(isset($_POST['cmd_xmt_disconnect'])){
-			$cfg = xmt_acc_cfg_get($acc_name);
-			$cfg['oah_use'] = 0;						
-			$cfg['oah_tkn'] = $res['ot'];
-			$cfg['oah_sct'] = $res['os'];						
+			$cfg = xmt_acc_cfg_get($acc_sel);
+			$cfg['oah_use'] = 0;					
+			$cfg['csm_key'] = '';
+			$cfg['csm_sct'] = '';							
+			$cfg['oah_tkn'] = '';
+			$cfg['oah_sct'] = '';						
 			$cfg['tmp_oah_tkn'] = '';
 			$cfg['tmp_oah_sct'] = '';			
 			xmt_acc_cfg_upd($acc_sel, $cfg);
@@ -135,6 +137,8 @@
 				'cst_ftr_txt' => xmt_form_post('txa_xmt_ftr_txt'),
 				'twt_usr_nme' => xmt_form_post('txt_xmt_twt_usr_nme'),
 				'oah_use' => $cfg['oah_use'],
+				'csm_key' => $cfg['csm_key'],
+				'csm_sct' => $cfg['csm_sct'],
 				'oah_tkn' => $cfg['oah_tkn'],
 				'oah_sct' => $cfg['oah_sct'],
 				'ord' => xmt_form_post('cbo_xmt_ord'),	
@@ -171,6 +175,15 @@
 				'tmp_oah_tkn' => '',
 				'tmp_oah_sct' => ''
 			);
+
+			if(isset($_POST['txt_xmt_csm_key']))
+				$tmp_cfg['csm_key'] = xmt_form_post('txt_xmt_csm_key');
+			if(isset($_POST['txt_xmt_csm_sct']))
+				$tmp_cfg['csm_sct'] = xmt_form_post('txt_xmt_csm_sct');
+			if(isset($_POST['txt_xmt_oah_tkn']))
+				$tmp_cfg['oah_tkn'] = xmt_form_post('txt_xmt_oah_tkn');
+			if(isset($_POST['txt_xmt_oah_sct']))
+				$tmp_cfg['oah_sct'] = xmt_form_post('txt_xmt_oah_sct');
 
 			$path = xmt_base_dir.'/theme';		
 			$dir = dir($path);	
@@ -261,7 +274,7 @@
 			table, td{font-family:Arial;font-size:12px}
 			tr{height:22px}
 			ul li{line-height:2px}	
-			.clear{clear:both}		
+			.clear{clear:both}
 		</style>
 		<script type="text/javascript">
 			function show_spoiler(obj){
@@ -354,48 +367,22 @@
 					
 			<?php 
 				if(in_array($acc_sel, $acc_lst)){ 
-					$conn = false;
 					$cfg = xmt_acc_cfg_get($acc_sel);
 					
-					if($cfg['tmp_oah_tkn'] != '' || $cfg['tmp_oah_sct'] != ''){
-						$cfg['oah_use'] = 0;
-							
-						$res = xmt_req('get-auth-token', $acc_sel, $cfg, array(
-							'ort' => $cfg['tmp_oah_tkn'],
-							'ors' => $cfg['tmp_oah_sct'],
-							'ov' => $_GET['oauth_verifier'],							
-						));
-						
-						$cfg['oah_tkn'] = $res['ot'];
-						$cfg['oah_sct'] = $res['os'];
-						
-						$cfg['tmp_oah_tkn'] = '';
-						$cfg['tmp_oah_sct'] = '';
-												
-						xmt_acc_cfg_upd($acc_sel, $cfg);
-					}
-					
-					if($cfg['oah_tkn'] != '' && $cfg['oah_sct'] != ''){
-						$res_prof = xmt_req('get-profile', $acc_sel, $cfg);
-						if(!count($res_prof['err'])){
-							$cfg['twt_usr_nme'] = $res_prof['scr_name'];
+					if($cfg['csm_key'] != '' && $cfg['csm_sct'] != '' && $cfg['oah_tkn'] != '' && $cfg['oah_sct'] != ''){
+						$twt_prf = xmt_twt_oah_prf_get($cfg);						
+						if($twt_prf !== false){
+							$cfg['twt_usr_nme'] = $twt_prf['scr_nme'];
 							$cfg['oah_use'] = 1;
 							xmt_acc_cfg_upd($acc_sel, $cfg);
-							$conn = true;			
+						}else{
+							$cfg['oah_use'] = 0;
+							xmt_acc_cfg_upd($acc_sel, $cfg);
 						}
-					}
-					
-					$blog_url = get_option('siteurl');
-					if(substr($blog_url,-1) != '/')
-						$blog_url .= '/';
-					$url_cb = $blog_url.'wp-admin/admin.php?page=xhanch-my-twitter/admin/setting.php&profile='.$acc_sel;
-					
-					if(!$conn){
-						$res = xmt_req('reg', $acc_sel, $cfg, array('cb' => $url_cb));							
-						$cfg['tmp_oah_tkn'] = $res['ort'];
-						$cfg['tmp_oah_sct'] = $res['ors'];		
-						xmt_acc_cfg_upd($acc_sel, $cfg);	
-					}					
+					}else{
+						$cfg['oah_use'] = 0;
+						xmt_acc_cfg_upd($acc_sel, $cfg);
+					}		
 					
 			?>		
 				<form action="" method="post" id="frm_config">
@@ -457,7 +444,7 @@
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td width="150px"><?php echo __('Username', 'xmt'); ?></td>
-							<td width="200px"><input type="text" <?php echo ($conn?'value="'.$res_prof['scr_name'].'" disabled="disabled"':'value="'.htmlspecialchars($cfg['twt_usr_nme']).'"'); ?> id="txt_xmt_twt_usr_nme" name="txt_xmt_twt_usr_nme" style="width:100%"/></td>
+							<td width="200px"><input type="text" <?php echo ($cfg['oah_use']?'value="'.$twt_prf['scr_nme'].'" disabled="disabled"':'value="'.htmlspecialchars($cfg['twt_usr_nme']).'"'); ?> id="txt_xmt_twt_usr_nme" name="txt_xmt_twt_usr_nme" style="width:100%"/></td>
 							<td width="10px"></td>
 							<td width="150px"></td>
 							<td width="200px"></td>
@@ -584,13 +571,44 @@
 					<br/>
                         	
                     <b><?php echo __('Advanced Features', 'xmt'); ?></b><br/><br/>
-                    <small><?php echo __('<b>Note:</b> Advanced features will burden our web server because the Twitter application (Xhanch - MT) is hosted on our web server to handle OAuth authentication, retrieve your profile, tweets, replies, direct messages and more data. So, you should consider to set a higher "Tweet import interval" to reduce our server load and you may also <a href="http://xhanch.com/xhanch-my-twitter-donate"><b>donate us</b></a> so we can maintain our web server or even afford a much more reliable web server to keep Xhanch - My Twitter up, fast, reliable and stable. Thanks for your attention.', 'xmt'); ?></small><br/>
-                    <br/>
-                    <?php if(!$conn){ ?>                 
-                        <?php echo __('To enable advanced features, you need to grant read-write permission to Xhanch - My Twitter (Xhanch - MT) by clicking the following button.', 'xmt'); ?><br/>
-                        <a href="<?php echo $res['auth-url']; ?>"><img src="<?php echo xmt_base_url.'/img/button/sign-in.png'; ?>" alt="<?php echo __('Click here to connect this application with your Twitter Account', 'xmt'); ?>"/></a>
+                    <?php if(!$cfg['oah_use']){ ?>
+						<?php echo __('To enable the advance features, you will need to create a new Twitter application.', 'xmt'); ?><br/>
+						<?php echo __('To create a new Twitter application, just follow these steps:', 'xmt'); ?><br/>
+						- Create a new Twitter application <a href="http://dev.twitter.com/apps/new" title="Twitter App Registration" target="_blank">via this page</a><br/>
+						- If you're not logged in, you can use your Twitter username and password<br/>
+						- Some details you need to know when filling the form:<br/>
+						&nbsp;&nbsp;+ Application Name: Just give a name.<br/>
+						&nbsp;&nbsp;+ Application Type: <strong>Browser</strong><br/>
+						&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('siteurl'); ?></strong><br/>
+						&nbsp;&nbsp;+ Default Access Type: <strong>Read &amp; Write</strong><br/>
+						&nbsp;&nbsp;+ Fill the remaining details as you wish<br/>
+						- Fill in the CAPTCHA and click <b>Register application</b> button<br/>
+						<br/>
+
+						Once your application is created, you will see your application's detail page.<br/>
+						On that page, find your <b>Consumer key</b> and <b>Consumer secret</b>.<br/>
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="150px"><?php echo __('Consumer key', 'xmt'); ?></td>
+								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_key']); ?>" id="txt_xmt_csm_key" name="txt_xmt_csm_key" style="width:100%"/></td>
+								<td width="10px"></td>
+								<td width="150px"><?php echo __('Consumer secret', 'xmt'); ?></td>
+								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_sct']); ?>" id="txt_xmt_csm_sct" name="txt_xmt_csm_sct" style="width:100%"/></td>
+							</tr>
+						</table><br/>
+						On that right side, click <b>My Access Token</b> button. You will see another page.<br/>
+						On that page, find your <b>Access Token</b> and <b>Access Token Secret</b>.<br/>
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="150px"><?php echo __('Access Token', 'xmt'); ?></td>
+								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_tkn']); ?>" id="txt_xmt_oah_tkn" name="txt_xmt_oah_tkn" style="width:100%"/></td>
+								<td width="10px"></td>
+								<td width="150px"><?php echo __('Access Token Secret', 'xmt'); ?></td>
+								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_sct']); ?>" id="txt_xmt_oah_sct" name="txt_xmt_oah_sct" style="width:100%"/></td>
+							</tr>
+						</table>
                    	<?php }else{ ?>
-                    	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $res_prof['name']; ?></b> (<b><?php echo $res_prof['scr_name']; ?></b>)<br/><br/>
+                    	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $twt_prf['nme']; ?></b> (<b><?php echo $twt_prf['scr_nme']; ?></b>)<br/><br/>
                         <table cellpadding="0" cellspacing="0">
                             <tr>
                                 <td colspan="5"><input type="checkbox" id="chk_xmt_inc_drc_msg" name="chk_xmt_shw_pst_frm" value="1" <?php echo ($cfg['shw_pst_frm']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin', 'xmt'); ?></td>
