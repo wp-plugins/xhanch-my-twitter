@@ -24,7 +24,6 @@ We will keep improving this plugin in order to make this plugin to be the best T
 
 
 For complete features list, installation and setup, screen shots, FAQs, update logs/changelog, and support:
-
 * [Plugin details](http://xhanch.com/wp-plugin-my-twitter/ "Xhanch - My Twitter")
 * [Forum/community center](http://forum.xhanch.com "Forum/community center")
 * [Change/update logs](http://forum.xhanch.com/index.php/board,13.0.html "Change/update logs")
