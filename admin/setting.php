@@ -164,6 +164,8 @@
 				'inc_rpl_tou' => intval(xmt_form_post('chk_xmt_inc_rpl_tou')),
 				'inc_rtw' => intval(xmt_form_post('chk_xmt_inc_rtw')),
 				'inc_drc_msg' => intval(xmt_form_post('chk_xmt_inc_drc_msg')),
+				'ctn_kwd' => xmt_form_post('txt_xmt_ctn_kwd'),
+				'ecl_kwd' => xmt_form_post('txt_xmt_ecl_kwd'),
 				'cch_enb' => intval(xmt_form_post('chk_xmt_cch_enb')),
 				'cch_exp' => intval(xmt_form_post('int_xmt_cch_exp')),	
 				'imp_itv' => intval(xmt_form_post('int_xmt_imp_itv')),	
@@ -566,7 +568,21 @@
 							<td></td>
 							<td><?php echo __('Ellipsis', 'xmt'); ?></td>
 							<td><input type="text" id="txt_xmt_trc_chr" name="txt_xmt_trc_chr" value="<?php echo $cfg['trc_chr']; ?>" style="width:100%"/></td>
-						</tr>	
+						</tr>						
+						<tr>
+							<td colspan="5">
+								<?php echo __('Show tweets that contain these words', 'xmt'); ?><br/>
+								<input type="text" id="txt_xmt_ctn_kwd" name="txt_xmt_ctn_kwd" value="<?php echo $cfg['ctn_kwd']; ?>" style="width:100%"/><br/>
+								<small><i>Note: Separate the words with a comma (,)</i></small>
+							</td>
+						</tr>					
+						<tr>
+							<td colspan="5">
+								<?php echo __('Don\'t show tweets that contain these words', 'xmt'); ?><br/>
+								<input type="text" id="txt_xmt_ecl_kwd" name="txt_xmt_ecl_kwd" value="<?php echo $cfg['ecl_kwd']; ?>" style="width:100%"/><br/>
+								<small><i>Note: Separate the words with a comma (,)</i></small>
+							</td>
+						</tr>								
 					</table>
 					<br/>
                         	

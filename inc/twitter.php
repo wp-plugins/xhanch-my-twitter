@@ -195,6 +195,23 @@
 				$typ_exc[] = '\'dmg\'';
 			if(count($typ_exc) > 0)
 				$crt[] = 'twt_typ not in ('.implode(',', $typ_exc).')';
+
+			if($cfg['ctn_kwd']){
+				$ctn_kwd = explode(',', trim($cfg['ctn_kwd']));
+				if(count($ctn_kwd)){
+					foreach($ctn_kwd as $kwd){
+						$crt[] = 'twt like '.xmt_sql_str('%'.$kwd.'%');
+					}
+				}
+			}
+			if($cfg['ecl_kwd']){
+				$ecl_kwd = explode(',', trim($cfg['ecl_kwd']));
+				if(count($ecl_kwd)){
+					foreach($ecl_kwd as $kwd){
+						$crt[] = 'twt not like '.xmt_sql_str('%'.$kwd.'%');
+					}
+				}
+			}
 	
 			$sql = '
 				select 
