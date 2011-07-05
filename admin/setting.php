@@ -573,7 +573,7 @@
 							<td colspan="5">
 								<?php echo __('Show tweets that contain these words', 'xmt'); ?><br/>
 								<input type="text" id="txt_xmt_ctn_kwd" name="txt_xmt_ctn_kwd" value="<?php echo $cfg['ctn_kwd']; ?>" style="width:100%"/><br/>
-								<small><i>Note: Separate the words with a comma (,)</i></small>
+								<small><i>Note: Separate the words with comma (,)</i></small>
 							</td>
 						</tr>					
 						<tr>
