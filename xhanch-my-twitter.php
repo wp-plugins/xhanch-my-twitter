@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.6.3
+		Version: 2.6.4
 	*/
 	
 	define('xmt', true);
@@ -45,6 +45,8 @@
 		'shw_org_rtw' => 0,
 		'twt_new_pst' => 0,
 		'twt_new_pst_lyt' => '@title - @url',
+		'twt_new_pag' => 0,
+		'twt_new_pag_lyt' => '@title - @url',
 		'clc_usr_tag' => 1,
 		'clc_hsh_tag' => 1,
 		'clc_url' => 1,
@@ -252,11 +254,19 @@
 		foreach($acc_lst as $acc){	
 			$cfg = xmt_acc_cfg_get($acc);
 			if($cfg['oah_use'] && $cfg['twt_new_pst']){
-				$t_tweet = $cfg['twt_new_pst_lyt'];
+				if($info->post_type == 'post' && !$cfg['twt_new_pst'])
+					return;
+				if($info->post_type == 'page' && !$cfg['twt_new_pag'])
+					return;
+				
+				if($info->post_type == 'post')
+					$t_tweet = $cfg['twt_new_pst_lyt'];
+				elseif($info->post_type == 'page')
+					$t_tweet = $cfg['twt_new_pag_lyt'];
 				
 				$t_tweet = str_replace('@title', $info->post_title, $t_tweet);
 				$t_tweet = str_replace('@url', $url, $t_tweet);
-				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content),0,100), $t_tweet);
+				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content), 0, 100), $t_tweet);
 				
 				xmt_twt_oah_twt_pst($cfg, $t_tweet);				
 				xmt_twt_cch_rst($acc);

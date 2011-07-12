@@ -153,6 +153,8 @@
 				'shw_org_rtw' => intval(xmt_form_post('chk_xmt_shw_org_rtw')),
 				'twt_new_pst' => intval(xmt_form_post('chk_xmt_twt_new_pst')),
 				'twt_new_pst_lyt' => xmt_form_post('txa_xmt_twt_new_pst_lyt'),
+				'twt_new_pag' => intval(xmt_form_post('chk_xmt_twt_new_pag')),
+				'twt_new_pag_lyt' => xmt_form_post('txa_xmt_twt_new_pag_lyt'),
 				'clc_usr_tag' => intval(xmt_form_post('chk_xmt_clc_usr_tag')),
 				'clc_hsh_tag' => intval(xmt_form_post('chk_xmt_clc_hsh_tag')),
 				'clc_url' => intval(xmt_form_post('chk_xmt_clc_url')),
@@ -633,12 +635,17 @@
                                 <td colspan="5"><input type="checkbox" id="chk_xmt_inc_drc_msg" name="chk_xmt_inc_drc_msg" value="1" <?php echo ($cfg['inc_drc_msg']?'checked="checked"':''); ?>/> <?php echo __('Show/include direct messages', 'xmt'); ?></td>
                             </tr>
                             <tr>
-                                <td colspan="5"><input type="checkbox" id="chk_xmt_twt_new_pst" name="chk_xmt_twt_new_pst" value="1" <?php echo ($cfg['twt_new_pst']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new page/post', 'xmt'); ?></td>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_twt_new_pst" name="chk_xmt_twt_new_pst" value="1" <?php echo ($cfg['twt_new_pst']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new post', 'xmt'); ?></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><input type="checkbox" id="chk_xmt_twt_new_pag" name="chk_xmt_twt_new_pag" value="1" <?php echo ($cfg['twt_new_pag']?'checked="checked"':''); ?>/> <?php echo __('Post a tweet as you publish a new page', 'xmt'); ?></td>
                             </tr>
                             <tr>
                                 <td colspan="5">
-                                    <?php echo __('Auto tweet layout', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_auto_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
+                                    <?php echo __('Auto tweet layout (post)', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_auto_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
                                     <textarea id="txa_xmt_twt_new_pst_lyt" name="txa_xmt_twt_new_pst_lyt" style="width:100%;height:40px"><?php echo htmlspecialchars($cfg['twt_new_pst_lyt']); ?></textarea><br/>
+                                    <?php echo __('Auto tweet layout (page)', 'xmt'); ?> (<a href="javascript:show_more('sct_twt_auto_layout_var')"><?php echo __('show/hide available variables', 'xmt'); ?></a>)<br/>
+                                    <textarea id="txa_xmt_twt_new_pag_lyt" name="txa_xmt_twt_new_pag_lyt" style="width:100%;height:40px"><?php echo htmlspecialchars($cfg['twt_new_pag_lyt']); ?></textarea><br/>
                                     <div id="sct_twt_auto_layout_var" style="display:none;">		
                                         <small><i><?php echo __('Available variables for tweet layout', 'xmt'); ?></i></small>
                                         <ul>
