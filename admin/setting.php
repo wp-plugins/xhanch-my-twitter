@@ -9,7 +9,7 @@
 		$acc_sel = urldecode(xmt_form_get('profile'));
 		
 		$acc_lst = xmt_acc_lst();
-		if($acc_sel == '' || !in_array($acc_sel, $acc_lst)){
+		if($acc_sel == ''){
 			foreach($acc_lst as $acc){
 				$acc_sel = $acc;		
 				break;
@@ -76,7 +76,7 @@
 		);
 				
 		if(isset($_POST['cmd_xmt_crt_prf']) || isset($_POST['cmd_xmt_dpl_prf'])){
-			$acc_name = strtolower(xmt_form_post('txt_xmt_acc_nme'));
+			$acc_nme = strtolower(xmt_form_post('txt_xmt_acc_nme'));
 			$valid_chars = array(
 				'a','b','c','d','e','f','g','h','i','j',
 				'k','l','m','n','o','p','q','r','s','t',
@@ -84,12 +84,14 @@
 				'0','1','2','3','4','5','6','7','8','9'
 			);
 		
-			if(empty($acc_name))
-				echo '<div id="message" class="updated fade"><p>'.__('Profile name is empty', 'xmt').'</p></div>';
-			elseif(in_array($acc_name, $acc_lst))
+			if(empty($acc_nme))
+				echo '<div id="message" class="updated fade"><p>'.__('Profile name is empty', 'xmt').'</p></div>'; 
+			elseif($acc_nme == 'new')
+				echo '<div id="message" class="updated fade"><p>'.__('Profile name cannot be <b>new</b>', 'xmt').'</p></div>';
+			elseif(in_array($acc_nme, $acc_lst))
 				echo '<div id="message" class="updated fade"><p>'.__('Profile already exists', 'xmt').'</p></div>';
 			else{
-				$chars = str_split($acc_name);
+				$chars = str_split($acc_nme);
 				$valid = true;
 				foreach($chars as $key){
 					if(!in_array($key, $valid_chars)){		
@@ -100,10 +102,10 @@
 				}
 				if($valid){
 					if(isset($_POST['cmd_xmt_dpl_prf'])){
-						xmt_acc_add($acc_name, xmt_acc_cfg_get($acc_name));		
-						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$acc_sel.'</b> has been duplicated as <b>'.$acc_name.'</b>', 'xmt').'</p></div>';	
+						xmt_acc_add($acc_nme, xmt_acc_cfg_get($acc_nme));		
+						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$acc_sel.'</b> has been duplicated as <b>'.$acc_nme.'</b>', 'xmt').'</p></div>';	
 					}else{
-						xmt_acc_add($acc_name, $xmt_cfg_def);		
+						xmt_acc_add($acc_nme, $xmt_cfg_def);		
 						echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
 					}
 				}
@@ -267,7 +269,7 @@
 		$acc_lst = xmt_acc_lst();
 		ksort($acc_lst);
 		
-		if($acc_sel == '' || !in_array($acc_sel, $acc_lst)){
+		if($acc_sel == ''){
 			foreach($acc_lst as $acc){
 				$acc_sel = $acc;		
 				break;
@@ -337,37 +339,16 @@
             <div class="clear"></div>
 			<br/>
             <?php xmt_check(); ?>
-			<form action="" method="post">
-				<?php if(count($acc_lst) == 0){ ?>
-					<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
-				<?php } ?>
-				
-				<b><big><?php echo __('Add Profile', 'xmt'); ?></big></b><br/>
-				<br/>
-				<?php echo __('Fill the following form to create a new profile', 'xmt'); ?>
-				<br/><br/>
-				<table cellpadding="0" cellspacing="0">
-					<tr>
-						<td width="150px"><?php echo __('Name', 'xmt'); ?></td>
-						<td><input type="text" id="txt_xmt_acc_nme" name="txt_xmt_acc_nme" value="" style="width:200px"/></td>
-					</tr>
-				</table>
-				<i><small><?php echo __('Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)', 'xmt'); ?></small></i><br/>
-				<i><small><?php echo __('Each profile will create a new widget to be placed to your sidebar/post/template code', 'xmt'); ?></small></i><br/>
-				<p class="submit"><input type="submit" name="cmd_xmt_crt_prf" value="<?php echo __('Create Profile', 'xmt'); ?>"/></p>
-			</form>
+			
 			<br/>
-			<?php if(count($acc_lst) > 0){ ?>	
-				<b><big><?php echo __('Profile Configuration', 'xmt'); ?></big></b><br/>
-				<br/>
-				<div id="icon-themes" class="icon32"><br /></div>
-				<h2>
-					<?php foreach($acc_lst as $acc){ ?>
-                		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$acc_sel?' nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
-					<?php } ?>
-				</h2>
-                <div class="clear" style="border-top:1px solid #CCC;margin-top:-3px;"/><br/>		
-			<?php } ?>
+			<div id="icon-themes" class="icon32"><br /></div>
+			<h2>
+				<?php foreach($acc_lst as $acc){ ?>
+					<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$acc_sel?' nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
+				<?php } ?>
+				<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=new" class="nav-tab<?php echo ('new'==$acc_sel?' nav-tab-active':''); ?>">+</a>	
+			</h2>
+			<div class="clear" style="border-top:1px solid #CCC;margin-top:-3px;"/><br/>			
 					
 			<?php 
 				if(in_array($acc_sel, $acc_lst)){ 
@@ -591,40 +572,43 @@
                     <b><?php echo __('Advanced Features', 'xmt'); ?></b><br/><br/>
                     <?php if(!$cfg['oah_use']){ ?>
 						<?php echo __('To enable the advance features, you will need to create a new Twitter application.', 'xmt'); ?><br/>
-						<?php echo __('To create a new Twitter application, just follow these steps:', 'xmt'); ?><br/>
-						- Create a new Twitter application <a href="http://dev.twitter.com/apps/new" title="Twitter App Registration" target="_blank">via this page</a><br/>
-						- If you're not logged in, you can use your Twitter username and password<br/>
-						- Some details you need to know when filling the form:<br/>
-						&nbsp;&nbsp;+ Application Name: Just give a name.<br/>
-						&nbsp;&nbsp;+ Application Type: <strong>Browser</strong><br/>
-						&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('siteurl'); ?></strong><br/>
-						&nbsp;&nbsp;+ Default Access Type: <strong>Read &amp; Write</strong><br/>
-						&nbsp;&nbsp;+ Fill the remaining details as you wish<br/>
-						- Fill in the CAPTCHA and click <b>Register application</b> button<br/>
-						<br/>
+						<a href="javascript:show_more('sct_adv_ftr')"><?php echo __('Click here to setup this feature.', 'xmt'); ?></a>
+						<div id="sct_adv_ftr" style="display:none;">
+							<?php echo __('To create a new Twitter application, just follow these steps:', 'xmt'); ?><br/>
+							- Create a new Twitter application <a href="http://dev.twitter.com/apps/new" title="Twitter App Registration" target="_blank">via this page</a><br/>
+							- If you're not logged in, you can use your Twitter username and password<br/>
+							- Some details you need to know when filling the form:<br/>
+							&nbsp;&nbsp;+ Application Name: Just give a name.<br/>
+							&nbsp;&nbsp;+ Application Type: <strong>Browser</strong><br/>
+							&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('siteurl'); ?></strong><br/>
+							&nbsp;&nbsp;+ Default Access Type: <strong>Read &amp; Write</strong><br/>
+							&nbsp;&nbsp;+ Fill the remaining details as you wish<br/>
+							- Fill in the CAPTCHA and click <b>Register application</b> button<br/>
+							<br/>
 
-						Once your application is created, you will see your application's detail page.<br/>
-						On that page, find your <b>Consumer key</b> and <b>Consumer secret</b>.<br/>
-						<table cellpadding="0" cellspacing="0">
-							<tr>
-								<td width="150px"><?php echo __('Consumer key', 'xmt'); ?></td>
-								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_key']); ?>" id="txt_xmt_csm_key" name="txt_xmt_csm_key" style="width:100%"/></td>
-								<td width="10px"></td>
-								<td width="150px"><?php echo __('Consumer secret', 'xmt'); ?></td>
-								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_sct']); ?>" id="txt_xmt_csm_sct" name="txt_xmt_csm_sct" style="width:100%"/></td>
-							</tr>
-						</table><br/>
-						On that right side, click <b>My Access Token</b> button. You will see another page.<br/>
-						On that page, find your <b>Access Token</b> and <b>Access Token Secret</b>.<br/>
-						<table cellpadding="0" cellspacing="0">
-							<tr>
-								<td width="150px"><?php echo __('Access Token', 'xmt'); ?></td>
-								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_tkn']); ?>" id="txt_xmt_oah_tkn" name="txt_xmt_oah_tkn" style="width:100%"/></td>
-								<td width="10px"></td>
-								<td width="150px"><?php echo __('Access Token Secret', 'xmt'); ?></td>
-								<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_sct']); ?>" id="txt_xmt_oah_sct" name="txt_xmt_oah_sct" style="width:100%"/></td>
-							</tr>
-						</table>
+							Once your application is created, you will see your application's detail page.<br/>
+							On that page, find your <b>Consumer key</b> and <b>Consumer secret</b>.<br/>
+							<table cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="150px"><?php echo __('Consumer key', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_key']); ?>" id="txt_xmt_csm_key" name="txt_xmt_csm_key" style="width:100%"/></td>
+									<td width="10px"></td>
+									<td width="150px"><?php echo __('Consumer secret', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_sct']); ?>" id="txt_xmt_csm_sct" name="txt_xmt_csm_sct" style="width:100%"/></td>
+								</tr>
+							</table><br/>
+							On that right side, click <b>My Access Token</b> button. You will see another page.<br/>
+							On that page, find your <b>Access Token</b> and <b>Access Token Secret</b>.<br/>
+							<table cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="150px"><?php echo __('Access Token', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_tkn']); ?>" id="txt_xmt_oah_tkn" name="txt_xmt_oah_tkn" style="width:100%"/></td>
+									<td width="10px"></td>
+									<td width="150px"><?php echo __('Access Token Secret', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_sct']); ?>" id="txt_xmt_oah_sct" name="txt_xmt_oah_sct" style="width:100%"/></td>
+								</tr>
+							</table>
+						</div>
                    	<?php }else{ ?>
                     	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $twt_prf['nme']; ?></b> (<b><?php echo $twt_prf['scr_nme']; ?></b>)<br/><br/>
                         <table cellpadding="0" cellspacing="0">
@@ -800,28 +784,49 @@
 						<input type="submit" name="cmd_xmt_dpl_prf" value="<?php echo __('Duplicate Profile', 'xmt'); ?>"/>
 					</p>
 				</form>
-			<?php } ?>	
-			<br/><br/>
-			
-			<form action="" method="post">				
-				<b><big><?php echo __('Import Old Profiles', 'xmt'); ?></big></b><br/>
-				<br/>
-				<?php echo __('Are you just upgrading from version older than v 2.5.1? The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
-				<p class="submit"><input type="submit" name="cmd_xmt_migrate_profile" value="<?php echo __('Process', 'xmt'); ?>"/></p>
-			</form>	
-			<br/><br/>
-			
-			<form action="" method="post">				
-				<b><big><?php echo __('Database Information', 'xmt'); ?></big></b><br/>
-				<br/>				
-				<table cellpadding="0" cellspacing="0">
-					<tr>
-						<td width="150px"><?php echo __('Current version', 'xmt'); ?></td>
-						<td><input type="text" id="txt_xmt_dtb_ver" name="txt_xmt_dtb_ver" value="<?php echo get_option('xmt_vsn'); ?>" style="width:100px"/></td>
-					</tr>
-				</table>
-				<p class="submit"><input type="submit" name="cmd_xmt_dtb_ver_upd" value="<?php echo __('Change', 'xmt'); ?>"/></p>
-			</form>
+			<?php }else{ ?>	
+				<form action="" method="post">
+					<?php if(count($acc_lst) == 0){ ?>
+						<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
+					<?php } ?>
+					
+					<b><big><?php echo __('Add Profile', 'xmt'); ?></big></b><br/>
+					<br/>
+					<?php echo __('Fill the following form to create a new profile', 'xmt'); ?>
+					<br/><br/>
+					<table cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="150px"><?php echo __('Name', 'xmt'); ?></td>
+							<td><input type="text" id="txt_xmt_acc_nme" name="txt_xmt_acc_nme" value="" style="width:200px"/></td>
+						</tr>
+					</table>
+					<i><small><?php echo __('Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)', 'xmt'); ?></small></i><br/>
+					<i><small><?php echo __('Each profile will create a new widget to be placed to your sidebar/post/template code', 'xmt'); ?></small></i><br/>
+					<p class="submit"><input type="submit" name="cmd_xmt_crt_prf" value="<?php echo __('Create Profile', 'xmt'); ?>"/></p>
+				</form>
+				<br/><br/>
+
+				<form action="" method="post">				
+					<b><big><?php echo __('Import Old Profiles', 'xmt'); ?></big></b><br/>
+					<br/>
+					<?php echo __('Are you just upgrading from version older than v 2.5.1? The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
+					<p class="submit"><input type="submit" name="cmd_xmt_migrate_profile" value="<?php echo __('Process', 'xmt'); ?>"/></p>
+				</form>	
+				<br/><br/>
+				
+				<form action="" method="post">				
+					<b><big><?php echo __('Database Information', 'xmt'); ?></big></b><br/>
+					<br/>				
+					<table cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="150px"><?php echo __('Current version', 'xmt'); ?></td>
+							<td><input type="text" id="txt_xmt_dtb_ver" name="txt_xmt_dtb_ver" value="<?php echo get_option('xmt_vsn'); ?>" style="width:100px"/></td>
+						</tr>
+					</table>
+					<p class="submit"><input type="submit" name="cmd_xmt_dtb_ver_upd" value="<?php echo __('Change', 'xmt'); ?>"/></p>
+				</form>
+			<?php } ?>
+
 			<br/><br/>
 				
 			<a name="guide"></a>
