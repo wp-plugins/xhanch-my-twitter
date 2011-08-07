@@ -264,6 +264,22 @@
 		}elseif(isset($_POST['cmd_xmt_dtb_ver_upd'])){
 			update_option('xmt_vsn', xmt_form_post('txt_xmt_dtb_ver'));
 			echo '<div id="message" class="updated fade"><p>Database version has been set to <b>'.htmlspecialchars(xmt_form_post('txt_xmt_dtb_ver')).'</b></p></div>';	
+		}elseif(isset($_POST['cmd_xmt_twt_pst'])){
+			$cfg = xmt_acc_cfg_get($acc_sel);
+			$twt_str = trim(xmt_form_post('txa_xmt_twt_str'));
+			if($twt_str == '')
+				$msg = 'Your tweet is empty!';
+			if(strlen($twt_str) > 140)
+				$msg = 'Your tweet exceeds 140 characters!';
+			if($msg == ''){			
+				xmt_twt_oah_twt_pst($cfg, $twt_str);
+				$msg = 'Your tweet has been posted';
+				xmt_twt_cch_rst($acc_sel);
+				xmt_twt_imp($acc_sel, $cfg);
+			}
+
+			if($msg)
+				echo '<div id="message" class="updated fade"><p>'.__($msg, 'xmt').'</p></div>';	
 		}
 				
 		$acc_lst = xmt_acc_lst();
@@ -367,12 +383,20 @@
 					}else{
 						$cfg['oah_use'] = 0;
 						xmt_acc_cfg_upd($acc_sel, $cfg);
-					}		
-					
+					}							
 			?>		
 				<form action="" method="post" id="frm_config">
 					<i><small>Note: <a href="#guide"><?php echo __('Click here for a complete explaination about these configurations fields', 'xmt'); ?></a></small></i><br/>
 					<br/>				
+
+					<?php if($cfg['oah_use']) { ?>
+						<b><?php echo __('Post a tweet', 'xmt'); ?></b><br/>
+						<br/>
+						<textarea name="txa_xmt_twt_str" style="width:710px;height:40px"><?php echo htmlspecialchars($twt_str); ?></textarea><br/>
+						<input type="submit" name="cmd_xmt_twt_pst" value="<?php echo __('Post', 'xmt'); ?>"/>
+						<div class="clear"></div>
+						<br/>
+					<?php } ?>
                    	
 					<b><?php echo __('Widget Setting', 'xmt'); ?></b><br/>
 					<br/>
