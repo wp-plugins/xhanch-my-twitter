@@ -113,6 +113,13 @@
 		}elseif(isset($_POST['cmd_xmt_delete_profile'])){
 			xmt_acc_del($acc_sel);
 			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';				
+		}elseif(isset($_POST['cmd_xmt_delete_tweets'])){
+			$sql = '
+				delete from '.$wpdb->prefix.'xmt_twt
+				where acc_nme = '.xmt_sql_str($acc_sel).'
+			';
+			$wpdb->query($sql);
+			echo '<div id="message" class="updated fade"><p>All stored tweets for <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';	
 		}elseif(isset($_POST['cmd_xmt_disconnect'])){
 			$cfg = xmt_acc_cfg_get($acc_sel);
 			$cfg['oah_use'] = 0;					
@@ -159,6 +166,7 @@
 				'twt_new_pag_lyt' => xmt_form_post('txa_xmt_twt_new_pag_lyt'),
 				'clc_usr_tag' => intval(xmt_form_post('chk_xmt_clc_usr_tag')),
 				'clc_hsh_tag' => intval(xmt_form_post('chk_xmt_clc_hsh_tag')),
+				'shw_hsh_tag' => intval(xmt_form_post('chk_xmt_shw_hsh_tag')),
 				'clc_url' => intval(xmt_form_post('chk_xmt_clc_url')),
 				'url_lyt' => xmt_form_post('txt_xmt_url_lyt'),
 				'avt_shw' => intval(xmt_form_post('chk_xmt_avt_shw')),
@@ -535,11 +543,18 @@
 							<td><input type="text" id="txt_xmt_url_lyt" name="txt_xmt_url_lyt" value="<?php echo $cfg['url_lyt']; ?>"/></td>
 						</tr>
 						<tr>
+							<td><?php echo __('Clickable hash tag?', 'xmt'); ?></td>
+							<td><input type="checkbox" id="chk_xmt_clc_hsh_tag" name="chk_xmt_clc_hsh_tag" value="1" <?php echo ($cfg['clc_hsh_tag']?'checked="checked"':''); ?>/></td>
+							<td></td>
+							<td><?php echo __('Show hash tag?', 'xmt'); ?></td>
+							<td><input type="checkbox" id="chk_xmt_shw_hsh_tag" name="chk_xmt_shw_hsh_tag" value="1" <?php echo ($cfg['shw_hsh_tag']?'checked="checked"':''); ?>/></td>
+						</tr>
+						<tr>
 							<td><?php echo __('Clickable user tag?', 'xmt'); ?></td>
 							<td><input type="checkbox" id="chk_xmt_clc_usr_tag" name="chk_xmt_clc_usr_tag" value="1" <?php echo ($cfg['clc_usr_tag']?'checked="checked"':''); ?>/></td>
 							<td></td>
-							<td><?php echo __('Clickable hash tag?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_clc_hsh_tag" name="chk_xmt_clc_hsh_tag" value="1" <?php echo ($cfg['clc_hsh_tag']?'checked="checked"':''); ?>/></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td><?php echo __('Show divider line?', 'xmt'); ?></td>
@@ -673,7 +688,6 @@
                                 <td width="200px"></td>
                             </tr>
                       	</table><br/>
-                    	<input type="submit" name="cmd_xmt_disconnect" value="<?php echo __('Disconnect From Twitter', 'xmt'); ?>"/>
                     <?php } ?>
                     <br/><br/>                    
 	
@@ -791,6 +805,10 @@
 					<p class="submit">
 						<input type="submit" name="cmd_xmt_update_profile" value="<?php echo __('Update Profile', 'xmt'); ?>"/>
 						<input type="submit" name="cmd_xmt_clear_cache" value="<?php echo __('Clear Cache', 'xmt'); ?>" onclick="return confirm('Are you sure to clear the cached data for this profile?')"/>
+						<?php if($cfg['oah_use']){ ?>
+                    		<input type="submit" name="cmd_xmt_disconnect" value="<?php echo __('Disconnect From Twitter', 'xmt'); ?>"/>							
+						<?php } ?>
+						<input type="submit" name="cmd_xmt_delete_tweets" value="<?php echo __('Delete All Stored Tweets', 'xmt'); ?>" onclick="return confirm('Are you sure to delete all stored tweets?')"/>
 						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>" onclick="return confirm('Are you sure to delete this profile?')"/>
 					</p>
                     

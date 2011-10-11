@@ -5,7 +5,7 @@
 		Description: Twitter plugin for wordpress
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.6.5
+		Version: 2.6.6
 	*/
 	
 	define('xmt', true);
@@ -49,6 +49,7 @@
 		'twt_new_pag_lyt' => '@title - @url',
 		'clc_usr_tag' => 1,
 		'clc_hsh_tag' => 1,
+		'shw_hsh_tag' => 1,
 		'clc_url' => 1,
 		'url_lyt' => '',
 		'avt_shw' => 1,
@@ -85,22 +86,6 @@
 	$dir->close();
 
 	define('xmt_base_url', xmt_get_dir('url'));
-
-	$acc_lst = xmt_acc_lst();	
-	foreach($acc_lst as $acc){
-		$php_wid_function = '
-			function widget_xmt_'.$acc.'($args){
-				widget_xmt($args, \''.$acc.'\');
-			}
-			function widget_xmt_control_'.$acc.'(){
-				widget_xmt_control(\''.$acc.'\');
-			}
-		';
-		eval($php_wid_function);	
-		
-		wp_register_sidebar_widget('xmt_'.$acc, __('Xhanch - My Twitter', 'xmt').' : '.$acc, 'widget_xmt_'.$acc);
-		register_widget_control('xmt_'.$acc, 'widget_xmt_control_'.$acc, 300, 200 );
-	}
 	
 	function xmt_itl(){
 		$upd_res = false;
@@ -239,12 +224,6 @@
 		
 		xmt_tmd('Finished');
 	}
-
-	function widget_xmt_control($acc){	
-?>
-		<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo $acc; ?>"><?php echo __('Click here to configure this plugin', 'xmt'); ?></a>
-<?php		
-	}
 		
 	function xmt_tweet_post($post_id){
 		$info = get_post($post_id);
@@ -316,4 +295,43 @@
 		}
 		$dir->close();
 	}
+	
+	class xmt_wgt extends WP_Widget{
+		function xmt_wgt(){
+			$wgt_opt = array('classname' => 'xmt', 'description' => 'Display your latest tweets from a profile');
+			$ctr_opt = array('width' => 300, 'height' => 200);
+			$this->WP_Widget(false, 'XMT: Latest Tweets', $wgt_opt, $ctr_opt);
+		}
+
+		function widget($arg, $cfg){
+			widget_xmt($arg, $cfg['prf']);
+		}
+
+		function update($new_cfg, $old_cfg) {
+			$cfg = $old_cfg;
+			$cfg['prf'] = $new_cfg['prf'];
+			return $cfg;
+		}
+
+		function form($cfg){
+			$acc_lst = xmt_acc_lst();
+			$cbo_prf = '<option value="" '.(''==$cfg['prf']?'selected="selected"':'').'>- Select Profile -</option>';
+			foreach($acc_lst as $acc){
+				$cbo_prf .= '<option value="'.$acc.'" '.($acc==$cfg['prf']?'selected="selected"':'').'>'.ucfirst($acc).'</option>';
+			}
+?>
+			<table style="width:350px">
+				<tr>
+					<td style="width:100px"><label for="Profile">Profile</label></td>
+					<td style="width:200px"><select id="<?php echo $this->get_field_id('prf'); ?>" name="<?php echo $this->get_field_name('prf'); ?>" style="width:200px"><?php echo $cbo_prf; ?></select></td>
+				</tr>
+				<tr>
+					<td colspan="2"><a href="admin.php?page=xhanch-my-twitter/admin/setting.php"><?php echo __('Click here to manage your profiles', 'xmt'); ?></a></td>
+				</tr>
+			</table>
+<?php 
+		}
+	}
+
+	add_action('widgets_init', create_function('', 'return register_widget("xmt_wgt");'));
 ?>
