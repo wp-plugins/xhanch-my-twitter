@@ -102,7 +102,7 @@
 				}
 				if($valid){
 					if(isset($_POST['cmd_xmt_dpl_prf'])){
-						xmt_acc_add($acc_nme, xmt_acc_cfg_get($acc_nme));		
+						xmt_acc_add($acc_nme, xmt_acc_cfg_get($acc_sel));		
 						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$acc_sel.'</b> has been duplicated as <b>'.$acc_nme.'</b>', 'xmt').'</p></div>';	
 					}else{
 						xmt_acc_add($acc_nme, $xmt_cfg_def);		
@@ -187,7 +187,7 @@
 				'imp_itv' => intval(xmt_form_post('int_xmt_imp_itv')),	
 				'thm' => xmt_form_post('cbo_xmt_thm'),
 				'cst_css' => xmt_form_post('txa_xmt_cst_css'),
-				'shw_crd' => intval(xmt_form_post('chk_xmt_shw_crd')),
+				'shw_crd' => (intval(xmt_form_post('chk_xmt_shw_crd'))?0:1),
 				'cvr_sml' => intval(xmt_form_post('chk_xmt_cvr_sml')),
 				'lnk_new_tab' => intval(xmt_form_post('chk_xmt_lnk_new_tab')),
 				'tmp_oah_tkn' => '',
@@ -292,6 +292,16 @@
 
 			if($msg)
 				echo '<div id="message" class="updated fade"><p>'.__($msg, 'xmt').'</p></div>';	
+		}elseif(isset($_POST['cmd_xmt_import_profile'])){
+			$xmt_fle_nme = $_FILES['fil_xmt_prf_fle']['tmp_name'];	
+			$xmt_dat = unserialize(base64_decode(file_get_contents($xmt_fle_nme)));
+			if($xmt_dat === false)
+				echo '<div id="message" class="updated fade"><p>'.__('Invalid XMT profile file', 'xmt').'</p></div>';	
+			else{
+				xmt_acc_del($xmt_dat['nme']);
+				xmt_acc_add($xmt_dat['nme'], $xmt_dat['cfg']);	
+				echo '<div id="message" class="updated fade"><p>'.__('XMT profile (<b>'.$xmt_dat['nme'].'</b>) has been successfully imported', 'xmt').'</p></div>';
+			}
 		}
 				
 		$acc_lst = xmt_acc_lst();
@@ -397,7 +407,7 @@
 						xmt_acc_cfg_upd($acc_sel, $cfg);
 					}							
 			?>		
-				<form action="" method="post" id="frm_config">
+				<form action="" method="post" id="frm_config" enctype="multipart/form-data">
 					<i><small>Note: <a href="#guide"><?php echo __('Click here for a complete explaination about these configurations fields', 'xmt'); ?></a></small></i><br/>
 					<br/>				
 
@@ -790,8 +800,8 @@
 							<td width="200px"><input type="checkbox" id="chk_xmt_lnk_new_tab" name="chk_xmt_lnk_new_tab" value="1" <?php echo ($cfg['lnk_new_tab']?'checked="checked"':''); ?>/></td>
 						</tr>
 						<tr>
-							<td><?php echo __('Show credit?', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'checked="checked"':''); ?>/></td>
+							<td><?php echo __('I have <a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank">donated</a>!', 'xmt'); ?></td>
+							<td><input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'':'checked="checked"'); ?>/></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -834,6 +844,7 @@
                     		<input type="submit" name="cmd_xmt_disconnect" value="<?php echo __('Disconnect From Twitter', 'xmt'); ?>"/>							
 						<?php } ?>
 						<input type="submit" name="cmd_xmt_delete_tweets" value="<?php echo __('Delete All Stored Tweets', 'xmt'); ?>" onclick="return confirm('Are you sure to delete all stored tweets?')"/>
+						<input type="button" name="cmd_xmt_export_profile" value="<?php echo __('Export Profile', 'xmt'); ?>" onclick="location.href='<?php echo xmt_get_dir('url').'/misc/profile-export.php?prf='.urlencode($acc_sel); ?>'"/>
 						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>" onclick="return confirm('Are you sure to delete this profile?')"/>
 					</p>
                     
@@ -873,8 +884,17 @@
 				</form>
 				<br/><br/>
 
+				<form action="" method="post" enctype="multipart/form-data">					
+					<b><big><?php echo __('Import XMT profile', 'xmt'); ?></big></b><br/>
+					<br/>
+					<?php echo __('Browse for your XMT profile file (<b>.xmt</b>)', 'xmt'); ?><br/>							
+					<input type="file" size="30" name="fil_xmt_prf_fle"/><br/>	
+					<p class="submit"><input type="submit" name="cmd_xmt_import_profile" value="<?php echo __('Import Profile', 'xmt'); ?>"/></p>
+				</form>
+				<br/><br/>
+
 				<form action="" method="post">				
-					<b><big><?php echo __('Import Old Profiles', 'xmt'); ?></big></b><br/>
+					<b><big><?php echo __('Migrate Old Profiles', 'xmt'); ?></big></b><br/>
 					<br/>
 					<?php echo __('Are you just upgrading from version older than v 2.5.1? The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
 					<p class="submit"><input type="submit" name="cmd_xmt_migrate_profile" value="<?php echo __('Process', 'xmt'); ?>"/></p>

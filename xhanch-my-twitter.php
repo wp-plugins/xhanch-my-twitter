@@ -2,10 +2,10 @@
 	/*
 		Plugin Name: Xhanch - My Twitter
 		Plugin URI: http://xhanch.com/wp-plugin-my-twitter/
-		Description: Twitter plugin for wordpress
+		Description: The best Twitter plugin to integrate your Wordpress and your Twitter accounts
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.6.7
+		Version: 2.6.8
 	*/
 	
 	define('xmt', true);
