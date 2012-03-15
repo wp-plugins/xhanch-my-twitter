@@ -919,7 +919,7 @@
 			<a name="guide"></a>
 			<b><big><?php echo __('Support This Plugin Development', 'xmt'); ?></big></b><br/>		
 			<br/>
-			<font color="red"><b>Hot offer:</b> By donating any amount, you can place a link (do follow) at our PR6 site (<a href="http://xhanch.com" target="_blank">http://xhanch.com</a>) ($1 = 1 day)</font><br/><br/>
+			<font color="red"><b>Hot offer:</b> By donating any amount, you can place a link (do follow) at our PR 6 website (<a href="http://xhanch.com" target="_blank">http://xhanch.com</a>) (US$1 = 1 day)</font><br/><br/>
 			<?php echo __('Do you like this plugin? Do you think this plugin very helpful?', 'xmt'); ?><br/>
 			<?php echo __('Why don\'t you support this plugin developement by donating any amount you are willing to give?', 'xmt'); ?><br/>
 			<br/>
@@ -939,7 +939,7 @@
 			</div>
 			<br/>
 			<b>Useful links:</b><br/>
-			- <a href="http://forum.xhanch.com/index.php/board,13.0.html" target="_blank">Update/change logs of this plugin </a><br/>
+			- <a href="http://forum.xhanch.com/index.php/board,13.0.html" target="_blank">Update/change logs of this plugin</a><br/>
 			- <a href="http://forum.xhanch.com/index.php/board,9.0.html" target="_blank">Ask and share about how to customize this plugin. You may also ask questions about plugin configurations</a><br/>
 			- <a href="http://forum.xhanch.com/index.php/board,12.0.html" target="_blank">Have a thought to improve this plugin? Suggest it here</a><br/>
 			- <a href="http://forum.xhanch.com/index.php/board,10.0.html" target="_blank">Found a bug/error? Kindly report it here</a><br/>
