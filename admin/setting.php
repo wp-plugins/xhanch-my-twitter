@@ -206,7 +206,7 @@
 			$path = xmt_base_dir.'/theme';		
 			$dir = dir($path);	
 			while($thm = $dir->read()){
-				if($thm == '.' || $thm == '..')
+				if($thm == '.' || $thm == '..' || substr($thm,-5) == '.html')
 					continue;
 				$target = $path.'/'.$thm.'/conf-set.php';
 				$tpl_cfg = array();
@@ -343,7 +343,7 @@
 					$path = xmt_base_dir.'/theme';		
 					$dir = dir($path);	
 					while($thm = $dir->read()){
-						if($thm == '.' || $thm == '..')
+						if($thm == '.' || $thm == '..' || substr($thm,-5) == '.html')
 							continue;
 						echo 'document.getElementById("sct_md_'.$thm.'").style.display = "none";';										
 					}
@@ -737,7 +737,7 @@
 									$path = xmt_base_dir.'/theme';		
 									$dir = dir($path);	
 									while($thm = $dir->read()){
-										if($thm == '.' || $thm == '..')
+										if($thm == '.' || $thm == '..' || substr($thm,-5) == '.html')
 											continue;
 								?>
 										<option value="<?php echo $thm; ?>" <?php echo ($thm==$cfg['thm'])?'selected="selected"':''; ?>><?php echo __(ucwords($thm), 'xmt'); ?></option>	
@@ -757,7 +757,7 @@
 									$path = xmt_base_dir.'/theme';		
 									$dir = dir($path);	
 									while($thm = $dir->read()){
-										if($thm == '.' || $thm == '..')
+										if($thm == '.' || $thm == '..' || substr($thm,-5) == '.html')
 											continue;
 										echo '<div id="sct_md_'.$thm.'" style="display:none;">';
 
