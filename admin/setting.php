@@ -919,7 +919,7 @@
 			<a name="guide"></a>
 			<b><big><?php echo __('Support This Plugin Development', 'xmt'); ?></big></b><br/>		
 			<br/>
-			<b>Hot offer:</b> Place a link (do follow) at our PR6 site (http://xhanch.com) by donating any amount ($1 = 1 day)<br/><br/>
+			<font color="red"><b>Hot offer:</b> By donating any amount, you can place a link (do follow) at our PR6 site (<a href="http://xhanch.com" target="_blank">http://xhanch.com</a>) ($1 = 1 day)</font><br/><br/>
 			<?php echo __('Do you like this plugin? Do you think this plugin very helpful?', 'xmt'); ?><br/>
 			<?php echo __('Why don\'t you support this plugin developement by donating any amount you are willing to give?', 'xmt'); ?><br/>
 			<br/>
