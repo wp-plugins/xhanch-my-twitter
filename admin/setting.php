@@ -799,13 +799,6 @@
 							<td width="150px"><?php echo __('Open link in new tab?', 'xmt'); ?></td>
 							<td width="200px"><input type="checkbox" id="chk_xmt_lnk_new_tab" name="chk_xmt_lnk_new_tab" value="1" <?php echo ($cfg['lnk_new_tab']?'checked="checked"':''); ?>/></td>
 						</tr>
-						<tr>
-							<td><?php echo __('I have <a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank">donated</a>!', 'xmt'); ?></td>
-							<td><input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'':'checked="checked"'); ?>/></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
 					</table><br/>
 										
 					<b><?php echo __('Codes for Template and Post/Page', 'xmt'); ?></b><br/>
@@ -835,8 +828,12 @@
                                 
                             </td>
 						</tr>
-					</table><br/>
-					
+					</table><br/><br/>
+
+					<input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'checked="checked"':''); ?>/>
+					<b><?php echo __('Show credit link ("Powered by"), I will <a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank">donate</a> later.', 'xmt'); ?></b>
+					<br/>
+
 					<p class="submit">
 						<input type="submit" name="cmd_xmt_update_profile" value="<?php echo __('Update Profile', 'xmt'); ?>"/>
 						<input type="submit" name="cmd_xmt_clear_cache" value="<?php echo __('Clear Cache', 'xmt'); ?>" onclick="return confirm('Are you sure to clear the cached data for this profile?')"/>

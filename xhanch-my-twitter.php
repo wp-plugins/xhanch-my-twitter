@@ -70,7 +70,7 @@
 		'imp_itv' => 60,	
 		'thm' => 'default',
 		'cst_css' => '',
-		'shw_crd' => 1,
+		'shw_crd' => 0,
 		'cvr_sml' => 1,
 		'lnk_new_tab' => 1,
 		'tmp_oah_tkn' => '',

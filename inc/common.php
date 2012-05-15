@@ -129,8 +129,12 @@
 	}
 
 	function xmt_get_dir($type) {
-		if ( !defined('WP_CONTENT_URL') )
-			define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+		if ( !defined('WP_CONTENT_URL')){
+			$tmp_url = get_option('siteurl').'/wp-content';
+			if($_SERVER["HTTPS"] == "on")
+				$tmp_url = str_replace('http://', 'https://', $tmp_url);
+			define( 'WP_CONTENT_URL', $tmp_url);
+		}
 		if ( !defined('WP_CONTENT_DIR') )
 			define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 		if ($type=='path') { return WP_CONTENT_DIR.'/plugins/'.plugin_basename(xmt_base_dir); }
