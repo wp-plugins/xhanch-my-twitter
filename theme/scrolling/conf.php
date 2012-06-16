@@ -3,7 +3,7 @@
 		exit;
 		
 	wp_enqueue_script('jquery');
-	wp_enqueue_script('xmt_marquee', xmt_get_dir('url').'/js/marquee.js');
+	wp_enqueue_script('xmt_marquee', xmt_get_dir('url').'/js/marquee.js', array('jquery'));
 
 	$tpl_cfg = array(
 		'thm_scr_szh' => 200,
