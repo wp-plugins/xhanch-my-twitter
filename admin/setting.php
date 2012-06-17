@@ -187,7 +187,7 @@
 				'imp_itv' => intval(xmt_form_post('int_xmt_imp_itv')),	
 				'thm' => xmt_form_post('cbo_xmt_thm'),
 				'cst_css' => xmt_form_post('txa_xmt_cst_css'),
-				'shw_crd' => (intval(xmt_form_post('chk_xmt_shw_crd'))?0:1),
+				'shw_crd' => (intval(xmt_form_post('chk_xmt_shw_crd'))?1:0),
 				'cvr_sml' => intval(xmt_form_post('chk_xmt_cvr_sml')),
 				'lnk_new_tab' => intval(xmt_form_post('chk_xmt_lnk_new_tab')),
 				'tmp_oah_tkn' => '',
