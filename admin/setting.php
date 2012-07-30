@@ -15,6 +15,7 @@
 				break;
 			}
 		}
+		$twt_str = '';
 			
 		$arr_header_style = array(
 			'' => 'No Header',
@@ -136,7 +137,7 @@
 			xmt_twt_cch_rst($acc_sel);
 			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Cache has been cleared', 'xmt').'</p></div>';				
-		}elseif($_POST['cmd_xmt_update_profile']){
+		}elseif(isset($_POST['cmd_xmt_update_profile'])){
 			$cfg = $xmt_acc[$acc_sel]['cfg'];
 			$tmp_cfg = array(
 				'ttl' => xmt_form_post('txt_xmt_ttl'),
@@ -815,7 +816,7 @@
 				</form>
 			<?php }else{ ?>	
 				<form action="" method="post">
-					<?php if(count($acc_lst) == 0){ ?>
+					<?php if(count($xmt_acc) == 0){ ?>
 						<?php echo __('You have not created any profile yet.', 'xmt'); ?><br/><br/>
 					<?php } ?>
 					
