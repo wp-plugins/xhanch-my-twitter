@@ -785,7 +785,7 @@
 					</table><br/><br/>
 
 					<input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'checked="checked"':''); ?>/>
-					<b><?php echo __('Show credit link ("Powered by"), I will <a href="http://store.xhanch.com/others/61-xhanch-dynamic-payment.html" target="_blank">donate</a> later.', 'xmt'); ?></b>
+					<b><?php echo __('Show credit link ("Powered by"), I will <a href="http://xhanch.com/xhanch-donate/" target="_blank">donate</a> later.', 'xmt'); ?></b>
 					<br/>
 
 					<p class="submit">
@@ -867,7 +867,7 @@
 			<?php echo __('Why don\'t you support this plugin developement by donating any amount you are willing to give?', 'xmt'); ?><br/>
 			<br/>
 			<?php echo __('If you wish to support the developer and make a donation, please click the following button. Thanks!', 'xmt'); ?><br/>
-			<a href="http://store.xhanch.com/others/61-xhanch-dynamic-payment.html" target="_blank"><img src="http://xhanch.com/image/paypal/btn_donate.gif" alt="<?php echo __('Donate', 'xmt'); ?>"></a></p>
+			<a href="http://xhanch.com/xhanch-donate/" target="_blank"><img src="http://xhanch.com/image/paypal/btn_donate.gif" alt="<?php echo __('Donate', 'xmt'); ?>"></a></p>
 
 			<br/><br/>
 			<a name="guide"></a>
