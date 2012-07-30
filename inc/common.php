@@ -8,16 +8,29 @@
 	}
 
 	function xmt_check(){
+		global $xmt_acc;
+
 		$issues = array();
 		if(!function_exists('curl_init'))
 			$issues[] = __('Oops, your web server does not provide/support/enable the CURL Extension. But, this plugin may work if you just leave the password field empty/blank or you can ask your hosting provider to enable it for you', 'xmt');
 		if(!function_exists('simplexml_load_string'))
 			$issues[] = __('SimpleXML cannot be found. You can ask your hosting provider to enable it or you can\'t use this plugin.', 'xmt');
+
+		foreach($xmt_acc as $acc=>$acc_det){
+			if($xmt_acc[$acc]['cfg']['cch_enb']){				
+				if(!is_dir(xmt_cch_dir))
+					@mkdir(xmt_cch_dir);
+				if(!is_dir(xmt_cch_dir))
+					$issues[] = __('Cannot create cache directory! Please create a new directory, <b>xhc-xmt</b>, in your <b>wp-content</b>', 'xmt');
+				break;
+			}
+		}
+
 		if(count($issues))
 			echo '<div id="message" class="updated fade"><p><b>'.__('Plugin requirements issue(s)', 'xmt').'</b>:<br/><br/>'.implode('<br/><br/>', $issues).'</p></div>';
 	}
 
-	function xmt_replace_vars($str, $acc, $cfg){		
+	function xmt_replace_vars($str, $acc){		
 		if(trim($str) == '')
 			return $str;
 
@@ -25,7 +38,7 @@
 		if(strpos($str, '@') === false)
 			return $str;
 		
-		$det = xmt_prf_get($acc, $cfg); 	
+		$det = xmt_prf_get($acc);
 		$str = str_replace('@followers_count', intval($det['followers_count']), $str);
 		$str = str_replace('@friends_count', intval($det['friends_count']), $str);
 		$str = str_replace('@favourites_count', intval($det['favourites_count']), $str);
@@ -49,14 +62,16 @@
 			echo '<i>- XMT: '.str_replace('--', '-', __($str, 'xmt')).' -</i><br/>';
 	}
 
-	function xmt_make_clickable($ret, $acc, $cfg) {		
+	function xmt_make_clickable($ret, $acc){
+		global $xmt_acc;
+
 		$ret = ' ' . $ret;
 		
 		$has_url = preg_match_all('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/\-=?@\[\](+]|[.,;:](?![\s<])|(?(1)\)(?![\s<])|\)))+)#is', $ret, $tmp);
 		if($has_url){
 			foreach($tmp[2] AS $aV){
 				$url = esc_url($aV);
-				$rpc = '<a href="'.$url.'" rel="nofollow" '.($cfg['lnk_new_tab']?'target="_blank"':'').'>'.($cfg['url_lyt']?$cfg['url_lyt']:$url).'</a>';
+				$rpc = '<a href="'.$url.'" rel="nofollow" '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').'>'.($xmt_acc[$acc]['cfg']['url_lyt']?$xmt_acc[$acc]['cfg']['url_lyt']:$url).'</a>';
 				$ret = str_replace($aV, $rpc, $ret);
 			}
 		}

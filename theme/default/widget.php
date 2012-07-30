@@ -8,22 +8,22 @@
 		return;		
 	echo $before_widget;
 
-	if($cfg['ttl'] != ''){
+	if($xmt_acc[$acc]['cfg']['ttl'] != ''){
 		echo $before_title;
 		
-		if($cfg['lnk_ttl'])
-			echo '<a href="http://twitter.com/'.$cfg['twt_usr_nme'].'" rel="external nofollow" '.($cfg['lnk_new_tab']?'target="_blank"':'').'>';
-		echo $cfg['ttl'];
-		if($cfg['lnk_ttl'])
+		if($xmt_acc[$acc]['cfg']['lnk_ttl'])
+			echo '<a href="http://twitter.com/'.$xmt_acc[$acc]['cfg']['twt_usr_nme'].'" rel="external nofollow" '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').'>';
+		echo $xmt_acc[$acc]['cfg']['ttl'];
+		if($xmt_acc[$acc]['cfg']['lnk_ttl'])
 			echo '</a>';
 		
 		echo $after_title;		
 	}
 
 	echo '<div id="xmt_'.$acc.'_wid" class="xmt xmt_'.$acc.'">';
-	xmt_hdr_sty($acc, $cfg);
+	xmt_hdr_sty($acc);
 
-	echo xmt_replace_vars($cfg['widget']['custom_text']['header'], $acc, $cfg);
+	echo xmt_replace_vars($xmt_acc[$acc]['cfg']['cst_hdr_txt'], $acc);
 	
 	if($cur_role == 'administrator'){
 		echo '<a name="xmt_'.$acc.'"></a>';
@@ -35,16 +35,16 @@
 
 	echo '<ul class="tweet_area">';
 
-	$twt_lyt = $cfg['twt_lyt'];
+	$twt_lyt = $xmt_acc[$acc]['cfg']['twt_lyt'];
 	$twt_lyt = convert_smilies(html_entity_decode($twt_lyt));
 
 	foreach($res as $sts_id=>$row){
 		echo '<li class="tweet_list">';
-			if($cfg['shw_hrl'])
+			if($xmt_acc[$acc]['cfg']['shw_hrl'])
 				echo '<hr/>';
 			
-			if($cfg['avt_shw']){					
-				echo '<a href="'.$row['author_url'].'" '.($cfg['lnk_new_tab']?'target="_blank"':'').'><img class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
+			if($xmt_acc[$acc]['cfg']['avt_shw']){					
+				echo '<a href="'.$row['author_url'].'" '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').'><img class="tweet_avatar" src="'.$row['author_img'].'" alt="'.$row['author_name'].'"/></a>';				
 			}
 						
 			$lnk_sts = 'http://twitter.com/'.$row['author'].'/status/'.$sts_id;
@@ -52,16 +52,16 @@
 			$lnk_rpl = 'http://twitter.com/home?status='.urlencode('@'.$row['author']).'&amp;in_reply_to_status_id='.$sts_id.'&amp;in_reply_to='.urlencode($row['author']);
 			
 			$tmp_str = str_replace('@screen_name_plain', $row['author'], $twt_lyt);
-			$tmp_str = str_replace('@screen_name', '<a href="'.$row['author_url'].'"  '.($cfg['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.$row['author'].'</a>', $tmp_str);
+			$tmp_str = str_replace('@screen_name', '<a href="'.$row['author_url'].'"  '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.$row['author'].'</a>', $tmp_str);
 			$tmp_str = str_replace('@name_plain', $row['author_name'], $tmp_str);
-			$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'"  '.($cfg['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
+			$tmp_str = str_replace('@name', '<a href="'.$row['author_url'].'"  '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.$row['author_name'].'</a>', $tmp_str);
 			$tmp_str = str_replace('@date', $row['timestamp'], $tmp_str);
 			$tmp_str = str_replace('@source', $row['source'], $tmp_str);
 			$tmp_str = str_replace('@tweet', $row['tweet'], $tmp_str);
 			$tmp_str = str_replace('@reply_url', $lnk_rpl, $tmp_str);
-			$tmp_str = str_replace('@reply_link', '<a href="'.$lnk_rpl.'"  '.($cfg['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.__('reply', 'xmt').'</a>', $tmp_str);
+			$tmp_str = str_replace('@reply_link', '<a href="'.$lnk_rpl.'"  '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.__('reply', 'xmt').'</a>', $tmp_str);
 			$tmp_str = str_replace('@retweet_url', $lnk_rtw, $tmp_str);
-			$tmp_str = str_replace('@retweet_link', '<a href="'.$lnk_rtw.'"  '.($cfg['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.__('retweet', 'xmt').'</a>', $tmp_str);
+			$tmp_str = str_replace('@retweet_link', '<a href="'.$lnk_rtw.'"  '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').' rel="external nofollow">'.__('retweet', 'xmt').'</a>', $tmp_str);
 			$tmp_str = str_replace('@status_url', $lnk_sts, $tmp_str);
 			
 			echo $tmp_str;
@@ -71,12 +71,12 @@
 		echo '</li>';
 	}
 	echo '</ul>';
-	if($cfg['shw_hrl']) 
+	if($xmt_acc[$acc]['cfg']['shw_hrl']) 
 		echo '<hr/>';
 				
-	echo xmt_replace_vars($cfg['cst_ftr_txt'], $acc, $cfg); 
+	echo xmt_replace_vars($xmt_acc[$acc]['cfg']['cst_ftr_txt'], $acc); 
 
-	if ($cfg['shw_crd']){
+	if ($xmt_acc[$acc]['cfg']['shw_crd']){
 		echo '<div class="credit"><a href="http://xhanch.com/wp-plugin-my-twitter/" rel="section" title="'.__('Xhanch My Twitter - The best WordPress plugin to integrate your WordPress website with your Twitter accounts', 'xmt').'">'.__('My Twitter', 'xmt').'</a>, <a href="http://xhanch.com/" rel="section" title="'.__('Developed by Xhanch Studio', 'xmt').'">'.__('by Xhanch', 'xmt').'</a></div>';
 	}
 	echo '</div>';

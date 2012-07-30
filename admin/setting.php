@@ -4,14 +4,14 @@
 	
 	function xmt_setting(){
 		global $wpdb;
+		global $xmt_acc;
 		global $xmt_cfg_def;
 				
 		$acc_sel = urldecode(xmt_form_get('profile'));
 		
-		$acc_lst = xmt_acc_lst();
 		if($acc_sel == ''){
-			foreach($acc_lst as $acc){
-				$acc_sel = $acc;		
+			foreach($xmt_acc as $acc=>$xmt_det){
+				$acc_sel = $acc;
 				break;
 			}
 		}
@@ -88,7 +88,7 @@
 				echo '<div id="message" class="updated fade"><p>'.__('Profile name is empty', 'xmt').'</p></div>'; 
 			elseif($acc_nme == 'new')
 				echo '<div id="message" class="updated fade"><p>'.__('Profile name cannot be <b>new</b>', 'xmt').'</p></div>';
-			elseif(in_array($acc_nme, $acc_lst))
+			elseif(array_key_exists($acc_nme, $xmt_acc))
 				echo '<div id="message" class="updated fade"><p>'.__('Profile already exists', 'xmt').'</p></div>';
 			else{
 				$chars = str_split($acc_nme);
@@ -102,10 +102,10 @@
 				}
 				if($valid){
 					if(isset($_POST['cmd_xmt_dpl_prf'])){
-						xmt_acc_add($acc_nme, xmt_acc_cfg_get($acc_sel));		
+						xmt_acc_add($acc_nme, $xmt_acc[$acc_sel]['cfg']);		
 						echo '<div id="message" class="updated fade"><p>'.__('The profile <b>'.$acc_sel.'</b> has been duplicated as <b>'.$acc_nme.'</b>', 'xmt').'</p></div>';	
 					}else{
-						xmt_acc_add($acc_nme, $xmt_cfg_def);		
+						xmt_acc_add($acc_nme, $xmt_cfg_def);
 						echo '<div id="message" class="updated fade"><p>'.__('A new profile has been created', 'xmt').'</p></div>';			
 					}
 				}
@@ -119,9 +119,10 @@
 				where acc_nme = '.xmt_sql_str($acc_sel).'
 			';
 			$wpdb->query($sql);
-			echo '<div id="message" class="updated fade"><p>All stored tweets for <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';	
+			echo '<div id="message" class="updated fade"><p>All stored tweets for <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';
+			xmt_twt_cch_rst($acc_sel);
 		}elseif(isset($_POST['cmd_xmt_disconnect'])){
-			$cfg = xmt_acc_cfg_get($acc_sel);
+			$cfg = $xmt_acc[$acc_sel]['cfg'];
 			$cfg['oah_use'] = 0;					
 			$cfg['csm_key'] = '';
 			$cfg['csm_sct'] = '';							
@@ -136,7 +137,7 @@
 			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Cache has been cleared', 'xmt').'</p></div>';				
 		}elseif($_POST['cmd_xmt_update_profile']){
-			$cfg = xmt_acc_cfg_get($acc_sel);
+			$cfg = $xmt_acc[$acc_sel]['cfg'];
 			$tmp_cfg = array(
 				'ttl' => xmt_form_post('txt_xmt_ttl'),
 				'nme' => xmt_form_post('txt_xmt_nme'),
@@ -182,6 +183,7 @@
 				'inc_drc_msg' => intval(xmt_form_post('chk_xmt_inc_drc_msg')),
 				'ctn_kwd' => xmt_form_post('txt_xmt_ctn_kwd'),
 				'ecl_kwd' => xmt_form_post('txt_xmt_ecl_kwd'),
+				'sql_crt' => xmt_form_post('txt_xmt_sql_crt'),
 				'cch_enb' => intval(xmt_form_post('chk_xmt_cch_enb')),
 				'cch_exp' => intval(xmt_form_post('int_xmt_cch_exp')),	
 				'imp_itv' => intval(xmt_form_post('int_xmt_imp_itv')),	
@@ -220,74 +222,21 @@
 			xmt_twt_cch_rst($acc_sel);
 			xmt_prf_cch_rst($acc_sel);
 			echo '<div id="message" class="updated fade"><p>'.__('Configuration Updated', 'xmt').'</p></div>';
-		}elseif(isset($_POST['cmd_xmt_migrate_profile'])){
-			$acc_lst = xmt_acc_lst();
-			$xmt_acc_old = get_option('xmt_accounts');
-			if($xmt_acc_old !== false){
-				foreach($xmt_acc_old as $acc_nme=>$acc_cfg){
-					$tmp_cfg = $xmt_cfg_def;
-					
-					$tmp_cfg['ttl'] = $acc_cfg['widget']['title'];
-					$tmp_cfg['nme'] = $acc_cfg['widget']['name'];
-					$tmp_cfg['lnk_ttl'] = $acc_cfg['widget']['link_title'];
-					$tmp_cfg['hdr_sty'] = $acc_cfg['widget']['header_style'];
-					$tmp_cfg['cst_hdr_txt'] = $acc_cfg['widget']['custom_text']['header'];
-					$tmp_cfg['cst_ftr_txt'] = $acc_cfg['widget']['custom_text']['footer'];
-					$tmp_cfg['twt_usr_nme'] = $acc_cfg['tweet']['username'];
-					$tmp_cfg['oah_use'] = $acc_cfg['tweet']['oauth_use'];
-					$tmp_cfg['oah_tkn'] = $acc_cfg['tweet']['oauth_token'];
-					$tmp_cfg['oah_sct'] = $acc_cfg['tweet']['oauth_secret'];
-					$tmp_cfg['ord'] = $acc_cfg['tweet']['order'];	
-					$tmp_cfg['cnt'] = $acc_cfg['tweet']['count'];
-					$tmp_cfg['gmt_add'] = $acc_cfg['tweet']['time_add'];
-					$tmp_cfg['dtm_fmt'] = $acc_cfg['tweet']['date_format'];
-					$tmp_cfg['twt_lyt'] = $acc_cfg['tweet']['layout'];
-					$tmp_cfg['shw_hrl'] = $acc_cfg['tweet']['show_hr'];
-					$tmp_cfg['shw_pst_frm'] = $acc_cfg['tweet']['show_post_form'];
-					$tmp_cfg['shw_org_rtw'] = $acc_cfg['tweet']['show_origin_retweet'];
-					$tmp_cfg['twt_new_pst'] = $acc_cfg['tweet']['tweet_new_post'];
-					$tmp_cfg['twt_new_pst_lyt'] = $acc_cfg['tweet']['tweet_new_post_layout'];
-					$tmp_cfg['clc_usr_tag'] = $acc_cfg['tweet']['make_clickable']['user_tag'];
-					$tmp_cfg['clc_hsh_tag'] = $acc_cfg['tweet']['make_clickable']['hash_tag'];
-					$tmp_cfg['clc_url'] = $acc_cfg['tweet']['make_clickable']['url'];
-					$tmp_cfg['url_lyt'] = $acc_cfg['tweet']['url_layout'];
-					$tmp_cfg['avt_shw'] = $acc_cfg['tweet']['avatar']['show'];
-					$tmp_cfg['avt_szw'] = $acc_cfg['tweet']['avatar']['size']['w'];
-					$tmp_cfg['avt_szh'] = $acc_cfg['tweet']['avatar']['size']['h'];
-					$tmp_cfg['inc_rpl_fru'] = $acc_cfg['tweet']['include']['replies_from_you'];
-					$tmp_cfg['inc_rpl_tou'] = $acc_cfg['tweet']['include']['replies'];
-					$tmp_cfg['inc_rtw'] = $acc_cfg['tweet']['include']['retweet'];
-					$tmp_cfg['inc_drc_msg'] = $acc_cfg['tweet']['include']['direct_message'];
-					$tmp_cfg['cch_enb'] = $acc_cfg['tweet']['cache']['enable'];
-					$tmp_cfg['cch_exp'] = $acc_cfg['tweet']['cache']['expiry'];	
-					$tmp_cfg['imp_itv'] = 60;	
-					$tmp_cfg['cst_css'] = $acc_cfg['css']['custom_css'];
-					$tmp_cfg['cvr_sml'] = $acc_cfg['other']['convert_similies'];
-					$tmp_cfg['lnk_new_tab'] = $acc_cfg['other']['open_link_on_new_window'];
-					$tmp_cfg['tmp_oah_tkn'] = '';
-					$tmp_cfg['tmp_oah_sct'] = '';
-
-					xmt_acc_del($acc_nme);
-					xmt_acc_add($acc_nme, $tmp_cfg);
-
-					echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_nme).'</b> has been added</p></div>';	
-				}
-			}
 		}elseif(isset($_POST['cmd_xmt_dtb_ver_upd'])){
 			update_option('xmt_vsn', xmt_form_post('txt_xmt_dtb_ver'));
 			echo '<div id="message" class="updated fade"><p>Database version has been set to <b>'.htmlspecialchars(xmt_form_post('txt_xmt_dtb_ver')).'</b></p></div>';	
 		}elseif(isset($_POST['cmd_xmt_twt_pst'])){
-			$cfg = xmt_acc_cfg_get($acc_sel);
 			$twt_str = trim(xmt_form_post('txa_xmt_twt_str'));
 			if($twt_str == '')
 				$msg = 'Your tweet is empty!';
 			if(strlen($twt_str) > 140)
 				$msg = 'Your tweet exceeds 140 characters!';
 			if($msg == ''){			
-				xmt_twt_oah_twt_pst($cfg, $twt_str);
+				xmt_twt_oah_twt_pst($acc_sel, $twt_str);
 				$msg = 'Your tweet has been posted';
+				$xmt_acc[$acc_sel]['las_twt_imp_dtp'] = 0;
 				xmt_twt_cch_rst($acc_sel);
-				xmt_twt_imp($acc_sel, $cfg);
+				xmt_twt_imp($acc_sel);
 			}
 
 			if($msg)
@@ -304,12 +253,11 @@
 			}
 		}
 				
-		$acc_lst = xmt_acc_lst();
-		ksort($acc_lst);
+		ksort($xmt_acc);
 		
 		if($acc_sel == ''){
-			foreach($acc_lst as $acc){
-				$acc_sel = $acc;		
+			foreach($xmt_acc as $acc=>$xmt_det){
+				$acc_sel = $acc;
 				break;
 			}
 		}
@@ -381,7 +329,7 @@
 			<br/>
 			<div id="icon-themes" class="icon32"><br /></div>
 			<h2>
-				<?php foreach($acc_lst as $acc){ ?>
+				<?php foreach($xmt_acc as $acc=>$acc_det){ ?>
 					<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=<?php echo urlencode($acc); ?>" class="nav-tab<?php echo ($acc==$acc_sel?' nav-tab-active':''); ?>"><?php echo ucwords(htmlspecialchars($acc)); ?></a>																	
 				<?php } ?>
 				<a href="admin.php?page=xhanch-my-twitter/admin/setting.php&profile=new" class="nav-tab<?php echo ('new'==$acc_sel?' nav-tab-active':''); ?>">+</a>	
@@ -389,11 +337,11 @@
 			<div class="clear" style="border-top:1px solid #CCC;margin-top:-3px;"/><br/>			
 					
 			<?php 
-				if(in_array($acc_sel, $acc_lst)){ 
-					$cfg = xmt_acc_cfg_get($acc_sel);
+				if(array_key_exists($acc_sel, $xmt_acc)){ 
+					$cfg = $xmt_acc[$acc_sel]['cfg'];
 					
 					if($cfg['csm_key'] != '' && $cfg['csm_sct'] != '' && $cfg['oah_tkn'] != '' && $cfg['oah_sct'] != ''){
-						$twt_prf = xmt_twt_oah_prf_get($cfg);						
+						$twt_prf = xmt_twt_oah_prf_get($acc_sel);						
 						if($twt_prf !== false){
 							$cfg['twt_usr_nme'] = $twt_prf['scr_nme'];
 							$cfg['oah_use'] = 1;
@@ -617,6 +565,12 @@
 								<?php echo __('Don\'t show tweets that contain these words', 'xmt'); ?><br/>
 								<input type="text" id="txt_xmt_ecl_kwd" name="txt_xmt_ecl_kwd" value="<?php echo $cfg['ecl_kwd']; ?>" style="width:100%"/><br/>
 								<small><i>Note: Separate the words with a comma (,)</i></small>
+							</td>
+						</tr>					
+						<tr>
+							<td colspan="5">
+								<?php echo __('Additional criteria', 'xmt'); ?><br/>
+								<input type="text" id="txt_xmt_sql_crt" name="txt_xmt_sql_crt" value="<?php echo $cfg['sql_crt']; ?>" style="width:100%"/>
 							</td>
 						</tr>								
 					</table>
@@ -888,14 +842,6 @@
 					<input type="file" size="30" name="fil_xmt_prf_fle"/><br/>	
 					<p class="submit"><input type="submit" name="cmd_xmt_import_profile" value="<?php echo __('Import Profile', 'xmt'); ?>"/></p>
 				</form>
-				<br/><br/>
-
-				<form action="" method="post">				
-					<b><big><?php echo __('Migrate Old Profiles', 'xmt'); ?></big></b><br/>
-					<br/>
-					<?php echo __('Are you just upgrading from version older than v 2.5.1? The following button will help you to restore your old profiles. Simply click the following button', 'xmt'); ?>		<br/>		
-					<p class="submit"><input type="submit" name="cmd_xmt_migrate_profile" value="<?php echo __('Process', 'xmt'); ?>"/></p>
-				</form>	
 				<br/><br/>
 				
 				<form action="" method="post">				

@@ -5,13 +5,14 @@
 		Description: The best Twitter plugin to integrate your Wordpress and your Twitter accounts
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.7.0
+		Version: 2.7.1
 	*/
 	
 	define('xmt', true);
 	define('xmt_base_dir', dirname(__FILE__));
 		
 	global $xmt_tmd;
+	global $xmt_acc;
 	global $xmt_cfg_def;
 		
 	load_plugin_textdomain('xmt', WP_PLUGIN_URL.'/xhanch-my-twitter/lang/', 'xhanch-my-twitter/lang/');
@@ -90,6 +91,7 @@
 	$dir->close();
 
 	define('xmt_base_url', xmt_get_dir('url'));
+	define('xmt_cch_dir', WP_CONTENT_DIR.'/xhc-xmt/');
 	
 	function xmt_itl(){
 		$upd_res = false;
@@ -97,7 +99,8 @@
 		return $upd_res;
 	}
 	$upd_res = xmt_itl();
-	if(!$upd_res){
+
+	if($upd_res === false){
 		define('xmt_itl_wrn_msg', $wpdb->last_query);
 		function xmt_itl_wrn(){
 			global $wpdb;
@@ -109,20 +112,51 @@
 				</p></div>
 			';
 		}
-		add_action('admin_notices', 'xmt_itl_wrn');		
+		add_action('admin_notices', 'xmt_itl_wrn');
+	}
+	
+	$xmt_acc = array();	
+	$sql = '
+		select 
+			id,
+			nme,
+			cfg,
+			las_twt_imp_dtp
+		from '.$wpdb->prefix.'xmt_acc
+		order by nme
+	';
+	$rcs = $wpdb->get_results($sql, ARRAY_A);
+	if($rcs){
+		foreach ($rcs as $row){
+			$xmt_acc[$row['nme']] = array(
+				'id' => intval($row['id']),
+				'cfg' => unserialize($row['cfg']),
+				'las_twt_imp_dtp' => intval($row['las_twt_imp_dtp']),
+			);
+		}
+	}
+
+	if($upd_res === 1){
+		foreach($xmt_acc as $acc=>$acc_det){
+			$xmt_cfg = $xmt_acc[$acc]['cfg'];
+			$xmt_cfg = array_merge($xmt_cfg_def, $xmt_cfg);
+			xmt_acc_cfg_upd($acc, $xmt_cfg);
+		}
+
+		if(count($acc_lst) == 0)
+			xmt_acc_add('Primary', $xmt_cfg_def);
 	}
 					
-	function xmt_css(){			
+	function xmt_css(){
+		global $xmt_acc;
+
 		echo '<link rel="stylesheet" href="'.xmt_get_dir('url').'/css/css.php" type="text/css" media="screen" />';
 		
-		$acc_lst = xmt_acc_lst();
-		foreach($acc_lst as $acc){
-			$cfg = xmt_acc_cfg_get($acc);
-
-			$avt_szw = intval($cfg['avt_szw']);
-			$avt_szh = intval($cfg['avt_szh']);
-			$avt_shw = intval($cfg['avt_shw']);
-			$cst_css = $cfg['cst_css'];
+		foreach($xmt_acc as $acc=>$acc_det){
+			$avt_szw = intval($xmt_acc[$acc]['cfg']['avt_szw']);
+			$avt_szh = intval($xmt_acc[$acc]['cfg']['avt_szh']);
+			$avt_shw = intval($xmt_acc[$acc]['cfg']['avt_shw']);
+			$cst_css = $xmt_acc[$acc]['cfg']['cst_css'];
 					
 			if($avt_szw && $avt_szh){
 				$css .= '#xmt_'.$acc.'_wid.xmt .tweet_avatar{width:'.$avt_szw.'px;height:'.$avt_szh.'px} ';
@@ -178,11 +212,10 @@
 	function widget_xmt($args, $acc){
 		global $wpdb;
 		global $xmt_tmd;
+		global $xmt_acc;
 				
 		$xmt_tmd = time();		
 		xmt_log('Starting to generate output');		
-
-		$cfg = xmt_acc_cfg_get($acc);
 
 		extract($args);
 		
@@ -190,10 +223,10 @@
 		$alw_twt = false;
 		$msg = '';
 		
-		if($cur_role == 'administrator' && $cfg['oah_use'] && $cfg['shw_pst_frm'])
+		if($cur_role == 'administrator' && $xmt_acc[$acc]['cfg']['oah_use'] && $xmt_acc[$acc]['cfg']['shw_pst_frm'])
 			$alw_twt = true;
 
-		xmt_twt_imp($acc, $cfg);
+		xmt_twt_imp($acc);
 
 		if($alw_twt && isset($_POST['cmd_xmt_'.$acc.'_post'])){
 			$t_tweet = trim(xmt_form_post('txa_xmt_'.$acc.'_tweet'));
@@ -201,11 +234,12 @@
 				$msg = 'Your tweet is empty!';
 			if(strlen($t_tweet) > 140)
 				$msg = 'Your tweet exceeds 140 characters!';
-			if($msg == ''){			
-				xmt_twt_oah_twt_pst($cfg, $t_tweet);
+			if($msg == ''){
+				xmt_twt_oah_twt_pst($acc, $t_tweet);
 				$msg = 'Your tweet has been posted';
+				$xmt_acc[$acc]['las_twt_imp_dtp'] = 0;
 				xmt_twt_cch_rst($acc);
-				xmt_twt_imp($acc, $cfg);
+				xmt_twt_imp($acc);
 			}
 		}
 
@@ -216,11 +250,11 @@
 			$msg = 'Your tweet has been deleted';
 		}
 		
-		$res = xmt_twt_get($acc, $cfg);	
+		$res = xmt_twt_get($acc);	
 		if(!$res || !is_array($res))
 			$res = array();
 		
-		$tpl = xmt_base_dir.'/theme/'.$cfg['thm'].'/widget.php';
+		$tpl = xmt_base_dir.'/theme/'.$xmt_acc[$acc]['cfg']['thm'].'/widget.php';
 		if(!file_exists($tpl))
 			$tpl = xmt_base_dir.'/theme/default/widget.php';
 
@@ -230,28 +264,28 @@
 	}
 		
 	function xmt_tweet_post($post_id){
+		global $xmt_acc;
+
 		$info = get_post($post_id);
 		$url = get_permalink($post_id);		
 
-		$acc_lst = xmt_acc_lst();
-		foreach($acc_lst as $acc){	
-			$cfg = xmt_acc_cfg_get($acc);
-			if($cfg['oah_use'] && $cfg['twt_new_pst']){
-				if($info->post_type == 'post' && !$cfg['twt_new_pst'])
+		foreach($xmt_acc as $acc=>$acc_det){
+			if($xmt_acc[$acc]['cfg']['oah_use'] && $xmt_acc[$acc]['cfg']['twt_new_pst']){
+				if($info->post_type == 'post' && !$xmt_acc[$acc]['cfg']['twt_new_pst'])
 					return;
-				if($info->post_type == 'page' && !$cfg['twt_new_pag'])
+				if($info->post_type == 'page' && !$xmt_acc[$acc]['cfg']['twt_new_pag'])
 					return;
 				
 				if($info->post_type == 'post')
-					$t_tweet = $cfg['twt_new_pst_lyt'];
+					$t_tweet = $xmt_acc[$acc]['cfg']['twt_new_pst_lyt'];
 				elseif($info->post_type == 'page')
-					$t_tweet = $cfg['twt_new_pag_lyt'];
+					$t_tweet = $xmt_acc[$acc]['cfg']['twt_new_pag_lyt'];
 				
 				$t_tweet = str_replace('@title', $info->post_title, $t_tweet);
 				$t_tweet = str_replace('@url', $url, $t_tweet);
 				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content), 0, 100), $t_tweet);
 				
-				xmt_twt_oah_twt_pst($cfg, $t_tweet);				
+				xmt_twt_oah_twt_pst($acc, $t_tweet);				
 				xmt_twt_cch_rst($acc);
 			}
 		}
@@ -261,28 +295,28 @@
 	add_action('pending_to_publish', 'xmt_tweet_post');
 		
 	function xmt_tweet_updated_post($post_id){
+		global $xmt_acc;
+
 		$info = get_post($post_id);
 		$url = get_permalink($post_id);		
 
-		$acc_lst = xmt_acc_lst();
-		foreach($acc_lst as $acc){	
-			$cfg = xmt_acc_cfg_get($acc);
-			if($cfg['oah_use'] && $cfg['twt_upd_pst']){
-				if($info->post_type == 'post' && !$cfg['twt_upd_pst'])
+		foreach($xmt_acc as $acc=>$acc_det){	
+			if($xmt_acc[$acc]['cfg']['oah_use'] && $xmt_acc[$acc]['cfg']['twt_upd_pst']){
+				if($info->post_type == 'post' && !$xmt_acc[$acc]['cfg']['twt_upd_pst'])
 					return;
-				if($info->post_type == 'page' && !$cfg['twt_upd_pag'])
+				if($info->post_type == 'page' && !$xmt_acc[$acc]['cfg']['twt_upd_pag'])
 					return;
 				
 				if($info->post_type == 'post')
-					$t_tweet = $cfg['twt_upd_pst_lyt'];
+					$t_tweet = $xmt_acc[$acc]['cfg']['twt_upd_pst_lyt'];
 				elseif($info->post_type == 'page')
-					$t_tweet = $cfg['twt_upd_pag_lyt'];
+					$t_tweet = $xmt_acc[$acc]['cfg']['twt_upd_pag_lyt'];
 				
 				$t_tweet = str_replace('@title', $info->post_title, $t_tweet);
 				$t_tweet = str_replace('@url', $url, $t_tweet);
 				$t_tweet = str_replace('@summary', substr(strip_tags($info->post_content), 0, 100), $t_tweet);
 				
-				xmt_twt_oah_twt_pst($cfg, $t_tweet);				
+				xmt_twt_oah_twt_pst($acc, $t_tweet);				
 				xmt_twt_cch_rst($acc);
 			}
 		}
@@ -348,9 +382,9 @@
 		}
 
 		function form($cfg){
-			$acc_lst = xmt_acc_lst();
+			global $xmt_acc;
 			$cbo_prf = '<option value="" '.(''==$cfg['prf']?'selected="selected"':'').'>- Select Profile -</option>';
-			foreach($acc_lst as $acc){
+			foreach($xmt_acc as $acc=>$acc_det){
 				$cbo_prf .= '<option value="'.$acc.'" '.($acc==$cfg['prf']?'selected="selected"':'').'>'.ucfirst($acc).'</option>';
 			}
 ?>

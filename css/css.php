@@ -12,7 +12,7 @@
 	
 	$css = xmt_css_minify(file_get_contents("css.css"));
 	
-	$acc_lst = xmt_acc_lst();
-	foreach($acc_lst as $acc)
+	global $xmt_acc;
+	foreach($xmt_acc as $acc=>$xmt_det)
 		echo str_replace('{xmt_id}', '#xmt_'.$acc.'_wid', $css);
 ?>

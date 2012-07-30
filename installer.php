@@ -228,17 +228,30 @@
 		update_option('xmt_vsn', $ver);
 	}
 
-	if($upd){
-		$acc_lst = xmt_acc_lst();	
-		foreach($acc_lst as $acc){
-			$xmt_cfg = xmt_acc_cfg_get($acc);
-			$xmt_cfg = array_merge($xmt_cfg_def, $xmt_cfg);
-			xmt_acc_cfg_upd($acc, $xmt_cfg);
-		}
+	if($ver == '1.0.2'){
+		$sql = 'alter table '.$wpdb->prefix.'xmt_acc drop `twt_cch`';
+		$wpdb->query($sql);
 
-		if(count($acc_lst) == 0)
-			xmt_acc_add('Primary', $xmt_cfg_def);
+		$sql = 'alter table '.$wpdb->prefix.'xmt_acc drop `twt_cch_dtp`';
+		$wpdb->query($sql);
+
+		$sql = 'alter table '.$wpdb->prefix.'xmt_acc drop `prf_cch`';
+		$wpdb->query($sql);
+
+		$sql = 'alter table '.$wpdb->prefix.'xmt_acc drop `prf_cch_dtp`';
+		$wpdb->query($sql);
+
+		$sql = 'alter table '.$wpdb->prefix.'xmt_twt add unique `acc_nme_twt_id` (`acc_nme`, `twt_id`)';
+		$wpdb->query($sql);
+
+		$upd = true;
+
+		$ver = '1.0.3';
+		update_option('xmt_vsn', $ver);
 	}
 
-	$upd_res = true;
+	if($upd)
+		$upd_res = 1;
+	else
+		$upd_res = true;
 ?>

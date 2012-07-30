@@ -3,13 +3,13 @@
 		exit;
 
 	$api_url = sprintf(
-		'http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=%s&count=%s'.($cfg['inc_rtw']?'&include_rts=true':''), 
-		urlencode($cfg['twt_usr_nme']), 
+		'http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=%s&count=%s'.($xmt_acc[$acc]['cfg']['inc_rtw']?'&include_rts=true':''), 
+		urlencode($xmt_acc[$acc]['cfg']['twt_usr_nme']), 
 		$lmt * 2
 	);
-	xmt_twt_raw_imp($acc, $cfg, xmt_get_file($api_url), 'twt');
+	xmt_twt_raw_imp($acc, xmt_get_file($api_url), 'twt');
 		
-	$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($cfg['twt_usr_nme']);
+	$api_url_reply = 'http://search.twitter.com/search.atom?q=to:'.urlencode($xmt_acc[$acc]['cfg']['twt_usr_nme']);
 	$req = xmt_get_file($api_url_reply); 
 	if($req != ''){
 		$req = str_replace('twitter:source', 'source', $req);
