@@ -331,7 +331,7 @@
 				add_menu_page(
 					'Xhanch', 
 					'Xhanch', 
-					8, 
+					'activate_plugins', 
 					'xhanch-my-twitter/admin/xhanch.php', 
 					'',
 					xmt_get_dir('url').'/img/icon.jpg'
@@ -342,7 +342,7 @@
 				xhanch_root, 
 				__('My Twitter', 'xmt'), 
 				__('My Twitter', 'xmt'), 
-				8, 
+				'activate_plugins', 
 				'xhanch-my-twitter/admin/setting.php', 
 				''
 			);
