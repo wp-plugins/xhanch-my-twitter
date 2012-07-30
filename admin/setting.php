@@ -785,7 +785,7 @@
 					</table><br/><br/>
 
 					<input type="checkbox" id="chk_xmt_shw_crd" name="chk_xmt_shw_crd" value="1" <?php echo ($cfg['shw_crd']?'checked="checked"':''); ?>/>
-					<b><?php echo __('Show credit link ("Powered by"), I will <a href="http://xhanch.com/xhanch-my-twitter-donate" target="_blank">donate</a> later.', 'xmt'); ?></b>
+					<b><?php echo __('Show credit link ("Powered by"), I will <a href="http://store.xhanch.com/others/61-xhanch-dynamic-payment.html" target="_blank">donate</a> later.', 'xmt'); ?></b>
 					<br/>
 
 					<p class="submit">
