@@ -5,12 +5,13 @@
 		Description: The best Twitter plugin to integrate your Wordpress and your Twitter accounts
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.7.1
+		Version: 2.7.2
 	*/
 	
 	define('xmt', true);
 	define('xmt_base_dir', dirname(__FILE__));
 		
+	global $wpdb;
 	global $xmt_tmd;
 	global $xmt_acc;
 	global $xmt_cfg_def;
@@ -157,6 +158,7 @@
 			$avt_szh = intval($xmt_acc[$acc]['cfg']['avt_szh']);
 			$avt_shw = intval($xmt_acc[$acc]['cfg']['avt_shw']);
 			$cst_css = $xmt_acc[$acc]['cfg']['cst_css'];
+			$css = '';
 					
 			if($avt_szw && $avt_szh){
 				$css .= '#xmt_'.$acc.'_wid.xmt .tweet_avatar{width:'.$avt_szw.'px;height:'.$avt_szh.'px} ';
