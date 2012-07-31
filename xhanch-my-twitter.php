@@ -5,7 +5,7 @@
 		Description: The best Twitter plugin to integrate your Wordpress and your Twitter accounts
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.7.2
+		Version: 2.7.3
 	*/
 	
 	define('xmt', true);

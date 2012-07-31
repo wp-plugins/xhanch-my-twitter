@@ -113,7 +113,10 @@
 			}
 		}elseif(isset($_POST['cmd_xmt_delete_profile'])){
 			xmt_acc_del($acc_sel);
-			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';				
+			echo '<div id="message" class="updated fade"><p>Profile <b>'.htmlspecialchars($acc_sel).'</b> has been deleted</p></div>';		
+		}elseif(isset($_POST['cmd_xmt_get_tweets'])){
+			xmt_twt_imp($acc_sel, true);
+			echo '<div id="message" class="updated fade"><p>Tweets updated</p></div>';			
 		}elseif(isset($_POST['cmd_xmt_delete_tweets'])){
 			$sql = '
 				delete from '.$wpdb->prefix.'xmt_twt
@@ -795,6 +798,7 @@
 						<?php if($cfg['oah_use']){ ?>
                     		<input type="submit" name="cmd_xmt_disconnect" value="<?php echo __('Disconnect From Twitter', 'xmt'); ?>"/>							
 						<?php } ?>
+						<input type="submit" name="cmd_xmt_get_tweets" value="<?php echo __('Get New Tweets', 'xmt'); ?>"/>
 						<input type="submit" name="cmd_xmt_delete_tweets" value="<?php echo __('Delete All Stored Tweets', 'xmt'); ?>" onclick="return confirm('Are you sure to delete all stored tweets?')"/>
 						<input type="button" name="cmd_xmt_export_profile" value="<?php echo __('Export Profile', 'xmt'); ?>" onclick="location.href='<?php echo xmt_get_dir('url').'/misc/profile-export.php?prf='.urlencode($acc_sel); ?>'"/>
 						<input type="submit" name="cmd_xmt_delete_profile" value="<?php echo __('Delete Profile', 'xmt'); ?>" onclick="return confirm('Are you sure to delete this profile?')"/>

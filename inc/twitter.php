@@ -46,16 +46,18 @@
 		unset($xml);
 	}
 
-	function xmt_twt_imp($acc){
+	function xmt_twt_imp($acc, $frc=false){
 		global $wpdb;
 		global $xmt_tmd;
 		global $xmt_acc;
+		
+		if(!$frc){
+			$las_imp = intval($xmt_acc[$acc]['las_twt_imp_dtp']);
+			$imp_itv = intval($xmt_acc[$acc]['cfg']['imp_itv']) * 60;
 
-		$las_imp = intval($xmt_acc[$acc]['las_twt_imp_dtp']);
-		$imp_itv = intval($xmt_acc[$acc]['cfg']['imp_itv']) * 60;
-
-		if(time() - $las_imp < $imp_itv)
-			return;
+			if(time() - $las_imp < $imp_itv)
+				return;
+		}
 
 		xmt_tmd('Import Tweets - Start');
 
@@ -132,8 +134,8 @@
 				now()
 			)on duplicate key update
 				nme = '.xmt_sql_str($prm['uid']).', 
-				img_url = '.xmt_sql_str($prm['nme']).', 
-				dte_upd = '.xmt_sql_str($prm['img_url']).'				
+				img_url = '.xmt_sql_str($prm['img_url']).', 
+				dte_upd = now()			
 		';
 		$wpdb->query($sql);
 	}
