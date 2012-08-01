@@ -12,14 +12,14 @@
 
 	if(!current_user_can('install_plugins'))
 		exit;
+
+	global $xmt_acc;
 	
 	$acc_sel = xmt_form_get('prf');
-		
-	$cfg = xmt_acc_cfg_get($acc_sel);
 
 	$ept_dat = array(
 		'nme' => $acc_sel,
-		'cfg' => $cfg
+		'cfg' => $xmt_acc[$acc_sel]['cfg']
 	);
 	$ept_dat_str = base64_encode(serialize($ept_dat));
 	$fl_len = strlen($ept_dat_str);
