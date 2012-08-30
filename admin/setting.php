@@ -229,6 +229,34 @@
 		}elseif(isset($_POST['cmd_xmt_dtb_ver_upd'])){
 			update_option('xmt_vsn', xmt_form_post('txt_xmt_dtb_ver'));
 			echo '<div id="message" class="updated fade"><p>Database version has been set to <b>'.htmlspecialchars(xmt_form_post('txt_xmt_dtb_ver')).'</b></p></div>';	
+		}elseif(isset($_POST['cmd_xmt_rit'])){
+			$sql = 'drop table if exists '.$wpdb->prefix.'xmt';
+			$wpdb->query($sql);
+			$sql = 'drop table if exists '.$wpdb->prefix.'xmt_acc';
+			$wpdb->query($sql);
+			$sql = 'drop table if exists '.$wpdb->prefix.'xmt_ath';
+			$wpdb->query($sql);
+			$sql = 'drop table if exists '.$wpdb->prefix.'xmt_twt';
+			$wpdb->query($sql);
+			$sql = '
+				delete from '.$wpdb->prefix.'options 
+				where option_name = \'xmt_vsn\';
+			';
+			$wpdb->query($sql);
+
+			$path = xmt_cch_dir;		
+			$dir = dir($path);
+			while($file = $dir->read()){
+				if($file == '.' || $file == '..')
+					continue;
+				$target = $path.'/'.$file;			
+				if(!is_dir($target))
+					 @unlink($target);
+			}
+			$dir->close();
+
+			$xmt_acc = array();
+			echo '<div id="message" class="updated fade"><p>Xhanch - My Twitter has been reinstalled</p></div>';
 		}elseif(isset($_POST['cmd_xmt_twt_pst'])){
 			$twt_str = trim(xmt_form_post('txa_xmt_twt_str'));
 			if($twt_str == '')
@@ -859,6 +887,15 @@
 						</tr>
 					</table>
 					<p class="submit"><input type="submit" name="cmd_xmt_dtb_ver_upd" value="<?php echo __('Change', 'xmt'); ?>"/></p>
+				</form>
+				<br/><br/>
+				
+				<form action="" method="post">				
+					<b><big><?php echo __('Reinstall Plugin', 'xmt'); ?></big></b><br/>
+					<br/>
+					This will completely remove your existing XMT tables and data and will create fresh XMT database tables.<br/>
+					You can export your profiles so you can import them again after reinstall.
+					<p class="submit"><input type="submit" name="cmd_xmt_rit" value="<?php echo __('Confirm', 'xmt'); ?>"/></p>
 				</form>
 			<?php } ?>
 
