@@ -186,7 +186,9 @@
 				'inc_rtw' => intval(xmt_form_post('chk_xmt_inc_rtw')),
 				'inc_drc_msg' => intval(xmt_form_post('chk_xmt_inc_drc_msg')),
 				'ctn_kwd' => xmt_form_post('txt_xmt_ctn_kwd'),
+				'ctn_kwd_any' => xmt_form_post('txt_xmt_ctn_kwd_any'),
 				'ecl_kwd' => xmt_form_post('txt_xmt_ecl_kwd'),
+				'ecl_kwd_any' => xmt_form_post('txt_xmt_ecl_kwd_any'),
 				'sql_crt' => xmt_form_post('txt_xmt_sql_crt'),
 				'cch_enb' => intval(xmt_form_post('chk_xmt_cch_enb')),
 				'cch_exp' => intval(xmt_form_post('int_xmt_cch_exp')),	
@@ -587,18 +589,32 @@
 						</tr>						
 						<tr>
 							<td colspan="5">
-								<?php echo __('Show tweets that contain these words', 'xmt'); ?><br/>
+								<?php echo __('Show tweets that contain all of these words', 'xmt'); ?><br/>
 								<input type="text" id="txt_xmt_ctn_kwd" name="txt_xmt_ctn_kwd" value="<?php echo $cfg['ctn_kwd']; ?>" style="width:100%"/><br/>
+								<small><i>Note: Separate the words with comma (,)</i></small>
+							</td>
+						</tr>						
+						<tr>
+							<td colspan="5">
+								<?php echo __('Show tweets that contain any of these words', 'xmt'); ?><br/>
+								<input type="text" id="txt_xmt_ctn_kwd_any" name="txt_xmt_ctn_kwd_any" value="<?php echo $cfg['ctn_kwd_any']; ?>" style="width:100%"/><br/>
 								<small><i>Note: Separate the words with comma (,)</i></small>
 							</td>
 						</tr>					
 						<tr>
 							<td colspan="5">
-								<?php echo __('Don\'t show tweets that contain these words', 'xmt'); ?><br/>
+								<?php echo __('Don\'t show tweets that contain all of these words', 'xmt'); ?><br/>
 								<input type="text" id="txt_xmt_ecl_kwd" name="txt_xmt_ecl_kwd" value="<?php echo $cfg['ecl_kwd']; ?>" style="width:100%"/><br/>
 								<small><i>Note: Separate the words with a comma (,)</i></small>
 							</td>
-						</tr>					
+						</tr>						
+						<tr>
+							<td colspan="5">
+								<?php echo __('Don\'t show tweets that contain any of these words', 'xmt'); ?><br/>
+								<input type="text" id="txt_xmt_ecl_kwd_any" name="txt_xmt_ecl_kwd_any" value="<?php echo $cfg['ecl_kwd_any']; ?>" style="width:100%"/><br/>
+								<small><i>Note: Separate the words with a comma (,)</i></small>
+							</td>
+						</tr>				
 						<tr>
 							<td colspan="5">
 								<?php echo __('Additional criteria', 'xmt'); ?><br/>

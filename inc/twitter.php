@@ -147,7 +147,7 @@
 		xmt_tmd('Get Tweets - Start');
 
 		$arr = xmt_cch_get($acc, 'twt');
-		if($arr === false || count($arr) == 0){
+		if(isset($_GET['xmt_debug_show']) || isset($_GET['xmt_debug']) || $arr === false || count($arr) == 0){
 			$lmt = $xmt_acc[$acc]['cfg']['cnt'];			
 			if($lmt <= 0)
 				$lmt = 5;
@@ -177,12 +177,36 @@
 					}
 				}
 			}
+			if($xmt_acc[$acc]['cfg']['ctn_kwd_any']){
+				$ctn_kwd = explode(',', trim($xmt_acc[$acc]['cfg']['ctn_kwd_any']));
+				if(count($ctn_kwd)){
+					$tmp_crt = '';
+					foreach($ctn_kwd as $kwd){
+						if($tmp_crt != '')
+							$tmp_crt .= ' or ';
+						$tmp_crt .= 'twt like '.xmt_sql_str('%'.$kwd.'%');
+					}
+					$crt[] = '('.$tmp_crt.')';
+				}
+			}
 			if($xmt_acc[$acc]['cfg']['ecl_kwd']){
 				$ecl_kwd = explode(',', trim($xmt_acc[$acc]['cfg']['ecl_kwd']));
 				if(count($ecl_kwd)){
 					foreach($ecl_kwd as $kwd){
 						$crt[] = 'twt not like '.xmt_sql_str('%'.$kwd.'%');
 					}
+				}
+			}
+			if($xmt_acc[$acc]['cfg']['ecl_kwd_any']){
+				$ctn_kwd = explode(',', trim($xmt_acc[$acc]['cfg']['ecl_kwd_any']));
+				if(count($ctn_kwd)){
+					$tmp_crt = '';
+					foreach($ctn_kwd as $kwd){
+						if($tmp_crt != '')
+							$tmp_crt .= ' or ';
+						$tmp_crt .= 'twt not like '.xmt_sql_str('%'.$kwd.'%');
+					}
+					$crt[] = '('.$tmp_crt.')';
 				}
 			}
 			if($xmt_acc[$acc]['cfg']['sql_crt'])
