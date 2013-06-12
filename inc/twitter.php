@@ -34,7 +34,7 @@
 			}
 			
 			xmt_twt_ins($acc, array(
-				'id' => (string)$res['id'],
+				'id' => (string)$res['id_str'],
 				'twt' => (string)$res['text'],
 				'ath' => (string)$res['user']['screen_name'],
 				'src' => (string)$res['source'],
