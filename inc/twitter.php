@@ -9,18 +9,23 @@
 		}
 
 		if($req == '')
-			return $arr;
+			return;
 
-		$xml = @simplexml_load_string($req);	
+		$arr_twt = json_decode($req, true);	
 			
-		if($xml->error)
-			xmt_log($xml->error);	
+		if(!$arr_twt){
+			xmt_log($req);	
+			return;
+		}elseif($arr_twt['errors']){
+			xmt_log($arr_twt['errors'][0]['message'].' (Code: '.$arr_twt['errors'][0]['code'].')');
+			return;
+		}
 		
-		foreach($xml->status as $res){
+		foreach($arr_twt as $res){
 			$twt_typ = $typ;
-			if($res->retweeted_status)
+			if($res['retweeted'])
 				$twt_typ = 'rtw';
-			$rpl = (string)$res->in_reply_to_screen_name;
+			$rpl = (string)$res['in_reply_to_screen_name'];
 			if($rpl != ''){
 				if($rpl == $xmt_acc[$acc]['cfg']['twt_usr_nme'])
 					$twt_typ = 'rty';
@@ -29,21 +34,21 @@
 			}
 			
 			xmt_twt_ins($acc, array(
-				'id' => (string)$res->id,
-				'twt' => (string)$res->text,
-				'ath' => (string)$res->user->screen_name,
-				'src' => (string)$res->source,
-				'dtp' => date('Y-m-d H:i:s', xmt_get_time((string)$res->created_at)),
+				'id' => (string)$res['id'],
+				'twt' => (string)$res['text'],
+				'ath' => (string)$res['user']['screen_name'],
+				'src' => (string)$res['source'],
+				'dtp' => date('Y-m-d H:i:s', xmt_get_time((string)$res['created_at'])),
 				'typ' => $twt_typ,
 			));
 
 			xmt_ath_ins(array(
-				'uid' => (string)$res->user->screen_name,
-				'nme' => (string)$res->user->name,
-				'img_url' => (string)$res->user->profile_image_url,
+				'uid' => (string)$res['user']['screen_name'],
+				'nme' => (string)$res['user']['name'],
+				'img_url' => (string)$res['user']['profile_image_url'],
 			));
 		}
-		unset($xml);
+		unset($arr_twt);
 	}
 
 	function xmt_twt_imp($acc, $frc=false){
@@ -75,9 +80,9 @@
 		if($lmt <= 0)
 			$lmt = 5;
 				
-		$method = 'public';
-		if($xmt_acc[$acc]['cfg']['oah_use'])
-			$method = 'oauth';
+		$method = 'oauth';
+		if(!$xmt_acc[$acc]['cfg']['oah_use'])
+			return;		
 			
 		@include xmt_base_dir.'/method/'.$method.'.php';
 
@@ -303,18 +308,16 @@
 
 		$arr = xmt_cch_get($acc, 'prf');
 		if($arr === false || count($arr) == 0){
-			$api_url_reply = 'http://twitter.com/users/'.urlencode($xmt_acc[$acc]['cfg']['twt_usr_nme']).'.xml';
-			$req = xmt_get_file($api_url_reply);
-			$xml = @simplexml_load_string($req);
+			$usr_det = xmt_twt_oah_prf_get($acc);	
 
 			$arr = array(
-				'avatar' => (string)$xml->profile_image_url,
-				'followers_count' => intval($xml->followers_count),
-				'friends_count' => intval($xml->friends_count),
-				'favourites_count' => intval($xml->favourites_count),
-				'statuses_count' => intval($xml->statuses_count),
-				'name' => (string)$xml->name,
-				'screen_name' => (string)$xml->screen_name,
+				'avatar' => (string)$usr_det['img_url'],
+				'followers_count' => intval($usr_det['tot_flw']),
+				'friends_count' => intval($usr_det['tot_frd']),
+				'favourites_count' => intval($usr_det['tot_fav']),
+				'statuses_count' => intval($usr_det['tot_sts']),
+				'name' => (string)$usr_det['nme'],
+				'screen_name' => (string)$usr_det['scr_nme'],
 			);
 
 			if($xml !== false)

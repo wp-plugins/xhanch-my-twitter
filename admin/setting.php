@@ -375,7 +375,7 @@
 					$cfg = $xmt_acc[$acc_sel]['cfg'];
 					
 					if($cfg['csm_key'] != '' && $cfg['csm_sct'] != '' && $cfg['oah_tkn'] != '' && $cfg['oah_sct'] != ''){
-						$twt_prf = xmt_twt_oah_prf_get($acc_sel);						
+						$twt_prf = xmt_twt_oah_prf_get($acc_sel);				
 						if($twt_prf !== false){
 							$cfg['twt_usr_nme'] = $twt_prf['scr_nme'];
 							$cfg['oah_use'] = 1;
@@ -392,15 +392,57 @@
 				<form action="" method="post" id="frm_config" enctype="multipart/form-data">
 					<i><small>Note: <a href="#guide"><?php echo __('Click here for a complete explaination about these configurations fields', 'xmt'); ?></a></small></i><br/>
 					<br/>				
+                        	
+                    <b><?php echo __('Authentication', 'xmt'); ?></b><br/><br/>
+                    <?php if(!$cfg['oah_use']){ ?>
+						<?php echo __('To make this plugin work, you will need to create a new Twitter application.', 'xmt'); ?><br/><br/>
+						<div id="sct_adv_ftr">
+							<?php echo __('To create a new Twitter application, just follow these steps:', 'xmt'); ?><br/>
+							- Create a new Twitter application <a href="http://dev.twitter.com/apps/new" title="Twitter App Registration" target="_blank">via this page</a><br/>
+							- If you're not logged in, you can use your Twitter username and password<br/>
+							- Some details you need to know when filling the form:<br/>
+							&nbsp;&nbsp;+ Application Name: Just give a name.<br/>
+							&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('siteurl'); ?></strong><br/>
+							&nbsp;&nbsp;+ Fill in the remaining details as you wish<br/>
+							&nbsp;&nbsp;+ Submit<br/>
+							- When your application is successfully created, you will see your application's detail page<br/>
+							&nbsp;&nbsp;+ Click <strong>Settings</strong> tab, change the <strong>Access</strong> to <strong>Read &amp; Write</strong>.<br/>
+							&nbsp;&nbsp;+ Submit to update<br/>
+							<br/>
 
-					<?php if($cfg['oah_use']) { ?>
+							Go back to <strong>Details</strong> tab.<br/>
+							On that page, find your <b>Consumer key</b> and <b>Consumer secret</b>.<br/>
+							<table cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="150px"><?php echo __('Consumer key', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_key']); ?>" id="txt_xmt_csm_key" name="txt_xmt_csm_key" style="width:100%"/></td>
+									<td width="10px"></td>
+									<td width="150px"><?php echo __('Consumer secret', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_sct']); ?>" id="txt_xmt_csm_sct" name="txt_xmt_csm_sct" style="width:100%"/></td>
+								</tr>
+							</table><br/>
+							Then, at the bottom, click <strong>Create my access token</strong> button.<br/>
+							You will get <b>Access Token</b> and <b>Access Token Secret</b>.<br/>
+							<table cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="150px"><?php echo __('Access Token', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_tkn']); ?>" id="txt_xmt_oah_tkn" name="txt_xmt_oah_tkn" style="width:100%"/></td>
+									<td width="10px"></td>
+									<td width="150px"><?php echo __('Access Token Secret', 'xmt'); ?></td>
+									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_sct']); ?>" id="txt_xmt_oah_sct" name="txt_xmt_oah_sct" style="width:100%"/></td>
+								</tr>
+							</table>
+							<br/><br/>
+						</div>
+                   	<?php }else{ ?>
+                    	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $twt_prf['nme']; ?></b> (<b><?php echo $twt_prf['scr_nme']; ?></b>)<br/><br/>
 						<b><?php echo __('Post a tweet', 'xmt'); ?></b><br/>
 						<br/>
 						<textarea name="txa_xmt_twt_str" style="width:710px;height:40px"><?php echo htmlspecialchars($twt_str); ?></textarea><br/>
 						<input type="submit" name="cmd_xmt_twt_pst" value="<?php echo __('Post', 'xmt'); ?>"/>
 						<div class="clear"></div>
 						<br/>
-					<?php } ?>
+                   	<?php } ?>
                    	
 					<b><?php echo __('Widget Setting', 'xmt'); ?></b><br/>
 					<br/>
@@ -621,51 +663,12 @@
 								<input type="text" id="txt_xmt_sql_crt" name="txt_xmt_sql_crt" value="<?php echo $cfg['sql_crt']; ?>" style="width:100%"/>
 							</td>
 						</tr>								
-					</table>
+					</table><br/>       
 					<br/>
-                        	
-                    <b><?php echo __('Advanced Features', 'xmt'); ?></b><br/><br/>
-                    <?php if(!$cfg['oah_use']){ ?>
-						<?php echo __('To enable the advance features, you will need to create a new Twitter application.', 'xmt'); ?><br/>
-						<a href="javascript:show_more('sct_adv_ftr')"><?php echo __('Click here to setup this feature.', 'xmt'); ?></a>
-						<div id="sct_adv_ftr" style="display:none;">
-							<?php echo __('To create a new Twitter application, just follow these steps:', 'xmt'); ?><br/>
-							- Create a new Twitter application <a href="http://dev.twitter.com/apps/new" title="Twitter App Registration" target="_blank">via this page</a><br/>
-							- If you're not logged in, you can use your Twitter username and password<br/>
-							- Some details you need to know when filling the form:<br/>
-							&nbsp;&nbsp;+ Application Name: Just give a name.<br/>
-							&nbsp;&nbsp;+ Application Type: <strong>Browser</strong><br/>
-							&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('siteurl'); ?></strong><br/>
-							&nbsp;&nbsp;+ Default Access Type: <strong>Read &amp; Write</strong><br/>
-							&nbsp;&nbsp;+ Fill the remaining details as you wish<br/>
-							- Fill in the CAPTCHA and click <b>Register application</b> button<br/>
-							<br/>
 
-							Once your application is created, you will see your application's detail page.<br/>
-							On that page, find your <b>Consumer key</b> and <b>Consumer secret</b>.<br/>
-							<table cellpadding="0" cellspacing="0">
-								<tr>
-									<td width="150px"><?php echo __('Consumer key', 'xmt'); ?></td>
-									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_key']); ?>" id="txt_xmt_csm_key" name="txt_xmt_csm_key" style="width:100%"/></td>
-									<td width="10px"></td>
-									<td width="150px"><?php echo __('Consumer secret', 'xmt'); ?></td>
-									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['csm_sct']); ?>" id="txt_xmt_csm_sct" name="txt_xmt_csm_sct" style="width:100%"/></td>
-								</tr>
-							</table><br/>
-							On that right side, click <b>My Access Token</b> button. You will see another page.<br/>
-							On that page, find your <b>Access Token</b> and <b>Access Token Secret</b>.<br/>
-							<table cellpadding="0" cellspacing="0">
-								<tr>
-									<td width="150px"><?php echo __('Access Token', 'xmt'); ?></td>
-									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_tkn']); ?>" id="txt_xmt_oah_tkn" name="txt_xmt_oah_tkn" style="width:100%"/></td>
-									<td width="10px"></td>
-									<td width="150px"><?php echo __('Access Token Secret', 'xmt'); ?></td>
-									<td width="200px"><input type="text" value="<?php echo htmlspecialchars($cfg['oah_sct']); ?>" id="txt_xmt_oah_sct" name="txt_xmt_oah_sct" style="width:100%"/></td>
-								</tr>
-							</table>
-						</div>
-                   	<?php }else{ ?>
-                    	<?php echo __('You are currently connected as', 'xmt'); ?> <b><?php echo $twt_prf['nme']; ?></b> (<b><?php echo $twt_prf['scr_nme']; ?></b>)<br/><br/>
+					<?php if($cfg['oah_use']){ ?>						
+						<b><?php echo __('Advanced Setting', 'xmt'); ?></b><br/>
+						<br/>						
                         <table cellpadding="0" cellspacing="0">
                             <tr>
                                 <td colspan="5"><input type="checkbox" id="chk_xmt_inc_drc_msg" name="chk_xmt_shw_pst_frm" value="1" <?php echo ($cfg['shw_pst_frm']?'checked="checked"':''); ?>/> <?php echo __('Show a form to post a tweet/status when logged in as Admin', 'xmt'); ?></td>
@@ -724,9 +727,8 @@
                                 <td width="150px"></td>
                                 <td width="200px"></td>
                             </tr>
-                      	</table><br/>
-                    <?php } ?>
-                    <br/><br/>                    
+                      	</table><br/><br/>
+                    <?php } ?>          
 	
 					<b><?php echo __('Theme', 'xmt'); ?></b><br/>					
 					<br/>
@@ -920,7 +922,7 @@
 			<a name="guide"></a>
 			<b><big><?php echo __('Support This Plugin Development', 'xmt'); ?></big></b><br/>		
 			<br/>
-			<font color="red">By donating any amount, you can place a link (do follow) at our PR 6 website (<a href="http://xhanch.com" target="_blank">http://xhanch.com</a>)</font><br/><br/>
+			<font color="red">By donating any amount, you can place a link (do follow) at our PR 7 website (<a href="http://xhanch.com" target="_blank">http://xhanch.com</a>)</font><br/><br/>
 			<?php echo __('Do you like this plugin? Do you think this plugin very helpful?', 'xmt'); ?><br/>
 			<?php echo __('Why don\'t you support this plugin developement by donating any amount you are willing to give?', 'xmt'); ?><br/>
 			<br/>

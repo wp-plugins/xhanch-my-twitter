@@ -20,7 +20,7 @@
 	function xmt_twt_oah_twt_get($acc){
 		global $xmt_acc;
 		$cls = new TwitterOAuth($xmt_acc[$acc]['cfg']['csm_key'], $xmt_acc[$acc]['cfg']['csm_sct'], $xmt_acc[$acc]['cfg']['oah_tkn'], $xmt_acc[$acc]['cfg']['oah_sct']);
-		$cls->format = 'xml';
+		$cls->format = 'json';
 		return $cls->get('statuses/user_timeline', array('count' => intval($xmt_acc[$acc]['cfg']['cnt']), 'include_rts' => intval($xmt_acc[$acc]['cfg']['inc_rtw'])));
 	}
 
@@ -33,14 +33,14 @@
 	function xmt_twt_oah_rpl_get($acc){
 		global $xmt_acc;
 		$cls = new TwitterOAuth($xmt_acc[$acc]['cfg']['csm_key'], $xmt_acc[$acc]['cfg']['csm_sct'], $xmt_acc[$acc]['cfg']['oah_tkn'], $xmt_acc[$acc]['cfg']['oah_sct']);
-		$cls->format = 'xml';
-		return $cls->get('statuses/replies', array('count' => intval($xmt_acc[$acc]['cfg']['cnt'])));
+		$cls->format = 'json';
+		return $cls->get('statuses/mentions_timeline', array('count' => intval($xmt_acc[$acc]['cfg']['cnt'])));
 	}
 
 	function xmt_twt_oah_drc_msg_get($acc){
 		global $xmt_acc;
 		$cls = new TwitterOAuth($xmt_acc[$acc]['cfg']['csm_key'], $xmt_acc[$acc]['cfg']['csm_sct'], $xmt_acc[$acc]['cfg']['oah_tkn'], $xmt_acc[$acc]['cfg']['oah_sct']);
-		$cls->format = 'xml';
+		$cls->format = 'json';
 		return $cls->get('direct_messages', array('count' => intval($xmt_acc[$acc]['cfg']['cnt'])));
 	}
 ?>
