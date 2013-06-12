@@ -11,6 +11,9 @@ Stable tag: 2.7.6
 The best plugin to display your latest tweets, replies, direct messages, retweets, auto and manual tweet and lots more. Support multiple accounts
 
 == Description ==
+News: Since Twitter has disabled their old API. Xhanch - My Twitter - 2.7.5 and older versions will no longer work. 
+Therefore, you need to use or upgrade to version 2.7.6 or later version.
+
 Xhanch - My Twitter (developed by [Xhanch Studio](http://xhanch.com/ "Xhanch Studio")) is the best WordPress plugin to show/hide or include/exclude your latest tweets, replies from other members to you, replies from you to other members, retweets, and direct messages from your Twitter account(s).
 
 You can customize it with our predefined flexible settings/options easily and it can be displayed via sidebar, post or page with advanced tweets filtering system.
