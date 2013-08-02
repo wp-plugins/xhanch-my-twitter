@@ -75,6 +75,11 @@
 			'lto' => 'Latest to oldest',
 			'otl' => 'Oldest to latest',
 		);
+
+		if(!empty($_POST) && !wp_verify_nonce($_POST['vrf_xmt_cfg_frm'],'xmt_cfg_frm')){
+			echo '<div id="message" class="updated fade"><p>'.__('Invalid form verification token.', 'xmt').'</p></div>'; 
+			exit;
+		}
 				
 		if(isset($_POST['cmd_xmt_crt_prf']) || isset($_POST['cmd_xmt_dpl_prf'])){
 			$acc_nme = strtolower(xmt_form_post('txt_xmt_acc_nme'));
@@ -151,10 +156,10 @@
 				'cst_ftr_txt' => xmt_form_post('txa_xmt_ftr_txt'),
 				'twt_usr_nme' => xmt_form_post('txt_xmt_twt_usr_nme'),
 				'oah_use' => $cfg['oah_use'],
-				'csm_key' => $cfg['csm_key'],
-				'csm_sct' => $cfg['csm_sct'],
-				'oah_tkn' => $cfg['oah_tkn'],
-				'oah_sct' => $cfg['oah_sct'],
+				'csm_key' => trim($cfg['csm_key']),
+				'csm_sct' => trim($cfg['csm_sct']),
+				'oah_tkn' => trim($cfg['oah_tkn']),
+				'oah_sct' => trim($cfg['oah_sct']),
 				'ord' => xmt_form_post('cbo_xmt_ord'),	
 				'cnt' => intval(xmt_form_post('int_xmt_cnt')),
 				'trc_len' => intval(xmt_form_post('int_xmt_trc_len')),
@@ -863,6 +868,8 @@
 					<p class="submit">
 						<input type="submit" name="cmd_xmt_dpl_prf" value="<?php echo __('Duplicate Profile', 'xmt'); ?>"/>
 					</p>
+
+					<?php wp_nonce_field('xmt_cfg_frm','vrf_xmt_cfg_frm'); ?>
 				</form>
 			<?php }else{ ?>	
 				<form action="" method="post">
@@ -883,6 +890,7 @@
 					<i><small><?php echo __('Note: Profile name must only contain alphanumeric characters (A to Z and 0 to 9)', 'xmt'); ?></small></i><br/>
 					<i><small><?php echo __('Each profile will create a new widget to be placed to your sidebar/post/template code', 'xmt'); ?></small></i><br/>
 					<p class="submit"><input type="submit" name="cmd_xmt_crt_prf" value="<?php echo __('Create Profile', 'xmt'); ?>"/></p>
+					<?php wp_nonce_field('xmt_cfg_frm','vrf_xmt_cfg_frm'); ?>
 				</form>
 				<br/><br/>
 
@@ -892,6 +900,7 @@
 					<?php echo __('Browse for your XMT profile file (<b>.xmt</b>)', 'xmt'); ?><br/>							
 					<input type="file" size="30" name="fil_xmt_prf_fle"/><br/>	
 					<p class="submit"><input type="submit" name="cmd_xmt_import_profile" value="<?php echo __('Import Profile', 'xmt'); ?>"/></p>
+					<?php wp_nonce_field('xmt_cfg_frm','vrf_xmt_cfg_frm'); ?>
 				</form>
 				<br/><br/>
 				
@@ -905,6 +914,7 @@
 						</tr>
 					</table>
 					<p class="submit"><input type="submit" name="cmd_xmt_dtb_ver_upd" value="<?php echo __('Change', 'xmt'); ?>"/></p>
+					<?php wp_nonce_field('xmt_cfg_frm','vrf_xmt_cfg_frm'); ?>
 				</form>
 				<br/><br/>
 				
@@ -914,6 +924,7 @@
 					This will completely remove your existing XMT tables and data and will create fresh XMT database tables.<br/>
 					You can export your profiles so you can import them again after reinstall.
 					<p class="submit"><input type="submit" name="cmd_xmt_rit" value="<?php echo __('Confirm', 'xmt'); ?>"/></p>
+					<?php wp_nonce_field('xmt_cfg_frm','vrf_xmt_cfg_frm'); ?>
 				</form>
 			<?php } ?>
 

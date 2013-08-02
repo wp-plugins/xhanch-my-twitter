@@ -265,7 +265,7 @@
 
 				if($xmt_acc[$acc]['cfg']['shw_hsh_tag'] && $xmt_acc[$acc]['cfg']['clc_hsh_tag']){
 					$pattern = '/(\s\#([_a-z0-9\-]+))/i';
-					$replace = '<a href="http://search.twitter.com/search?q=%23$2" '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').'>$1</a>';
+					$replace = '<a href="https://twitter.com/search?q=%23$2&src=hash" '.($xmt_acc[$acc]['cfg']['lnk_new_tab']?'target="_blank"':'').'>$1</a>';
 					$twt = preg_replace($pattern,$replace,$twt);
 				}
 
