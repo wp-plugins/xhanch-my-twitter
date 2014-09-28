@@ -5,7 +5,7 @@
 		Description: The best Twitter plugin to integrate your Wordpress and your Twitter accounts
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.7.7
+		Version: 2.7.8
 	*/
 	
 	define('xmt', true);
@@ -238,6 +238,8 @@
 
 		if($alw_twt && isset($_POST['cmd_xmt_'.$acc.'_post'])){
 			$t_tweet = trim(xmt_form_post('txa_xmt_'.$acc.'_tweet'));
+			if(!wp_verify_nonce($_POST['vrf_xmt_wgt_twt_frm_'.$acc], 'xmt_twt_frm'))
+				$msg = 'Invalid form verification token';
 			if($t_tweet == '')
 				$msg = 'Your tweet is empty!';
 			if(strlen($t_tweet) > 140)
@@ -251,11 +253,13 @@
 			}
 		}
 
-		if($cur_role == 'administrator' && isset($_GET['xmt_'.$acc.'_twt_id'])){
-			$twt_id = trim(xmt_form_get('xmt_'.$acc.'_twt_id'));
-			xmt_twt_del($acc, $twt_id);
-			xmt_twt_cch_rst($acc);
-			$msg = 'Your tweet has been deleted';
+		if($cur_role == 'administrator' && isset($_GET['xmt_'.$acc.'_twt_id'])){			
+			if(wp_verify_nonce($_GET['_wpnonce'], 'xmt_wgt_act')){
+				$twt_id = trim(xmt_form_get('xmt_'.$acc.'_twt_id'));
+				xmt_twt_del($acc, $twt_id);
+				xmt_twt_cch_rst($acc);
+				$msg = 'Your tweet has been deleted';
+			}
 		}
 		
 		$res = xmt_twt_get($acc);	

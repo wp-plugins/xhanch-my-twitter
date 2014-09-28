@@ -29,8 +29,11 @@
 		echo '<a name="xmt_'.$acc.'"></a>';
 		if($msg)
 			echo '<div>'.__($msg, 'xmt').'</div>';
-		if($alw_twt)
-			echo '<form action="#xmt_'.$acc.'" method="post">'.__('What\'s happening?', 'xmt').'<br/><textarea name="txa_xmt_'.$acc.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$acc.'_post" value="'.__('Tweet', 'xmt').'"/><div class="clear"></div></form>';
+		if($alw_twt){
+			echo '<form action="#xmt_'.$acc.'" method="post">'.__('What\'s happening?', 'xmt').'<br/>';
+			wp_nonce_field('xmt_twt_frm','vrf_xmt_wgt_twt_frm_'.$acc);
+			echo '<textarea name="txa_xmt_'.$acc.'_tweet"></textarea><input type="submit" class="submit" name="cmd_xmt_'.$acc.'_post" value="'.__('Tweet', 'xmt').'"/><div class="clear"></div></form>';
+		}
 	}
 
 	if($xmt_acc[$acc]['cfg']['thm_scr_anm'])
@@ -72,7 +75,7 @@
 			echo $tmp_str;
 
 			if($cur_role == 'administrator')
-				echo ' <a href="?xmt_'.$acc.'_twt_id='.$sts_id.'#xmt_'.$acc.'">[delete]</a>';	
+				echo ' <a href="'.wp_nonce_url('?xmt_'.$acc.'_twt_id='.$sts_id, 'xmt_wgt_act').'#xmt_'.$acc.'">[delete]</a>';	
 		echo '</li>';
 	}
 	echo '</ul>';
