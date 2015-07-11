@@ -349,7 +349,7 @@
 			<br/>
 
 			<iframe src="http://ads.xhanch.com" style="width:468px;height:60px;
-			float:left;border:1px solid #cacaca" allowscrolling="no" allowTransparency="true"></iframe>	
+			float:left;border:1px solid #cacaca" scrolling="no" allowTransparency="true"></iframe>	
 
             <div style="float:right;width:400px">
 				<div style="float:right;line-height:21px">
