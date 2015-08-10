@@ -5,7 +5,7 @@
 		Description: The best Twitter plugin to integrate your Wordpress and your Twitter accounts
 		Author: Susanto BSc (Xhanch Studio)
 		Author URI: http://xhanch.com
-		Version: 2.7.8
+		Version: 2.7.9
 	*/
 	
 	define('xmt', true);
@@ -71,6 +71,7 @@
 		'ecl_kwd_any' => '',
 		'cch_enb' => 1,
 		'cch_exp' => 60,	
+		'sql_crt' => '',
 		'imp_itv' => 60,	
 		'thm' => 'default',
 		'cst_css' => '',
@@ -146,7 +147,7 @@
 			xmt_acc_cfg_upd($acc, $xmt_cfg);
 		}
 
-		if(count($acc_lst) == 0)
+		if(count($xmt_acc) == 0)
 			xmt_acc_add('Primary', $xmt_cfg_def);
 	}
 					
@@ -377,10 +378,10 @@
 	}
 	
 	class xmt_wgt extends WP_Widget{
-		function xmt_wgt(){
+		function __construct(){
 			$wgt_opt = array('classname' => 'xmt', 'description' => 'Display your latest tweets from a profile');
 			$ctr_opt = array('width' => 300, 'height' => 200);
-			$this->WP_Widget(false, 'XMT: Latest Tweets', $wgt_opt, $ctr_opt);
+			parent::__construct(false, 'XMT: Latest Tweets', $wgt_opt, $ctr_opt);
 		}
 
 		function widget($arg, $cfg){
@@ -395,6 +396,10 @@
 
 		function form($cfg){
 			global $xmt_acc;
+
+			if(!isset($cfg['prf']))
+				$cfg['prf'] = '';
+
 			$cbo_prf = '<option value="" '.(''==$cfg['prf']?'selected="selected"':'').'>- Select Profile -</option>';
 			foreach($xmt_acc as $acc=>$acc_det){
 				$cbo_prf .= '<option value="'.$acc.'" '.($acc==$cfg['prf']?'selected="selected"':'').'>'.ucfirst($acc).'</option>';

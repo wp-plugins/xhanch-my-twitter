@@ -266,6 +266,8 @@
 			echo '<div id="message" class="updated fade"><p>Xhanch - My Twitter has been reinstalled</p></div>';
 		}elseif(isset($_POST['cmd_xmt_twt_pst'])){
 			$twt_str = trim(xmt_form_post('txa_xmt_twt_str'));
+			$msg = '';
+
 			if($twt_str == '')
 				$msg = 'Your tweet is empty!';
 			if(strlen($twt_str) > 140)
@@ -407,7 +409,7 @@
 							- If you're not logged in, you can use your Twitter username and password<br/>
 							- Some details you need to know when filling the form:<br/>
 							&nbsp;&nbsp;+ Application Name: Just give a name.<br/>
-							&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('siteurl'); ?></strong><br/>
+							&nbsp;&nbsp;+ Callback URL: <strong><?php echo get_bloginfo('url'); ?></strong><br/>
 							&nbsp;&nbsp;+ Fill in the remaining details as you wish<br/>
 							&nbsp;&nbsp;+ Submit<br/>
 							- When your application is successfully created, you will see your application's detail page<br/>

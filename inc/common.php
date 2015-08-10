@@ -216,7 +216,7 @@
 
 	function xmt_sql_str($str){
 		global $wpdb;
-		return '\''.$wpdb->escape($str).'\'';
+		return '\''.esc_sql($str).'\'';
 	}
 
 	function xmt_sql_int($val){
