@@ -2,7 +2,7 @@
 Contributors: xhanch_studio
 Plugin URI: http://xhanch.com/wp-plugin-my-twitter/
 Author URI: http://xhanch.com
-Donate link: http://xhanch.com/wp-plugin-my-twitter/
+Donate link: http://xhanch.com/xhanch-donate/
 Tags: twitter, tweet, status, sidebar, post, posts, page, seo, xhanch, widget, plugin, code, avatar, content, social, plugins, css, text, admin, google, comments, links, image, cache
 Requires at least: 2.3
 Tested up to: 4.3
